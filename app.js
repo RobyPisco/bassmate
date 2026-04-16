@@ -549,12 +549,15 @@ function _tourPosition() {
 function startTour() {
   if (document.getElementById('tourOverlay')) return;
   _tourStep = 0;
+
   const overlay = document.createElement('div');
   overlay.id = 'tourOverlay';
-  overlay.style.cssText = 'position:fixed; inset:0; z-index:9000; pointer-events:none;';
+  // pointer-events:all blocca tutti i click sull'app sottostante durante il tour
+  overlay.style.cssText = 'position:fixed; inset:0; z-index:9000; pointer-events:all;';
 
   _tourSpotlight = document.createElement('div');
   _tourSpotlight.className = 'tour-spotlight';
+  _tourSpotlight.style.pointerEvents = 'none'; // il spotlight è solo visivo
 
   _tourTooltip = document.createElement('div');
   _tourTooltip.className = 'tour-tooltip';
