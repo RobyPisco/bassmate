@@ -452,7 +452,7 @@ function renderInfo() {
   const sd = SCALES[S.scale];
   const t  = TUNINGS[S.tuning];
   
-  document.title = `${getNoteName(S.root)} ${tl(sd.name)} — ${tl('string_title')} ${t.strings} ${tl('strings_label')} | FormFactory`;
+  document.title = `${getNoteName(S.root)} ${tl(sd.name)} — ${tl('string_title')} ${t.strings} ${tl('strings_label')} | Bassmate`;
   
   const scaleInfoId = document.getElementById('scaleInfo');
   if(!scaleInfoId) return;
