@@ -38,6 +38,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
   gap: 12px;
 }
 
+/* MODALITÀ MINIMALE PER PAGINE SECONDARIE */
+body.minimal-header .td-actions,
+body.minimal-header .td-row-root,
+body.minimal-header .td-row-scales {
+  display: none !important;
+}
+body.minimal-header .top-dashboard {
+  padding-bottom: 12px;
+}
+
 .td-row {
   display: flex;
   align-items: center;

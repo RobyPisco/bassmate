@@ -56,10 +56,6 @@
 <body>
 <div class="app" style="justify-content: center; align-items:flex-start;">
   <div class="donate-container">
-    <div class="lang-float" id="dl-ctrl">
-       <button class="p on" data-v="it">IT</button>
-       <button class="p" data-v="en">EN</button>
-    </div>
     
     <div class="emoji-hero">🎸 ☕</div>
     
@@ -76,39 +72,15 @@
       <p>If this interactive "cheat-sheet" is saving you musical frustrations, helping you decode strings (yes, even lefties!), feel free to tip me a coffee—or a fresh set of strings!</p>
     </div>
 
-    <a href="https://www.paypal.com/donate/?business=roberto.pisconti@gmail.com&no_recurring=0&item_name=Supporta+lo+sviluppo+di+Bass+Scales&currency_code=EUR" target="_blank" rel="noopener noreferrer" class="paypal-btn" id="donate-btn-text">
+    <a href="https://www.paypal.com/donate/?business=roberto.pisconti@gmail.com&no_recurring=0&item_name=Supporta+lo+sviluppo+di+Bass+Scales&currency_code=EUR" target="_blank" rel="noopener noreferrer" class="paypal-btn" id="donate-btn-text" data-i18n="coffee">
        ☕ Offrimi un caffè
     </a>
     <br>
-    <a href="index.html" class="back-link" id="back-btn-text">← Torna al Manico</a>
+    <a href="index.html" class="back-link" id="back-btn-text" data-i18n="back_btn">⬅️ Torna al Manico</a>
   </div>
   
   <div id="footer-placeholder" style="width:100%;"></div>
 </div>
-<script>
-  let lang = 'it';
-  const h = location.hash.slice(1);
-  if(h.includes('lang=en')) lang = 'en';
-  
-  function setLang(l) {
-    lang = l;
-    document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
-    
-    document.getElementById('text-it').style.display = l === 'it' ? 'block' : 'none';
-    document.getElementById('text-en').style.display = l === 'en' ? 'block' : 'none';
-    
-    document.getElementById('donate-btn-text').innerHTML = l === 'it' ? '☕ Offrimi un caffè' : '☕ Buy me a coffee';
-    document.getElementById('back-btn-text').innerText = l === 'it' ? '← Torna al Manico' : '← Back to the App';
-  }
-  
-  document.getElementById('dl-ctrl').addEventListener('click', e => {
-    const btn = e.target.closest('[data-v]');
-    if(!btn) return;
-    setLang(btn.dataset.v);
-  });
-  
-  setLang(lang);
-</script>
 <script src="app.js"></script>
 </body>
 </html>

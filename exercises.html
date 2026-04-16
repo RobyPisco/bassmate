@@ -61,11 +61,6 @@
   <main class="main" style="overflow-y:auto; padding-bottom: 60px;">
     <div class="ex-container">
       
-      <div class="lang-float" id="dl-ctrl">
-         <button class="p on" data-v="it">IT</button>
-         <button class="p" data-v="en">EN</button>
-      </div>
-
       <!-- ITALIAN -->
       <div id="text-it" style="display:block;">
         <div class="ex-header">
@@ -268,30 +263,6 @@
   <div id="footer-placeholder"></div>
 </div>
 
-<script>
-  let activeLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
-  
-  function applyExLang(l) {
-    activeLang = l;
-    localStorage.setItem('bass_lang', l);
-    
-    document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
-    
-    document.getElementById('text-it').style.display = l === 'it' ? 'block' : 'none';
-    document.getElementById('text-en').style.display = l === 'en' ? 'block' : 'none';
-    
-    document.title = l === 'it' ? '10 Esercizi Pratici — Bassmate' : '10 Practice Exercises — Bassmate';
-  }
-  
-  document.getElementById('dl-ctrl').addEventListener('click', e => {
-    const btn = e.target.closest('[data-v]');
-    if(!btn) return;
-    applyExLang(btn.dataset.v);
-    if(window.updateI18nLabels) window.updateI18nLabels();
-  });
-  
-  applyExLang(activeLang);
-</script>
 <script src="app.js"></script>
 </body>
 </html>

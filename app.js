@@ -24,7 +24,8 @@ const I18N = {
     grids_btn: "Stampa Manici Vuoti", help_btn: "Aiuto e Istruzioni", export_btn: "Esporta PDF (Manico Corrente)",
     f_quote: "\"Ho creato questo strumento per non perdermi sul manico... ora lo metto a disposizione per farvi perdere su questo sito! 🤘\"",
     f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffè) ☕</a>",
-    right: "Destro", lefty: "Mancino", hand: "Mano"
+    right: "Destro", lefty: "Mancino", hand: "Mano",
+    back_btn: "⬅️ Torna alla Tastiera"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -48,7 +49,8 @@ const I18N = {
     grids_btn: "Print Blank Grids", help_btn: "Help & Guide", export_btn: "Export PDF (Current View)",
     f_quote: "\"I created this tool so I wouldn't get lost on the fretboard... now I'm sharing it so you can get lost on this site! 🤘\"",
     f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) ☕</a>",
-    right: "Right", lefty: "Lefty", hand: "Hand"
+    right: "Right", lefty: "Lefty", hand: "Hand",
+    back_btn: "⬅️ Back to Fretboard"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -132,6 +134,31 @@ async function initApp() {
     console.error("Component fetch failed.", err);
   }
 
+  // MINIMAL HEADER LOGIC
+  const path = window.location.pathname;
+  const isHome = path.endsWith('index.html') || path.endsWith('/') || path === '';
+  if (!isHome) {
+    document.body.classList.add('minimal-header');
+  }
+
+  // BIND LANG (Globale)
+  const lc = document.getElementById('langCtrl');
+  if (lc) {
+    lc.addEventListener('click', e => {
+      const btn = e.target.closest('[data-v]');
+      if (!btn) return;
+      S.lang = btn.dataset.v;
+      localStorage.setItem('bass_lang', S.lang);
+      lc.querySelectorAll('[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === S.lang));
+      updateI18nLabels();
+      if(typeof render === 'function') render();
+    });
+    // Set initial active state
+    lc.querySelectorAll('[data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === S.lang));
+  }
+  
+  updateI18nLabels();
+
   if (document.getElementById('tuningCtrl')) {
     
     // BUILD CONTROLS
@@ -190,7 +217,6 @@ async function initApp() {
       });
     }
     bindPills('rootCtrl',  'root',   true);
-    bindPills('langCtrl',  'lang',   false);
 
     const viewCtrlEl = document.getElementById('viewCtrl');
     if(viewCtrlEl) viewCtrlEl.addEventListener('change', ()=>{ S.boxStart=0; });
@@ -403,6 +429,13 @@ function updateI18nLabels() {
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
     el.title = tl(el.dataset.i18nTitle);
   });
+
+  const itBlock = document.getElementById('text-it');
+  const enBlock = document.getElementById('text-en');
+  if(itBlock && enBlock) {
+    itBlock.style.display = S.lang === 'it' ? 'block' : 'none';
+    enBlock.style.display = S.lang === 'en' ? 'block' : 'none';
+  }
   
   const tc = document.getElementById('tuningCtrl');
   if (tc) {

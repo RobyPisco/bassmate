@@ -29,11 +29,6 @@
     <div class="main">
       <div class="help-container">
         
-        <div class="lang-float" id="dl-ctrl">
-           <button class="p on" data-v="it">IT</button>
-           <button class="p" data-v="en">EN</button>
-        </div>
-
         <div id="text-it" style="display:block;">
           <h1 class="help-title">📖 Guida all'uso di Bassmate</h1>
           
@@ -131,38 +126,13 @@
         </div>
 
         <div style="text-align: center;">
-          <a href="index.html" class="back-btn" id="back-btn-text">⬅️ Torna alla Tastiera</a>
+          <a href="index.html" class="back-btn" data-i18n="back_btn">⬅️ Torna alla Tastiera</a>
         </div>
       </div>
     </div>
     <div id="footer-placeholder"></div>
   </div>
 
-  <script>
-    let activeLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
-    
-    function applyHelpLang(l) {
-      activeLang = l;
-      localStorage.setItem('bass_lang', l);
-      
-      document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
-      
-      document.getElementById('text-it').style.display = l === 'it' ? 'block' : 'none';
-      document.getElementById('text-en').style.display = l === 'en' ? 'block' : 'none';
-      
-      document.getElementById('back-btn-text').innerText = l === 'it' ? '⬅️ Torna alla Tastiera' : '⬅️ Back to Fretboard';
-      document.title = l === 'it' ? 'Aiuto e Istruzioni | Bassmate' : 'Help & Guide | Bassmate';
-    }
-    
-    document.getElementById('dl-ctrl').addEventListener('click', e => {
-      const btn = e.target.closest('[data-v]');
-      if(!btn) return;
-      applyHelpLang(btn.dataset.v);
-      if(window.updateI18nLabels) window.updateI18nLabels(); // sync app.js if loaded
-    });
-    
-    applyHelpLang(activeLang);
-  </script>
   <script src="app.js"></script>
 </body>
 </html>
