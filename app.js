@@ -27,7 +27,25 @@ const I18N = {
     right: "Destro", lefty: "Mancino", hand: "Mano",
     back_btn: "⬅️ Torna alla Tastiera",
     quiz_score: "🏆 Punteggio:", quiz_wrong: "(Ahi!)", quiz_initial: "🏆 Punteggio: 0",
-    metro_btn: "Metronomo", metro_btn_lbl: "Metro", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop"
+    metro_btn: "Metronomo", metro_btn_lbl: "Metro", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop",
+    share_btn: "Condividi Scala", share_copied: "🔗 Link copiato negli appunti!", share_fail: "Copia questo link:",
+    kbd_title: "⌨️ Scorciatoie da Tastiera",
+    kbd_root_lr: "← / →", kbd_root_lr_desc: "Cambia nota radice",
+    kbd_quiz: "Q", kbd_quiz_desc: "Attiva/Disattiva Quiz",
+    kbd_metro: "M", kbd_metro_desc: "Apri/Chiudi Metronomo",
+    kbd_reset: "R", kbd_reset_desc: "Reset tastiera",
+    kbd_help: "?", kbd_help_desc: "Mostra queste scorciatoie",
+    stats_title: "Le tue statistiche", stats_sessions: "Sessioni", stats_best: "Best Score", stats_weak: "Nota più difficile", stats_none: "Nessun dato ancora!",
+    tour_skip: "Salta tour", tour_next: "Avanti →", tour_done: "Fatto! 🎸",
+    tour_0_t: "Benvenuto su Bassmate! 🎸", tour_0_b: "Ti guidiamo in un veloce tour delle funzioni principali. Dura meno di un minuto!",
+    tour_1_t: "🎵 Nota Radice", tour_1_b: "Clicca una nota (Do, Re, Mi...) per impostare la fondamentale. Cambierà tutto il manico in tempo reale.",
+    tour_2_t: "🎹 Scala / Accordo", tour_2_b: "Naviga tra i tab Base, Modi, Arpeggi per esplorare le infinite combinazioni. La scala attiva è evidenziata in viola.",
+    tour_3_t: "🎺 Manico Interattivo", tour_3_b: "Clicca su qualsiasi nota del manico per sentirne il suono. Usa 'Etichette' per scegliere se vedere gradi, note o dita.",
+    tour_4_t: "🎯 Quiz Mode", tour_4_b: "Metti alla prova la tua memoria! Il manico si svuoterà e dovrai indovinare la nota sul tasto evidenziato.",
+    tour_5_t: "🥁 Metronomo", tour_5_b: "Studia le scale a tempo preciso. Regola BPM e battuta, poi premi Start. Puoi suonare le note sul manico mentre il metro batte!",
+    tour_6_t: "Sei pronto! 🤘", tour_6_b: "Buono studio bassista! Ricorda: la guida completa è sempre accessibile dall'icona \u2753 in alto a destra.",
+    "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-corde)", "D Standard (4)": "D Standard (4-corde)",
+    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -54,7 +72,25 @@ const I18N = {
     right: "Right", lefty: "Lefty", hand: "Hand",
     back_btn: "⬅️ Back to Fretboard",
     quiz_score: "🏆 Score:", quiz_wrong: "(Ouch!)", quiz_initial: "🏆 Score: 0",
-    metro_btn: "Metronome", metro_btn_lbl: "Metro", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop"
+    metro_btn: "Metronome", metro_btn_lbl: "Metro", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop",
+    share_btn: "Share Scale", share_copied: "🔗 Link copied to clipboard!", share_fail: "Copy this link:",
+    kbd_title: "⌨️ Keyboard Shortcuts",
+    kbd_root_lr: "← / →", kbd_root_lr_desc: "Change root note",
+    kbd_quiz: "Q", kbd_quiz_desc: "Toggle Quiz Mode",
+    kbd_metro: "M", kbd_metro_desc: "Open/Close Metronome",
+    kbd_reset: "R", kbd_reset_desc: "Reset fretboard",
+    kbd_help: "?", kbd_help_desc: "Show these shortcuts",
+    stats_title: "Your Statistics", stats_sessions: "Sessions", stats_best: "Best Score", stats_weak: "Weakest Note", stats_none: "No data yet!",
+    tour_skip: "Skip tour", tour_next: "Next →", tour_done: "Let's play! 🎸",
+    tour_0_t: "Welcome to Bassmate! 🎸", tour_0_b: "Let's take a quick 1-minute tour of the main features!",
+    tour_1_t: "🎵 Root Note", tour_1_b: "Click a note (C, D, E...) to set the root. The entire fretboard updates in real-time.",
+    tour_2_t: "🎹 Scale / Chord", tour_2_b: "Browse tabs (Base, Modes, Arpeggios) to explore endless combinations. The active scale is highlighted in purple.",
+    tour_3_t: "🎺 Interactive Fretboard", tour_3_b: "Click any dot to hear the note! Use 'Labels' to toggle between degrees, notes, or finger positions.",
+    tour_4_t: "🎯 Quiz Mode", tour_4_b: "Test your memory! The fretboard empties and you guess the highlighted fret's note.",
+    tour_5_t: "🥁 Metronome", tour_5_b: "Practice in time. Set BPM and time signature, press Start. You can still play notes while it ticks!",
+    tour_6_t: "You're all set! 🤘", tour_6_b: "Happy Grooving! The full guide is always accessible from the \u2753 icon in the top right.",
+    "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-string)", "D Standard (4)": "D Standard (4-string)",
+    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -102,6 +138,9 @@ const TUNINGS = {
   'std-4':  { strings:4, notes:[7,2,9,4],      labels:['G','D','A','E'],         midiBase:[43,38,33,28], desc:'Standard 4-Corde',   short:'Std (4)' },
   'dropd-4':{ strings:4, notes:[7,2,9,2],      labels:['G','D','A','D'],         midiBase:[43,38,33,26], desc:'Drop D (D-A-D-G)',   short:'Drop D' },
   'eb-4':   { strings:4, notes:[6,1,8,3],      labels:['Gb','Db','Ab','Eb'],     midiBase:[42,37,32,27], desc:'Half-Step Down',     short:'Eb (4)' },
+  'dropC-4':{ strings:4, notes:[5,0,7,0],      labels:['F','C','G','C'],         midiBase:[41,36,31,24], desc:'Drop C (C-G-C-F)',   short:'Drop C' },
+  'bstd-4': { strings:4, notes:[2,9,4,11],     labels:['D','A','E','B'],         midiBase:[38,33,28,23], desc:'B Standard (4)',     short:'B Std (4)' },
+  'dstd-4': { strings:4, notes:[5,0,7,2],      labels:['F','C','G','D'],         midiBase:[41,36,31,26], desc:'D Standard (4)',     short:'D Std (4)' },
   'std-5':  { strings:5, notes:[7,2,9,4,11],   labels:['G','D','A','E','B'],     midiBase:[43,38,33,28,23], desc:'Standard 5-Corde',   short:'Std (5)' },
   'std-6':  { strings:6, notes:[0,7,2,9,4,11], labels:['C','G','D','A','E','B'], midiBase:[48,43,38,33,28,23], desc:'Standard 6-Corde',   short:'Std (6)' },
 };
@@ -292,6 +331,267 @@ function _metroToggle() {
 }
 
 function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.className=cls; return d; }
+
+/* ══════════════════════════════════════
+   TOAST NOTIFICATION
+══════════════════════════════════════ */
+function showToast(msg, duration = 2500) {
+  let t = document.getElementById('_toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = '_toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.className = 'toast-show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = '', duration);
+}
+
+/* ══════════════════════════════════════
+   SHARE BUTTON
+══════════════════════════════════════ */
+function shareCurrentScale() {
+  const url = window.location.origin + window.location.pathname + buildURL();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url)
+      .then(() => showToast(tl('share_copied')))
+      .catch(() => prompt(tl('share_fail'), url));
+  } else {
+    prompt(tl('share_fail'), url);
+  }
+}
+
+/* ══════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════ */
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight':
+        S.root = (S.root + 1) % 12;
+        render();
+        break;
+      case 'ArrowLeft':
+        S.root = (S.root + 11) % 12;
+        render();
+        break;
+      case 'q': case 'Q': {
+        const qBtn = document.getElementById('quizTogBtn');
+        if (qBtn) qBtn.click();
+        break;
+      }
+      case 'm': case 'M': {
+        const mBtn = document.getElementById('metroTogBtn');
+        if (mBtn) mBtn.click();
+        break;
+      }
+      case 'r': case 'R': {
+        const rBtn = document.getElementById('resetBtn');
+        if (rBtn) rBtn.click();
+        break;
+      }
+      case '?':
+        toggleKbdPanel();
+        break;
+    }
+  });
+}
+
+function toggleKbdPanel() {
+  let panel = document.getElementById('kbdPanel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'kbdPanel';
+    panel.className = 'kbd-panel';
+    panel.innerHTML = `
+      <h3 class="kbd-title" id="kbdTitle">${tl('kbd_title')}</h3>
+      <div class="kbd-list">
+        <span class="kbd-key">← / →</span><span>${tl('kbd_root_lr_desc')}</span>
+        <span class="kbd-key">Q</span><span>${tl('kbd_quiz_desc')}</span>
+        <span class="kbd-key">M</span><span>${tl('kbd_metro_desc')}</span>
+        <span class="kbd-key">R</span><span>${tl('kbd_reset_desc')}</span>
+        <span class="kbd-key">?</span><span>${tl('kbd_help_desc')}</span>
+      </div>
+      <button class="kbd-close" onclick="document.getElementById('kbdPanel').remove()">✕</button>
+    `;
+    document.body.appendChild(panel);
+    setTimeout(() => panel.classList.add('kbd-show'), 10);
+  } else {
+    panel.remove();
+  }
+}
+
+/* ══════════════════════════════════════
+   QUIZ STATISTICS
+══════════════════════════════════════ */
+function getQuizStats() {
+  try { return JSON.parse(localStorage.getItem('bass_quiz_stats') || '{}'); } catch(e) { return {}; }
+}
+function saveQuizStats(stats) {
+  localStorage.setItem('bass_quiz_stats', JSON.stringify(stats));
+}
+function recordQuizResult(ni, correct) {
+  const stats = getQuizStats();
+  if (!stats.notes) stats.notes = {};
+  if (!stats.notes[ni]) stats.notes[ni] = { c: 0, w: 0 };
+  correct ? stats.notes[ni].c++ : stats.notes[ni].w++;
+  if (!stats.sessions) stats.sessions = 0;
+  if (!stats.bestScore) stats.bestScore = 0;
+  saveQuizStats(stats);
+}
+function recordQuizSession(score) {
+  const stats = getQuizStats();
+  stats.sessions = (stats.sessions || 0) + 1;
+  stats.bestScore = Math.max(stats.bestScore || 0, score);
+  // Daily streak
+  const today = new Date().toDateString();
+  if (stats.lastDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    stats.streak = (stats.lastDate === yesterday) ? (stats.streak || 0) + 1 : 1;
+    stats.lastDate = today;
+  }
+  saveQuizStats(stats);
+}
+function updateQuizStatsDisplay() {
+  const el = document.getElementById('quizStatsBar');
+  if (!el) return;
+  const stats = getQuizStats();
+  if (!stats.sessions) { el.textContent = tl('stats_none'); return; }
+  const weakNote = (() => {
+    if (!stats.notes) return '—';
+    let worst = null, worstRatio = -1;
+    Object.entries(stats.notes).forEach(([ni, d]) => {
+      const total = d.c + d.w;
+      if (total < 3) return;
+      const ratio = d.w / total;
+      if (ratio > worstRatio) { worstRatio = ratio; worst = +ni; }
+    });
+    return worst !== null ? getNoteName(worst) : '—';
+  })();
+  el.innerHTML = `<span>📊 ${tl('stats_sessions')}: <strong>${stats.sessions}</strong></span>
+    <span>🏅 ${tl('stats_best')}: <strong>${stats.bestScore}</strong></span>
+    <span>⚡ ${tl('stats_weak')}: <strong>${weakNote}</strong></span>
+    ${stats.streak > 1 ? `<span>🔥 Streak: <strong>${stats.streak}gg</strong></span>` : ''}`;
+}
+
+/* ══════════════════════════════════════
+   ONBOARDING TOUR
+══════════════════════════════════════ */
+const TOUR_STEPS = [
+  { target: null,           pos: 'center' },
+  { target: '.td-row-root', pos: 'bottom' },
+  { target: '.td-row-scales',pos: 'bottom' },
+  { target: '.fb-area',     pos: 'top'    },
+  { target: '#quizTogBtn',  pos: 'bottom' },
+  { target: '#metroTogBtn', pos: 'bottom' },
+  { target: null,           pos: 'center' },
+];
+let _tourStep = 0;
+let _tourSpotlight = null;
+let _tourTooltip   = null;
+
+function _tourGetEl() {
+  const sel = TOUR_STEPS[_tourStep].target;
+  return sel ? document.querySelector(sel) : null;
+}
+
+function _tourPosition() {
+  const el      = _tourGetEl();
+  const step    = TOUR_STEPS[_tourStep];
+  const tooltip = _tourTooltip;
+  const spot    = _tourSpotlight;
+  const isLast  = _tourStep === TOUR_STEPS.length - 1;
+
+  // Update content
+  tooltip.querySelector('.tour-step-lbl').textContent = `${_tourStep + 1} / ${TOUR_STEPS.length}`;
+  tooltip.querySelector('.tour-title').textContent    = tl(`tour_${_tourStep}_t`);
+  tooltip.querySelector('.tour-body').textContent     = tl(`tour_${_tourStep}_b`);
+  const nextBtn = tooltip.querySelector('.tour-next-btn');
+  nextBtn.textContent = isLast ? tl('tour_done') : tl('tour_next');
+
+  if (!el) {
+    // Centre overlay
+    spot.style.cssText = 'position:fixed; top:50%; left:50%; width:0; height:0; border-radius:50%; box-shadow:none;';
+    tooltip.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);';
+    return;
+  }
+
+  const r = el.getBoundingClientRect();
+  const pad = 8;
+  spot.style.cssText = `
+    position:fixed; top:${r.top-pad}px; left:${r.left-pad}px;
+    width:${r.width+pad*2}px; height:${r.height+pad*2}px;
+    border-radius:10px; box-shadow:0 0 0 9999px rgba(0,0,0,0.78);
+    transition:all .35s cubic-bezier(0.4,0,0.2,1);
+    pointer-events:none; z-index:9001;
+  `;
+  // Position tooltip
+  const tw = 300, th = 160;
+  let tx, ty;
+  if (step.pos === 'bottom') {
+    tx = r.left + r.width / 2 - tw / 2;
+    ty = r.bottom + 16;
+  } else if (step.pos === 'top') {
+    tx = r.left + r.width / 2 - tw / 2;
+    ty = r.top - th - 16;
+  } else {
+    tx = window.innerWidth  / 2 - tw / 2;
+    ty = window.innerHeight / 2 - th / 2;
+  }
+  tx = Math.max(12, Math.min(window.innerWidth  - tw - 12, tx));
+  ty = Math.max(70, Math.min(window.innerHeight - th - 12, ty));
+  tooltip.style.cssText = `position:fixed; top:${ty}px; left:${tx}px; width:${tw}px;`;
+}
+
+function startTour() {
+  if (document.getElementById('tourOverlay')) return;
+  _tourStep = 0;
+  const overlay = document.createElement('div');
+  overlay.id = 'tourOverlay';
+  overlay.style.cssText = 'position:fixed; inset:0; z-index:9000; pointer-events:none;';
+
+  _tourSpotlight = document.createElement('div');
+  _tourSpotlight.className = 'tour-spotlight';
+
+  _tourTooltip = document.createElement('div');
+  _tourTooltip.className = 'tour-tooltip';
+  _tourTooltip.innerHTML = `
+    <div class="tour-step-lbl">1 / ${TOUR_STEPS.length}</div>
+    <div class="tour-title"></div>
+    <div class="tour-body"></div>
+    <div class="tour-actions">
+      <button class="tour-skip-btn">${tl('tour_skip')}</button>
+      <button class="tour-next-btn">${tl('tour_next')}</button>
+    </div>
+  `;
+  _tourTooltip.style.pointerEvents = 'all';
+  _tourTooltip.querySelector('.tour-skip-btn').onclick = endTour;
+  _tourTooltip.querySelector('.tour-next-btn').onclick = () => {
+    if (_tourStep >= TOUR_STEPS.length - 1) { endTour(); return; }
+    _tourStep++;
+    _tourPosition();
+  };
+
+  overlay.appendChild(_tourSpotlight);
+  overlay.appendChild(_tourTooltip);
+  document.body.appendChild(overlay);
+  _tourPosition();
+}
+
+function endTour() {
+  const ov = document.getElementById('tourOverlay');
+  if (ov) ov.remove();
+  localStorage.setItem('bass_toured', '1');
+}
+
+function maybeStartTour() {
+  if (!document.getElementById('fretboard')) return;  // only on main page
+  if (localStorage.getItem('bass_toured')) return;
+  setTimeout(startTour, 800);
+}
 
 /* ══════════════════════════════════════
    ASYNC INIT AND INJECTIONS
@@ -574,9 +874,24 @@ async function initApp() {
       });
     }
 
+    // SHARE BUTTON
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) shareBtn.addEventListener('click', shareCurrentScale);
+
+    // KEYBOARD SHORTCUTS
+    initKeyboardShortcuts();
+
+    // TRANSPOSE BUTTONS
+    const transpDn = document.getElementById('transpDn');
+    const transpUp = document.getElementById('transpUp');
+    if (transpDn) transpDn.addEventListener('click', () => { S.root = (S.root + 11) % 12; render(); });
+    if (transpUp) transpUp.addEventListener('click', () => { S.root = (S.root + 1) % 12; render(); });
+
     loadURL();
     if(S.view === 'quiz') startQuiz();
     render();
+    updateQuizStatsDisplay();
+    maybeStartTour();
   } else {
     updateI18nLabels();
   }
@@ -616,6 +931,7 @@ function handleQuizGuess(ni, btn) {
        btn.classList.add('correct');
        quizScore += 10;
        document.getElementById('quizScore').innerText = tl('quiz_score') + ' ' + quizScore;
+       recordQuizResult(ni, true);
        setTimeout(() => {
            btn.classList.remove('correct');
            generateQuizNode();
@@ -623,9 +939,12 @@ function handleQuizGuess(ni, btn) {
        }, 300);
    } else {
        btn.classList.add('wrong');
+       recordQuizResult(quizActiveNote.ni, false);
+       if (quizScore > 0) recordQuizSession(quizScore);
        quizScore = 0;
        document.getElementById('quizScore').innerText = tl('quiz_initial') + ' ' + tl('quiz_wrong');
        setTimeout(() => btn.classList.remove('wrong'), 400);
+       updateQuizStatsDisplay();
    }
 }
 

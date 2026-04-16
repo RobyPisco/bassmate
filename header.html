@@ -16,6 +16,7 @@
         window._S = window._S || (typeof S !== 'undefined' ? S : null);
         if(window._S) { window._S.audio = !window._S.audio; this.textContent = window._S.audio ? '🔊' : '🔇'; this.style.opacity = window._S.audio ? '1' : '0.5'; }
       ">🔊</button>
+      <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi Scala">🔗</button>
       <select id="favCtrl" class="sel-wrap" style="width: auto; display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold; margin-left:6px;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
@@ -72,7 +73,9 @@
   <!-- RIGA 3: SCELTA NOTA RADICE -->
   <div class="td-row td-row-root" style="padding-top: 6px;">
     <div class="row-label" data-i18n="root_note">Nota radice</div>
+    <button class="p" id="transpDn" title="Semitono giù" style="padding:4px 8px; flex-shrink:0;">&#9664;</button>
     <div class="hz-grid" id="rootCtrl"></div>
+    <button class="p" id="transpUp" title="Semitono su" style="padding:4px 8px; flex-shrink:0;">&#9654;</button>
   </div>
 
   <!-- RIGA 4: SCELTA SCALA/ACCORDO -->
