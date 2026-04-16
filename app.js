@@ -478,119 +478,59 @@ function updateQuizStatsDisplay() {
 }
 
 /* ══════════════════════════════════════
-   ONBOARDING TOUR
+   ONBOARDING TOUR (Simple Modal — no spotlight)
 ══════════════════════════════════════ */
-const TOUR_STEPS = [
-  { target: null,           pos: 'center' },
-  { target: '.td-row-root', pos: 'bottom' },
-  { target: '.td-row-scales',pos: 'bottom' },
-  { target: '.fb-area',     pos: 'top'    },
-  { target: '#quizTogBtn',  pos: 'bottom' },
-  { target: '#metroTogBtn', pos: 'bottom' },
-  { target: null,           pos: 'center' },
-];
-let _tourStep = 0;
-let _tourSpotlight = null;
-let _tourTooltip   = null;
-
-function _tourGetEl() {
-  const sel = TOUR_STEPS[_tourStep].target;
-  return sel ? document.querySelector(sel) : null;
-}
-
-function _tourPosition() {
-  const el      = _tourGetEl();
-  const step    = TOUR_STEPS[_tourStep];
-  const tooltip = _tourTooltip;
-  const spot    = _tourSpotlight;
-  const isLast  = _tourStep === TOUR_STEPS.length - 1;
-
-  // Update content
-  tooltip.querySelector('.tour-step-lbl').textContent = `${_tourStep + 1} / ${TOUR_STEPS.length}`;
-  tooltip.querySelector('.tour-title').textContent    = tl(`tour_${_tourStep}_t`);
-  tooltip.querySelector('.tour-body').textContent     = tl(`tour_${_tourStep}_b`);
-  const nextBtn = tooltip.querySelector('.tour-next-btn');
-  nextBtn.textContent = isLast ? tl('tour_done') : tl('tour_next');
-
-  if (!el) {
-    // Centre overlay
-    spot.style.cssText = 'position:fixed; top:50%; left:50%; width:0; height:0; border-radius:50%; box-shadow:none;';
-    tooltip.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:all;';
-    return;
-  }
-
-  const r = el.getBoundingClientRect();
-  const pad = 8;
-  spot.style.cssText = `
-    position:fixed; top:${r.top-pad}px; left:${r.left-pad}px;
-    width:${r.width+pad*2}px; height:${r.height+pad*2}px;
-    border-radius:10px; box-shadow:0 0 0 9999px rgba(0,0,0,0.78);
-    transition:all .35s cubic-bezier(0.4,0,0.2,1);
-    pointer-events:none; z-index:9001;
-  `;
-  // Position tooltip
-  const tw = 300, th = 160;
-  let tx, ty;
-  if (step.pos === 'bottom') {
-    tx = r.left + r.width / 2 - tw / 2;
-    ty = r.bottom + 16;
-  } else if (step.pos === 'top') {
-    tx = r.left + r.width / 2 - tw / 2;
-    ty = r.top - th - 16;
-  } else {
-    tx = window.innerWidth  / 2 - tw / 2;
-    ty = window.innerHeight / 2 - th / 2;
-  }
-  tx = Math.max(12, Math.min(window.innerWidth  - tw - 12, tx));
-  ty = Math.max(70, Math.min(window.innerHeight - th - 12, ty));
-  tooltip.style.cssText = `position:fixed; top:${ty}px; left:${tx}px; width:${tw}px; pointer-events:all;`;
-}
-
 function startTour() {
   if (document.getElementById('tourOverlay')) return;
-  _tourStep = 0;
+  if (!document.getElementById('fretboard')) return;
 
+  const total = 7;
+  let step = 0;
+
+  // Overlay: fullscreen, above EVERYTHING, blocks all events
   const overlay = document.createElement('div');
   overlay.id = 'tourOverlay';
-  // pointer-events:all blocca tutti i click sull'app sottostante durante il tour
-  overlay.style.cssText = 'position:fixed; inset:0; z-index:9000; pointer-events:all;';
+  overlay.style.cssText = [
+    'position:fixed', 'inset:0', 'z-index:999999',
+    'background:rgba(5,5,15,0.82)', 'backdrop-filter:blur(3px)',
+    'display:flex', 'align-items:center', 'justify-content:center',
+    'pointer-events:all'
+  ].join(';');
 
-  _tourSpotlight = document.createElement('div');
-  _tourSpotlight.className = 'tour-spotlight';
-  _tourSpotlight.style.pointerEvents = 'none'; // il spotlight è solo visivo
+  // Card: does NOT inherit overlay's stacking issues
+  const card = document.createElement('div');
+  card.style.cssText = [
+    'background:#131326', 'border:1px solid #7c3aed', 'border-radius:18px',
+    'padding:32px 28px', 'max-width:380px', 'width:90%',
+    'box-shadow:0 16px 60px rgba(0,0,0,0.7)',
+    'pointer-events:all', 'position:relative'
+  ].join(';');
 
-  _tourTooltip = document.createElement('div');
-  _tourTooltip.className = 'tour-tooltip';
-  _tourTooltip.innerHTML = `
-    <div class="tour-step-lbl">1 / ${TOUR_STEPS.length}</div>
-    <div class="tour-title"></div>
-    <div class="tour-body"></div>
-    <div class="tour-actions">
-      <button class="tour-skip-btn">${tl('tour_skip')}</button>
-      <button class="tour-next-btn">${tl('tour_next')}</button>
-    </div>
-  `;
-  _tourTooltip.querySelector('.tour-skip-btn').onclick = endTour;
-  _tourTooltip.querySelector('.tour-next-btn').onclick = () => {
-    if (_tourStep >= TOUR_STEPS.length - 1) { endTour(); return; }
-    _tourStep++;
-    _tourPosition();
-  };
+  function render() {
+    const isLast = step === total - 1;
+    card.innerHTML = `
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">${step + 1} / ${total}</div>
+      <div style="font-size:20px;font-weight:900;color:#7c3aed;margin-bottom:12px;line-height:1.3;">${tl('tour_' + step + '_t')}</div>
+      <div style="font-size:14px;color:#dcdcf5;opacity:.9;line-height:1.65;margin-bottom:24px;">${tl('tour_' + step + '_b')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button id="_tSkip" style="background:none;border:none;color:#6b7280;font-size:13px;cursor:pointer;padding:4px;">${tl('tour_skip')}</button>
+        <button id="_tNext" style="padding:10px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.5);">${isLast ? tl('tour_done') : tl('tour_next')}</button>
+      </div>
+    `;
+    card.querySelector('#_tSkip').onclick = () => { overlay.remove(); localStorage.setItem('bass_toured', '1'); };
+    card.querySelector('#_tNext').onclick = () => {
+      if (step >= total - 1) { overlay.remove(); localStorage.setItem('bass_toured', '1'); return; }
+      step++;
+      render();
+    };
+  }
 
-  overlay.appendChild(_tourSpotlight);
-  overlay.appendChild(_tourTooltip);
+  render();
+  overlay.appendChild(card);
   document.body.appendChild(overlay);
-  _tourPosition();
-}
-
-function endTour() {
-  const ov = document.getElementById('tourOverlay');
-  if (ov) ov.remove();
-  localStorage.setItem('bass_toured', '1');
 }
 
 function maybeStartTour() {
-  if (!document.getElementById('fretboard')) return;  // only on main page
   if (localStorage.getItem('bass_toured')) return;
   setTimeout(startTour, 800);
 }
