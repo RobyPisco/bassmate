@@ -350,6 +350,25 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 .nd.q-dot { background: #ef4444 !important; box-shadow: 0 0 15px #ef4444 !important; opacity: 1 !important; z-index: 10; cursor: default; }
 .nd.q-dot span { display: none !important; }
 
+/* === QUIZ ARCADE HUD === */
+.quiz-hud {
+  max-width: 600px; margin: 0 auto 16px; 
+  background: var(--s2); border: 1px solid var(--border); border-radius: 12px;
+  overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.quiz-timer-bar { height: 6px; background: rgba(0,0,0,0.3); width: 100%; position: relative; }
+.quiz-timer-fill {
+  height: 100%; width: 100%; background: linear-gradient(90deg, #10b981, #22d3ee);
+  transition: width 1s linear; transform-origin: left;
+}
+.quiz-timer-fill.urgent { background: linear-gradient(90deg, #ef4444, #f59e0b); }
+
+.quiz-hud-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; }
+.quiz-score { font-size: 20px; font-weight: 900; color: #f59e0b; font-family: 'Space Mono', monospace; }
+.quiz-combo { font-size: 14px; font-weight: 800; color: #10b981; transition: all .2s; }
+.quiz-combo.pop { transform: scale(1.4); color: #22d3ee; }
+.quiz-time { font-size: 16px; font-weight: 700; color: var(--text); font-family: 'Space Mono', monospace; }
+
 @keyframes shake {
   0% { transform: translateX(0); }
   25% { transform: translateX(-4px); }

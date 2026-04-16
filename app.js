@@ -156,6 +156,10 @@ const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', han
 
 let quizActiveNote = null;
 let quizScore = 0;
+let quizCombo = 1;
+let quizTimeLeft = 60;
+let quizTimerId = null;
+let isQuizRunning = false;
 
 /* ══════════════════════════════════════
    AUDIO ENGINE
@@ -907,47 +911,111 @@ function syncScalePills() {
 }
 
 /* ══════════════════════════════════════
-   QUIZ ENGINE
+   ARCADE QUIZ ENGINE
 ══════════════════════════════════════ */
 function startQuiz() {
   quizScore = 0;
+  quizCombo = 1;
+  quizTimeLeft = 60;
+  isQuizRunning = true;
+  if(quizTimerId) clearInterval(quizTimerId);
+  
   const qs = document.getElementById('quizScore');
-  if (qs) qs.innerText = tl('quiz_initial');
+  const qc = document.getElementById('quizCombo');
+  const qt = document.getElementById('quizTime');
+  const fill = document.getElementById('quizTimerFill');
+  
+  if (qs) qs.innerText = 'Go!';
+  if (qc) { qc.innerText = 'Combo x1'; qc.className = 'quiz-combo'; }
+  if (qt) qt.innerText = '⏱️ 60s';
+  if (fill) { fill.style.width = '100%'; fill.classList.remove('urgent'); }
+  
   generateQuizNode();
+
+  quizTimerId = setInterval(() => {
+    quizTimeLeft--;
+    if(qt) qt.innerText = '⏱️ ' + quizTimeLeft + 's';
+    if(fill) {
+      const pct = (quizTimeLeft / 60) * 100;
+      fill.style.width = pct + '%';
+      if(quizTimeLeft <= 10) fill.classList.add('urgent');
+    }
+    if(quizTimeLeft <= 0) {
+      endQuizMode();
+    }
+  }, 1000);
+}
+
+function endQuizMode() {
+  isQuizRunning = false;
+  clearInterval(quizTimerId);
+  quizActiveNote = null;
+  recordQuizSession(quizScore);
+  const qs = document.getElementById('quizScore');
+  const qt = document.getElementById('quizTime');
+  if(qs) qs.innerText = 'TIME UP! Score: ' + quizScore;
+  if(qt) qt.innerText = '⏱️ 0s';
+  setTimeout(updateQuizStatsDisplay, 100);
+  renderFretboard();
 }
 
 function generateQuizNode() {
   const t = TUNINGS[S.tuning];
-  // Raggio ristretto al Manico per evitare panico (Max 12 tasti)
   const maxFret = Math.min(12, FRETS);
   const s = Math.floor(Math.random() * t.strings);
-  const f = Math.floor(Math.random() * maxFret) + 1; // escludo tasto a vuoto 0, troppo facile
+  const f = Math.floor(Math.random() * maxFret) + 1; 
   const ni = (t.notes[s] + f) % 12;
   quizActiveNote = {s, f, ni};
+
+  // Ear training: suona la nota automaticamente!
+  if(S.audio) {
+    const midi = t.midiBase[s] + f;
+    playNote(midi);
+  }
 }
 
 function handleQuizGuess(ni, btn) {
-   if (!quizActiveNote) return;
+   if (!quizActiveNote || !isQuizRunning) {
+     if(!isQuizRunning && quizTimeLeft <= 0) startQuiz(); // Restart upon click
+     return;
+   }
+   
+   const qs = document.getElementById('quizScore');
+   const qc = document.getElementById('quizCombo');
+
    if (ni === quizActiveNote.ni) {
        btn.classList.add('correct');
-       quizScore += 10;
-       document.getElementById('quizScore').innerText = tl('quiz_score') + ' ' + quizScore;
+       const pointsEarned = 10 * quizCombo;
+       quizScore += pointsEarned;
+       quizCombo++;
+       
+       if (qs) qs.innerText = 'Score: ' + quizScore;
+       if (qc) {
+         qc.innerText = 'Combo x' + quizCombo;
+         qc.classList.add('pop');
+         setTimeout(() => qc.classList.remove('pop'), 200);
+       }
+       
        recordQuizResult(ni, true);
        setTimeout(() => {
            btn.classList.remove('correct');
-           generateQuizNode();
-           renderFretboard();
+           if(isQuizRunning) { generateQuizNode(); renderFretboard(); }
        }, 300);
    } else {
        btn.classList.add('wrong');
        recordQuizResult(quizActiveNote.ni, false);
-       if (quizScore > 0) recordQuizSession(quizScore);
-       quizScore = 0;
-       document.getElementById('quizScore').innerText = tl('quiz_initial') + ' ' + tl('quiz_wrong');
+       
+       // Sbagliato? Perdi la combo ma non il punteggio!
+       quizCombo = 1;
+       if (qc) {
+         qc.innerText = 'Combo Break!';
+         qc.style.color = '#ef4444';
+         setTimeout(() => { qc.innerText = 'Combo x1'; qc.style.color = ''; }, 1000);
+       }
        setTimeout(() => btn.classList.remove('wrong'), 400);
-       updateQuizStatsDisplay();
    }
 }
+
 
 /* ══════════════════════════════════════
    CORE LOGIC & RENDER
