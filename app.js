@@ -515,7 +515,7 @@ function _tourPosition() {
   if (!el) {
     // Centre overlay
     spot.style.cssText = 'position:fixed; top:50%; left:50%; width:0; height:0; border-radius:50%; box-shadow:none;';
-    tooltip.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);';
+    tooltip.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:all;';
     return;
   }
 
@@ -543,7 +543,7 @@ function _tourPosition() {
   }
   tx = Math.max(12, Math.min(window.innerWidth  - tw - 12, tx));
   ty = Math.max(70, Math.min(window.innerHeight - th - 12, ty));
-  tooltip.style.cssText = `position:fixed; top:${ty}px; left:${tx}px; width:${tw}px;`;
+  tooltip.style.cssText = `position:fixed; top:${ty}px; left:${tx}px; width:${tw}px; pointer-events:all;`;
 }
 
 function startTour() {
@@ -567,7 +567,6 @@ function startTour() {
       <button class="tour-next-btn">${tl('tour_next')}</button>
     </div>
   `;
-  _tourTooltip.style.pointerEvents = 'all';
   _tourTooltip.querySelector('.tour-skip-btn').onclick = endTour;
   _tourTooltip.querySelector('.tour-next-btn').onclick = () => {
     if (_tourStep >= TOUR_STEPS.length - 1) { endTour(); return; }
