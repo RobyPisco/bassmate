@@ -18,31 +18,43 @@
 
 /* ════ LIGHT MODE ════ */
 [data-theme="light"] {
-  --bg:       #f4f4fb;
-  --surface:  rgba(255,255,255,0.92);
-  --s2:       #eceef8;
-  --s3:       #e2e4f2;
-  --border:   #c8cae0;
-  --text:     #18182e;
-  --muted:    #7070aa;
-  --root-c:   #c97b10;
-  --root-g:   rgba(201,123,16,.35);
-  --note-c:   #0891b2;
-  --note-g:   rgba(8,145,178,.3);
-  --accent:   #6d28d9;
-  --neck-bd:  #bbbdd8;
-  --neck-bg1: #dddff0;
-  --neck-bg2: #e6e8f4;
+  --bg:       #f8f9fb;
+  --surface:  rgba(255,255,255,0.95);
+  --s2:       #eef2f6;
+  --s3:       #e2e8f0;
+  --border:   #cbd5e1;
+  --text:     #1e293b;
+  --muted:    #64748b;
+  --root-c:   #ea580c;
+  --root-g:   rgba(234,88,12,.3);
+  --note-c:   #0ea5e9;
+  --note-g:   rgba(14,165,233,.25);
+  --accent:   #8b5cf6;
+  --neck-bd:  #94a3b8;
+  --neck-bg1: #e2e8f0;
+  --neck-bg2: #f1f5f9;
 }
 [data-theme="light"] .app {
-  background: radial-gradient(circle at top center, #d8d8f0, var(--bg) 65%) !important;
+  background: radial-gradient(circle at top center, #e2e8f0, var(--bg) 55%) !important;
 }
 [data-theme="light"] .nd.sn { background: var(--note-c); color: #fff; }
 [data-theme="light"] .nd.rn { background: var(--root-c); color: #fff; }
 [data-theme="light"] body { background: var(--bg); }
 [data-theme="light"] .p.on { color: #fff; }
-[data-theme="light"] .fb-str::before { background: var(--neck-bg1); }
-[data-theme="light"] .fb-dot { background: #a0a0c0; box-shadow: 0 0 6px rgba(110,100,180,.5); }
+[data-theme="light"] .fb-str::before { background: var(--neck-bd); opacity: 0.5; }
+[data-theme="light"] .fb-dot { background: #94a3b8; box-shadow: 0 0 4px rgba(100,116,139,.3); border-color:#e2e8f0; }
+
+[data-theme="light"] .scale-info,
+[data-theme="light"] .pos-bar,
+[data-theme="light"] .quiz-panel,
+[data-theme="light"] .metro-panel {
+  background: rgba(255, 255, 255, 0.6);
+}
+[data-theme="light"] .tour-tooltip {
+  background: #ffffff;
+  border-color: var(--accent);
+}
+[data-theme="light"] .tour-title { color: var(--accent); }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
