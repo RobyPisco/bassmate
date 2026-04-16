@@ -23,14 +23,26 @@
 </head>
 <body>
   <div class="hw-header">
-    <h1>Bass Study Session</h1>
+    <div class="lang-float" id="dl-ctrl" style="position:absolute; top:20px; right:20px; display:flex; gap:4px;">
+       <button class="p on" data-v="it" style="padding:4px 8px; cursor:pointer;">IT</button>
+       <button class="p" data-v="en" style="padding:4px 8px; cursor:pointer;">EN</button>
+    </div>
+    <h1 id="title-text">Bass Study Session</h1>
     <p>
-      Student: <input type="text" style="width:200px"> &nbsp;&nbsp;&nbsp; 
-      Date: <input type="text" style="width:100px"> &nbsp;&nbsp;&nbsp; 
-      Notes: <input type="text" style="width:150px">
+      <span id="stud-text">Studente</span>: <input type="text" style="width:200px"> &nbsp;&nbsp;&nbsp; 
+      <span id="date-text">Data</span>: <input type="text" style="width:100px"> &nbsp;&nbsp;&nbsp; 
+      <span id="note-text">Note</span>: <input type="text" style="width:150px">
     </p>
-    <div style="display:flex; justify-content:center; gap: 10px; margin-top: 20px;">
-      <button id="backBtn" onclick="window.history.back()" style="padding:10px 20px; border:1px solid #7c3aed; color:#7c3aed; background:transparent; border-radius:8px; cursor:pointer; font-weight:bold;">← Torna al Manico</button>
+    <div style="display:flex; justify-content:center; align-items:center; gap: 15px; margin-top: 20px;">
+      <label style="font-size:14px; font-weight:bold;">
+        Strings: 
+        <select id="stringCtrl" style="padding:5px; border-radius:6px; border:1px solid #7c3aed;">
+          <option value="4">4 Strings</option>
+          <option value="5">5 Strings</option>
+          <option value="6">6 Strings</option>
+        </select>
+      </label>
+      <button id="backBtn" onclick="window.location.href='index.html'" style="padding:10px 20px; border:1px solid #7c3aed; color:#7c3aed; background:transparent; border-radius:8px; cursor:pointer; font-weight:bold;">← Torna al Manico</button>
       <button id="printBtn" onclick="window.print()" style="padding:10px 20px; background:#7c3aed; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">🖨️ Stampa Ora</button>
     </div>
   </div>
@@ -42,85 +54,102 @@
   <script>
     const container = document.getElementById('gc');
     const frets = 15;
-    const strings = 4;
+    let stringsCount = 4;
     const markers = [3,5,7,9,12,15];
 
-    for(let i=0; i<6; i++) {
-      const wrapper = document.createElement('div');
-      
-      // Costruiamo il manico usando il motore vettoriale SVG per precisione matematica in stampa
-      const svgn = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgn, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', '110');
-      svg.style.border = '1pt solid #000';
-      svg.style.borderLeft = '5pt solid #000'; // Il capotasto 
-      svg.style.display = 'block';
-      svg.style.background = '#fff';
-      
-      // Frets (Linee Verticali)
-      for(let f=1; f<=frets; f++) {
-        const line = document.createElementNS(svgn, 'line');
-        const x = f * (100 / frets);
-        line.setAttribute('x1', x + '%');
-        line.setAttribute('y1', '0');
-        line.setAttribute('x2', x + '%');
-        line.setAttribute('y2', '100%');
-        line.setAttribute('stroke', '#000');
-        line.setAttribute('stroke-width', '1');
-        svg.appendChild(line);
-      }
-      
-      // Markers (Puntini)
-      markers.forEach(pos => {
-        if(pos > frets) return;
-        const addDot = (yPercent) => {
-          const circle = document.createElementNS(svgn, 'circle');
-          const cx = (pos - 0.5) * (100 / frets);
-          circle.setAttribute('cx', cx + '%');
-          circle.setAttribute('cy', yPercent);
-          circle.setAttribute('r', '6');
-          circle.setAttribute('fill', '#d1d5db');
-          svg.appendChild(circle);
-        };
-        if(pos === 12) { 
-           addDot('25%'); 
-           addDot('75%'); 
-        } else {
-           addDot('50%');
-        }
-      });
-      
-      // Corde (Linee Orizzontali)
-      for(let s=0; s<strings; s++) {
-        const line = document.createElementNS(svgn, 'line');
-        const y = (s + 0.5) * (110 / strings);
-        line.setAttribute('x1', '0');
-        line.setAttribute('y1', y);
-        line.setAttribute('x2', '100%');
-        line.setAttribute('y2', y);
-        line.setAttribute('stroke', '#000');
-        line.setAttribute('stroke-width', '1.5');
-        svg.appendChild(line);
-      }
+    let activeLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
 
-      wrapper.appendChild(svg);
-      
-      // Numeri allineati perfettamente con absolute per prevenire overflow
-      const nums = document.createElement('div');
-      nums.className = 'fret-nums';
-      
-      for(let f=1; f<=frets; f++) {
-         const n = document.createElement('div'); 
-         n.className = 'fret-n'; 
-         n.innerText = f;
-         n.style.left = `calc((${f - 0.5}) * (100% / ${frets}))`;
-         nums.appendChild(n);
+    function renderGrids() {
+      container.innerHTML = '';
+      for(let i=0; i<6; i++) {
+        const wrapper = document.createElement('div');
+        const svgn = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgn, 'svg');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', '120');
+        svg.style.border = '1pt solid #000';
+        svg.style.borderLeft = '5pt solid #000'; 
+        svg.style.display = 'block';
+        svg.style.background = '#fff';
+        
+        for(let f=1; f<=frets; f++) {
+          const line = document.createElementNS(svgn, 'line');
+          const x = f * (100 / frets);
+          line.setAttribute('x1', x + '%');
+          line.setAttribute('y1', '0');
+          line.setAttribute('x2', x + '%');
+          line.setAttribute('y2', '100%');
+          line.setAttribute('stroke', '#000');
+          line.setAttribute('stroke-width', '1');
+          svg.appendChild(line);
+        }
+        
+        markers.forEach(pos => {
+          if(pos > frets) return;
+          const addDot = (yPercent) => {
+            const circle = document.createElementNS(svgn, 'circle');
+            const cx = (pos - 0.5) * (100 / frets);
+            circle.setAttribute('cx', cx + '%');
+            circle.setAttribute('cy', yPercent);
+            circle.setAttribute('r', '5');
+            circle.setAttribute('fill', '#e5e7eb');
+            svg.appendChild(circle);
+          };
+          if(pos === 12) { addDot('25%'); addDot('75%'); }
+          else { addDot('50%'); }
+        });
+        
+        for(let s=0; s<stringsCount; s++) {
+          const line = document.createElementNS(svgn, 'line');
+          const y = (s + 0.5) * (120 / stringsCount);
+          line.setAttribute('x1', '0');
+          line.setAttribute('y1', y);
+          line.setAttribute('x2', '100%');
+          line.setAttribute('y2', y);
+          line.setAttribute('stroke', '#000');
+          line.setAttribute('stroke-width', '1.5');
+          svg.appendChild(line);
+        }
+        wrapper.appendChild(svg);
+        const nums = document.createElement('div');
+        nums.className = 'fret-nums';
+        for(let f=1; f<=frets; f++) {
+           const n = document.createElement('div'); n.className = 'fret-n'; n.innerText = f;
+           n.style.left = `calc((${f - 0.5}) * (100% / ${frets}))`;
+           nums.appendChild(n);
+        }
+        wrapper.appendChild(nums);
+        container.appendChild(wrapper);
       }
-      
-      wrapper.appendChild(nums);
-      container.appendChild(wrapper);
     }
+
+    function setLang(l) {
+      activeLang = l;
+      localStorage.setItem('bass_lang', l);
+      document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
+      
+      const isIt = l === 'it';
+      document.getElementById('title-text').innerText = isIt ? 'Sessione di Studio Basso' : 'Bass Study Session';
+      document.getElementById('stud-text').innerText = isIt ? 'Studente' : 'Student';
+      document.getElementById('date-text').innerText = isIt ? 'Data' : 'Date';
+      document.getElementById('note-text').innerText = isIt ? 'Note' : 'Notes';
+      document.getElementById('backBtn').innerText = isIt ? '← Torna al Manico' : '← Back to App';
+      document.getElementById('printBtn').innerText = isIt ? '🖨️ Stampa Ora' : '🖨️ Print Now';
+    }
+
+    document.getElementById('stringCtrl').addEventListener('change', e => {
+      stringsCount = +e.target.value;
+      renderGrids();
+    });
+
+    document.getElementById('dl-ctrl').addEventListener('click', e => {
+      const btn = e.target.closest('[data-v]');
+      if(!btn) return;
+      setLang(btn.dataset.v);
+    });
+
+    setLang(activeLang);
+    renderGrids();
   </script>
 </body>
 </html>
