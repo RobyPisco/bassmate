@@ -349,6 +349,27 @@ function showToast(msg, duration = 2500) {
 }
 
 /* ══════════════════════════════════════
+   THEME TOGGLE (Dark / Light)
+══════════════════════════════════════ */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('themeTogBtn');
+  if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+  localStorage.setItem('bass_theme', theme);
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('bass_theme') ||
+    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  applyTheme(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+/* ══════════════════════════════════════
    SHARE BUTTON
 ══════════════════════════════════════ */
 function shareCurrentScale() {
@@ -828,6 +849,12 @@ async function initApp() {
     const transpUp = document.getElementById('transpUp');
     if (transpDn) transpDn.addEventListener('click', () => { S.root = (S.root + 11) % 12; render(); });
     if (transpUp) transpUp.addEventListener('click', () => { S.root = (S.root + 1) % 12; render(); });
+
+    // THEME TOGGLE
+    const themeBtn = document.getElementById('themeTogBtn');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+    initTheme();
 
     loadURL();
     if(S.view === 'quiz') startQuiz();
