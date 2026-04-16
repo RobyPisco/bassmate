@@ -384,6 +384,34 @@ function shareCurrentScale() {
 }
 
 /* ══════════════════════════════════════
+   IMAGE EXPORT (html2canvas)
+══════════════════════════════════════ */
+function exportFretboardImage() {
+  if (typeof html2canvas === 'undefined') {
+    showToast('Libreria in caricamento, riprova tra un istante...');
+    return;
+  }
+  
+  const el = document.getElementById('fretboard');
+  if (!el) return;
+
+  const bgCol = getComputedStyle(document.body).backgroundColor;
+  showToast('Generazione immagine in corso... 📸');
+
+  html2canvas(el, { 
+    backgroundColor: bgCol,
+    scale: 2 // High-res export
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `bassmate-${getNoteName(S.root).replace('#','s')}-${SCALES[S.scale].short}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }).catch(() => {
+    showToast('Errore durante l\'esportazione ❌');
+  });
+}
+
+/* ══════════════════════════════════════
    KEYBOARD SHORTCUTS
 ══════════════════════════════════════ */
 function initKeyboardShortcuts() {
@@ -840,6 +868,10 @@ async function initApp() {
     // SHARE BUTTON
     const shareBtn = document.getElementById('shareBtn');
     if (shareBtn) shareBtn.addEventListener('click', shareCurrentScale);
+
+    // SNAPSHOT BUTTON
+    const snapBtn = document.getElementById('snapshotBtn');
+    if (snapBtn) snapBtn.addEventListener('click', exportFretboardImage);
 
     // KEYBOARD SHORTCUTS
     initKeyboardShortcuts();
