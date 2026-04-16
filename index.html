@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bass Scales & Arpeggios — FormFactory</title>
+  <meta name="description" content="Una comoda web-app interattiva e stampabile per imparare tutte le scale e arpeggi sul manico del basso.">
+  <meta property="og:title" content="Bass Scales & Arpeggios — FormFactory">
+  <meta property="og:description" content="L'esploratore di scale per basso definitivo, esplora accordature alternate, arpeggi, e visualizza la tastiera come vuoi tu.">
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#080810">
+  <link rel="apple-touch-icon" href="icon.svg">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= TOP DASHBOARD (INJECTED) ================= -->
+  <div id="header-placeholder"></div>
+
+  <!-- ================= MAIN & FRETBOARD ================= -->
+  <main class="main">
+    <div class="scale-info" id="scaleInfo"></div>
+
+    <div class="pos-bar hide" id="posBar">
+      <button class="pos-nav" id="posL">◀</button>
+      <span class="pos-txt" id="posTxt"></span>
+      <button class="pos-nav" id="posR">▶</button>
+    </div>
+
+    <div class="fb-area">
+      <div class="fb-layout" id="fretboard"></div>
+    </div>
+
+    <div id="quizPanel" class="quiz-panel">
+      <div class="quiz-score" id="quizScore">🏆 Punteggio: 0</div>
+      <div class="quiz-btns" id="quizBtns"></div>
+    </div>
+
+    <div class="legend" id="fbLegend">
+      <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>
+      <div class="li"><div class="ld" style="background:var(--note-c); box-shadow: 0 0 8px var(--note-g)"></div><span data-i18n="pos_note">Nota della scala</span></div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

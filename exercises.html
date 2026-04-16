@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 Esercizi Pratici — Bass Scales</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#080810">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .ex-container {
+      max-width: 800px; margin: 40px auto; padding: 0 20px;
+    }
+    .ex-header { text-align: center; margin-bottom: 50px; }
+    .ex-header h1 { font-size: 38px; font-weight: 900; letter-spacing: -1px; margin-bottom: 12px; color: var(--text); }
+    .ex-header p { color: var(--muted); font-size: 16px; max-width: 600px; margin: 0 auto; line-height: 1.6;}
+    
+    .ex-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-start;
+      transition: transform 0.2s; position: relative;
+    }
+    .ex-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    
+    .ex-num {
+      width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+      background: rgba(124,58,237,0.1); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; border: 1px solid rgba(124,58,237,0.3);
+    }
+    
+    .ex-text h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .ex-text p { font-size: 14.5px; color: #a1a1c9; line-height: 1.6; margin-bottom: 16px; }
+    
+    .ex-action {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 16px; border-radius: 8px; text-decoration: none;
+      font-size: 13px; font-weight: 600; font-family: 'Space Mono', monospace; transition: 0.2s;
+    }
+    .ex-action:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    
+    @media(max-width: 600px) {
+      .ex-card { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div id="header-placeholder"></div>
+
+  <main class="main" style="overflow-y:auto; padding-bottom: 60px;">
+    <div class="ex-container">
+      <div class="ex-header">
+        <h1>I 10 Esercizi Fondamentali</h1>
+        <p>Queste 10 routine rappresentano la spina dorsale della tecnica e della teoria del basso. Includile nel tuo riscaldamento quotidiano e clicca il tasto azzurro per caricare il preset visivo sul manico!</p>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">1</div>
+        <div class="ex-text">
+          <h2>La Sfida Cromatica</h2>
+          <p>Suona la Scala Cromatica su ogni singola corda, partendo dalla nota a vuoto fino al 12° tasto. Devi pronunciare ad alta voce il nome della nota mentre la suoni, dicendo i Diesis (es: Do, Do#, Re).<br><em>Scopo:</em> Memorizzare i nomi e superare lo "smarrimento da tastiera vuota".</p>
+          <a href="index.html#r=0&s=chromatic&l=note&v=full" class="ex-action">🎸 Vis. Manico (Cromatica)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">2</div>
+        <div class="ex-text">
+          <h2>Scala Maggiore Monocorda</h2>
+          <p>Imposta la Vista su "Tutto" nel manico. Scegli un root (es: La) e percorri tutta la corda usando la formula magica dei TONI (W) e SEMITONI (H): <strong>W-W-H-W-W-W-H</strong>.<br><em>Scopo:</em> Unire l'orecchio musico alla distanza geometrica degli intervalli.</p>
+          <a href="index.html#r=9&s=major&l=deg&v=full" class="ex-action">🎸 Vis. Manico (La Maggiore)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">3</div>
+        <div class="ex-text">
+          <h2>Il Pattern del "Box 5fr" (Major)</h2>
+          <p>Imposta la Vista su "Box 5fr" e tieni la mano parallela. Suona una scala maggiore iniziando dal dito Medio o Indice. Muoviti verticalmente saltando sulle corde superiori anziché scivolare orizzontalmente.<br><em>Scopo:</em> Imparare a suonare fluidi mantenendo la mano ancorata a un singolo capotasto.</p>
+          <a href="index.html#r=9&s=major&v=box&b=4&l=finger" class="ex-action">🎸 Vis. Manico (Box Dita)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">4</div>
+        <div class="ex-text">
+          <h2>La Pentatonica Universale (Minor)</h2>
+          <p>Il Re di tutti i groove. Suona la Pentatonica Minore omettendo la 2° e la 6° nota dalla scala minore. Formula: <strong>WH - W - W - WH - W</strong>. Applicalo sopra una semplice backing track soul.<br><em>Scopo:</em> Avere un set sicuro di note "a prova di errore" quando ti chiedono di improvvisare un giro.</p>
+          <a href="index.html#r=9&s=minPenta&v=box&b=5&l=finger" class="ex-action">🎸 Vis. Manico (Box Pentatonica)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">5</div>
+        <div class="ex-text">
+          <h2>Catturare la Blue Note</h2>
+          <p>Aggiungi alla tua pentatonica minore appena studiata l'<strong>Undicesima aumentata (Quinta diminuita)</strong>. Questa è la Blue Note! Esercitati a suonarla non come nota fissa, ma come un passaggio scivolato o martellato (Hammer-on) verso la Quinta Naturale.<br><em>Scopo:</em> Generare la tensione "cattiva" essenziale per Funk, Blues e Rock.</p>
+          <a href="index.html#r=9&s=blues&v=box&b=5&l=deg" class="ex-action">🎸 Vis. Manico (Box Blues Gradi)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">6</div>
+        <div class="ex-text">
+          <h2>Salti in Ottava Fissa</h2>
+          <p>Per qualsiasi nota che suoni, trova la sua ottava (8) istantaneamente saltando **due tasti a destra e due corde in alto** (es: dal MI grave al RE basso). Metti un metronomo veloce e suona l'alternanza Basso-Alto come se fossi in un brano Disco o Funk alla Bruno Mars.<br><em>Scopo:</em> Interiorizzare l'intervallo dell'ottava senza mai doverlo cercare con gli occhi.</p>
+          <a href="index.html#r=4&s=major&v=full&l=note" class="ex-action">🎸 Vis. Manico (Ottave di Mi)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">7</div>
+        <div class="ex-text">
+          <h2>Sincronizzazione Quinte e Quarte</h2>
+          <p>La Quinta perfetta si ottiene spostandosi a destra di due tasti e suonando una corda più in alto. La Quarta perfetta? È esattamente la corda immediatamente sopra, ma nello stesso tasto! Suona questi intervalli insieme (Power Chords).<br><em>Scopo:</em> Questi due salti risolvono il 90% dei cambi armonici nella musica pop: dominali ciecamente.</p>
+          <a href="index.html#r=2&s=major&v=box&b=5&l=deg" class="ex-action">🎸 Vis. Manico (Re Maggiore 5fr)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">8</div>
+        <div class="ex-text">
+          <h2>Arpeggiare la Triade (Stile Accordi)</h2>
+          <p>Piuttosto che formare accordi contemporaneamente (che suonerebbero "pasticciati" sul basso), "snocciola" gli accordi: suona individualmente e sequenzialmente il <strong>Root (1), la Terza (3/b3) e la Quinta (5)</strong> di svariati accordi di fila.<br><em>Scopo:</em> Inculcare nella mano le forme geometriche Maggiore (triangolo stretto) vs Minore.</p>
+          <a href="index.html#r=0&s=major&v=box&b=3&l=deg" class="ex-action">🎸 Vis. Manico (Triade di Do)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">9</div>
+        <div class="ex-text">
+          <h2>La Progressione Perfetta (I-IV-V-vi)</h2>
+          <p>Prendi una scala come il Do Maggiore. Suona come bassline (in sequenza) i gradi I, IV, V e vi – ovvero Do maggiore, Fa Maggiore, Sol Maggiore e La minore. Questo formulerà il "giro Pop/Punk" che regge le fondamenta delle canzoni moderne.<br><em>Scopo:</em> Pensare in "Numeri Romani" anziché in lette fisse, per poter trasportare un brano ovunque (Circle of Fifths).</p>
+          <a href="index.html#r=0&s=major&l=deg&v=full" class="ex-action">🎸 Vis. Manico (Gradi di Do)</a>
+        </div>
+      </div>
+
+      <div class="ex-card">
+        <div class="ex-num">10</div>
+        <div class="ex-text">
+          <h2>Rigoroso Metronomo 4/4</h2>
+          <p>Mettiti davanti una Drum Machine o un metronomo a 80 BPM. Cerca di suonare le note esatte sul <strong>Tempo Forte</strong> (l'1 e il 3) e lascia dei silenzi, o delle Ghost Notes, nel tempo debole. Fai lo stesso provando sedicesimi stretti.<br><em>Scopo:</em> La teoria sparisce se il tempo vacilla. L'orologio è il dio di ogni bassista.</p>
+          <a href="index.html#r=7&s=minPenta&l=note&v=full" class="ex-action">🎸 Vis. Manico (G Groove)</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  
+  <div id="footer-placeholder"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

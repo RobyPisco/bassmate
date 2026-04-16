@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Aiuto e Istruzioni | Bass Scales FormFactory</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080810">
+  <style>
+    .help-container { max-width: 800px; margin: 40px auto; padding: 30px; background: var(--surface); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
+    .help-title { text-align: center; color: var(--accent); margin-bottom: 30px; font-weight: 900; font-size: 28px; }
+    .help-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .help-section h3 { color: var(--note-c); font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .help-section p { color: var(--text); line-height: 1.6; font-size: 14px; margin-bottom: 10px; opacity: 0.9; }
+    .help-section ul { margin-left: 20px; margin-bottom: 10px; }
+    .help-section li { color: var(--text); font-size: 14px; margin-bottom: 8px; opacity: 0.8; line-height: 1.5; }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--s2); color: var(--text); border: 1px solid var(--border); text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; margin-top: 10px; font-size:14px; }
+    .back-btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div id="header-placeholder"></div>
+    <div class="main">
+      <div class="help-container">
+        <h1 class="help-title">📖 Guida all'uso di Bass Scales</h1>
+        
+        <div class="help-section">
+          <h3>🎵 Esplorazione del Manico</h3>
+          <p>L'app permette di visualizzare in tempo reale tantissime scale e arpeggi su manici a 4, 5 e 6 corde in diverse accordature (Drop D, Eb...).</p>
+          <ul>
+            <li><strong>Nota Radice:</strong> Seleziona la fondamentale della tua scala dai pulsanti C, D, E... o Do, Re...</li>
+            <li><strong>Scala/Accordo:</strong> Naviga fra i tab (Base, Modi, Arpeggi e Altro) per esplorare infinite combinazioni teoricote.</li>
+            <li><strong>Mano:</strong> Passa da "Destro" a "Mancino" se suoni specularmente.</li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <h3>🏷️ Etichette e Nomenclatura (Gradi vs Note)</h3>
+          <p>Usa il menù a tendina <strong>Etichette</strong> per scegliere se vuoi leggere sul manico:</p>
+          <ul>
+            <li>I <strong>Gradi</strong> (es: 1, 3, b7) ideali per capire la teoria degli intervalli.</li>
+            <li>Le <strong>Note</strong> visive usando la nomenclatura standard (C, D, E).</li>
+            <li>Le <strong>Note (Solfeggio)</strong> (Do, Re, Mi) utilissime per l'approccio scolastico e classico.</li>
+            <li>Le <strong>Dita</strong> (Box 5fr) per capire con che dito fermare la corda nei box scalari!</li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <h3>❤️ Preferiti e Offline</h3>
+          <p>Questa applicazione non invia nessun dato ad un server web, il che significa che è iper sicura e velocissima.</p>
+          <ul>
+            <li>Clicca sull'icona col cuore <strong>❤️</strong> (Salva Preferito) nell'header in alto a destra quando ti sei costruito una scala o un arpeggio di nicchia.</li>
+            <li>Dai un nome al tuo settaggio (es. "Slap Groove Re Minore"). Apparirà magicamente di fianco il menù <strong>🔖 Preferiti</strong> da dove potrai richiamarvelo per i prossimi studi!</li>
+            <li>L'App supporta PWA: installala sullo schermo del tuo cellulare per allenarti fisicamente in sala prove **senza connessione a internet**.</li>
+          </ul>
+        </div>
+
+        <div class="help-section">
+          <h3>🎯 La Sfida "Quiz Mode"</h3>
+          <p>Smetti di spulciare la teoria e metti alla prova le mani: clicca il bottone viola "🎯 Gioca Quiz". Il manico scomparirà, lasciando l'incognita su un singolo solfeggio: usa la pulsantiera gigante per indovinare che nota appartiene a quel tasto.</p>
+        </div>
+        
+        <div class="help-section">
+          <h3>🖨️ Stampa ed Esportazione</h3>
+          <ul>
+            <li>Tasto <strong>SVG Esporta Manico</strong> in alto a destra per esportare la visualizzazione ESATTA che hai a schermo per stamparla e aggiungerla al tuo fascicolo. (Ora stamperà in comodissimo orizzontale A4).</li>
+            <li>Tasto <strong>📚 (Manici Vuoti)</strong>: La "Teacher Mode", pensata per aprire un tool utile a Maestri e Insegnanti che vogliono generare e stampare tabulati bianchi pronti per scrivere l'esercizio in sede di lezione per l'allievo.</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="index.html" class="back-btn">⬅️ Torna alla Tastiera</a>
+        </div>
+      </div>
+    </div>
+    <div id="footer-placeholder"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
