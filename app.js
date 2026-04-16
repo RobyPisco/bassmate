@@ -26,9 +26,8 @@ const I18N = {
     f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffè) ☕</a>",
     right: "Destro", lefty: "Mancino", hand: "Mano",
     back_btn: "⬅️ Torna alla Tastiera",
-    quiz_score: "🏆 Punteggio:",
-    quiz_wrong: "(Ahi!)",
-    quiz_initial: "🏆 Punteggio: 0"
+    quiz_score: "🏆 Punteggio:", quiz_wrong: "(Ahi!)", quiz_initial: "🏆 Punteggio: 0",
+    metro_btn: "Metronomo", metro_btn_lbl: "Metro", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -54,9 +53,8 @@ const I18N = {
     f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) ☕</a>",
     right: "Right", lefty: "Lefty", hand: "Hand",
     back_btn: "⬅️ Back to Fretboard",
-    quiz_score: "🏆 Score:",
-    quiz_wrong: "(Ouch!)",
-    quiz_initial: "🏆 Score: 0"
+    quiz_score: "🏆 Score:", quiz_wrong: "(Ouch!)", quiz_initial: "🏆 Score: 0",
+    metro_btn: "Metronome", metro_btn_lbl: "Metro", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -179,6 +177,118 @@ function playNote(midi) {
     osc1.stop(now + 1.8);
     osc2.stop(now + 1.8);
   } catch(e) { console.warn('Audio error:', e); }
+}
+
+/* ══════════════════════════════════════
+   METRONOME ENGINE (Lookahead Scheduler)
+   Uses Web Audio clock for sample-accurate timing.
+   No setInterval drift.
+══════════════════════════════════════ */
+const metro = {
+  running: false,
+  bpm: 80,
+  beats: 4,         // beats per bar
+  currentBeat: 0,
+  nextNoteTime: 0.0,
+  lookahead: 25.0,      // ms — how often to call scheduler
+  scheduleAhead: 0.1,   // sec — how far ahead to schedule audio
+  timerID: null,
+  queue: []             // [{time, beat}] for visual sync via rAF
+};
+
+function _metroClick(time, isAccent) {
+  const ctx = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(isAccent ? 1050 : 630, time);
+
+  gain.gain.setValueAtTime(0.001, time);
+  gain.gain.linearRampToValueAtTime(isAccent ? 0.55 : 0.28, time + 0.003);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(time);
+  osc.stop(time + 0.07);
+
+  metro.queue.push({ time, beat: metro.currentBeat });
+}
+
+function _metroScheduler() {
+  const ctx = getAudioCtx();
+  while (metro.nextNoteTime < ctx.currentTime + metro.scheduleAhead) {
+    _metroClick(metro.nextNoteTime, metro.currentBeat === 0);
+    metro.nextNoteTime += (60.0 / metro.bpm);
+    metro.currentBeat  = (metro.currentBeat + 1) % metro.beats;
+  }
+  metro.timerID = setTimeout(_metroScheduler, metro.lookahead);
+}
+
+function _metroDraw() {
+  if (!metro.running) return;
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  while (metro.queue.length && metro.queue[0].time < now + 0.012) {
+    const info = metro.queue.shift();
+    _metroLightBeat(info.beat);
+  }
+  requestAnimationFrame(_metroDraw);
+}
+
+function _metroLightBeat(beat) {
+  const dots = document.querySelectorAll('.metro-beat-dot');
+  dots.forEach((d, i) => d.classList.toggle('lit', i === beat));
+  // Auto-off after ~70ms so the dot doesn't stay lit until next beat
+  setTimeout(() => dots.forEach(d => d.classList.remove('lit')), 80);
+}
+
+function _buildMetroDots() {
+  const c = document.getElementById('metroBeatDots');
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i = 0; i < metro.beats; i++) {
+    const d = document.createElement('div');
+    d.className = 'metro-beat-dot' + (i === 0 ? ' accent' : '');
+    c.appendChild(d);
+  }
+}
+
+function _setMetroBpm(bpm) {
+  metro.bpm = Math.max(30, Math.min(240, bpm));
+  const numEl  = document.getElementById('metroBpmNum');
+  const slider = document.getElementById('metroBpmSlider');
+  if (numEl)  numEl.textContent  = metro.bpm;
+  if (slider) slider.value       = metro.bpm;
+}
+
+function _metroToggle() {
+  if (metro.running) {
+    // STOP
+    metro.running = false;
+    clearTimeout(metro.timerID);
+    metro.queue = [];
+    metro.currentBeat = 0;
+    document.querySelectorAll('.metro-beat-dot').forEach(d => d.classList.remove('lit'));
+    const btn = document.getElementById('metroStartBtn');
+    const togBtn = document.getElementById('metroTogBtn');
+    if (btn) { btn.classList.remove('running'); btn.querySelector('[data-i18n]').dataset.i18n = 'metro_start'; btn.querySelector('[data-i18n]').textContent = tl('metro_start'); }
+    if (togBtn) togBtn.classList.remove('metroTogBtn-active');
+  } else {
+    // START — resume AudioContext if needed (browser autoplay policy)
+    getAudioCtx();
+    metro.running    = true;
+    metro.currentBeat = 0;
+    metro.queue      = [];
+    metro.nextNoteTime = getAudioCtx().currentTime + 0.05;
+    _metroScheduler();
+    requestAnimationFrame(_metroDraw);
+    const btn = document.getElementById('metroStartBtn');
+    const togBtn = document.getElementById('metroTogBtn');
+    if (btn) { btn.classList.add('running'); btn.querySelector('[data-i18n]').dataset.i18n = 'metro_stop'; btn.querySelector('[data-i18n]').textContent = tl('metro_stop'); }
+    if (togBtn) togBtn.classList.add('metroTogBtn-active');
+  }
 }
 
 function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.className=cls; return d; }
@@ -411,6 +521,58 @@ async function initApp() {
     // Lo espongo su window per chiamarlo nel render()
     window.buildQuizBtns = buildQuizBtns;
     buildQuizBtns();
+
+    // METRONOME BINDINGS
+    _buildMetroDots();
+
+    const metroTogBtn = document.getElementById('metroTogBtn');
+    if (metroTogBtn) {
+      metroTogBtn.addEventListener('click', () => {
+        const panel = document.getElementById('metroPanel');
+        if (panel) panel.classList.toggle('show');
+        // If hiding, also stop the metro
+        if (panel && !panel.classList.contains('show') && metro.running) _metroToggle();
+      });
+    }
+
+    const metroStartBtn = document.getElementById('metroStartBtn');
+    if (metroStartBtn) metroStartBtn.addEventListener('click', _metroToggle);
+
+    const metroBpmUp = document.getElementById('metroBpmUp');
+    if (metroBpmUp) metroBpmUp.addEventListener('click', () => _setMetroBpm(metro.bpm + 1));
+
+    const metroBpmDn = document.getElementById('metroBpmDn');
+    if (metroBpmDn) metroBpmDn.addEventListener('click', () => _setMetroBpm(metro.bpm - 1));
+
+    // Hold +/- for fast scroll
+    let _bpmHoldTimer = null;
+    function _startBpmHold(dir) {
+      _bpmHoldTimer = setInterval(() => _setMetroBpm(metro.bpm + dir), 80);
+    }
+    function _stopBpmHold() { clearInterval(_bpmHoldTimer); }
+    if (metroBpmUp) { metroBpmUp.addEventListener('mousedown', () => _startBpmHold(+1)); metroBpmUp.addEventListener('touchstart', () => _startBpmHold(+1), {passive:true}); }
+    if (metroBpmDn) { metroBpmDn.addEventListener('mousedown', () => _startBpmHold(-1)); metroBpmDn.addEventListener('touchstart', () => _startBpmHold(-1), {passive:true}); }
+    document.addEventListener('mouseup',  _stopBpmHold);
+    document.addEventListener('touchend', _stopBpmHold);
+
+    const metroBpmSlider = document.getElementById('metroBpmSlider');
+    if (metroBpmSlider) metroBpmSlider.addEventListener('input', e => _setMetroBpm(+e.target.value));
+
+    const metroTimeSig = document.getElementById('metroTimeSig');
+    if (metroTimeSig) {
+      metroTimeSig.addEventListener('change', e => {
+        metro.beats = +e.target.value;
+        metro.currentBeat = 0;
+        _buildMetroDots();
+        // Restart scheduler if running to apply immediately
+        if (metro.running) {
+          clearTimeout(metro.timerID);
+          metro.queue = [];
+          metro.nextNoteTime = getAudioCtx().currentTime + 0.05;
+          _metroScheduler();
+        }
+      });
+    }
 
     loadURL();
     if(S.view === 'quiz') startQuiz();

@@ -43,6 +43,34 @@
       <div class="quiz-btns" id="quizBtns"></div>
     </div>
 
+    <!-- ================= METRONOME PANEL ================= -->
+    <div id="metroPanel" class="metro-panel">
+      <div class="metro-ui">
+        <div class="metro-beats" id="metroBeatDots"></div>
+        <div class="metro-bpm-row">
+          <button class="metro-bpm-btn" id="metroBpmDn" aria-label="BPM Down">−</button>
+          <div class="metro-bpm-center">
+            <div class="metro-bpm-num" id="metroBpmNum">80</div>
+            <div class="metro-bpm-label">BPM</div>
+          </div>
+          <button class="metro-bpm-btn" id="metroBpmUp" aria-label="BPM Up">+</button>
+        </div>
+        <input type="range" id="metroBpmSlider" min="30" max="240" value="80" class="metro-slider" aria-label="BPM Slider">
+        <div class="metro-controls">
+          <label class="metro-sig-label">
+            <span data-i18n="metro_sig">Battuta</span>
+            <select id="metroTimeSig">
+              <option value="2">2/4</option>
+              <option value="3">3/4</option>
+              <option value="4" selected>4/4</option>
+              <option value="6">6/8</option>
+            </select>
+          </label>
+          <button id="metroStartBtn" class="metro-start-btn">▶ <span data-i18n="metro_start">Start</span></button>
+        </div>
+      </div>
+    </div>
+
     <div class="legend" id="fbLegend">
       <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>
       <div class="li"><div class="ld" style="background:var(--note-c); box-shadow: 0 0 8px var(--note-g)"></div><span data-i18n="pos_note">Nota della scala</span></div>
