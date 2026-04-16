@@ -28,7 +28,8 @@
     <div id="header-placeholder"></div>
     <div class="main">
       <div class="help-container">
-        
+
+        <!-- ITALIAN -->
         <div id="text-it" style="display:block;">
           <h1 class="help-title">📖 Guida all'uso di Bassmate</h1>
           
@@ -37,7 +38,7 @@
             <p>L'app permette di visualizzare in tempo reale tantissime scale e arpeggi su manici a 4, 5 e 6 corde in diverse accordature (Drop D, Eb...).</p>
             <ul>
               <li><strong>Nota Radice:</strong> Seleziona la fondamentale della tua scala dai pulsanti C, D, E... o Do, Re...</li>
-              <li><strong>Scala/Accordo:</strong> Naviga fra i tab (Base, Modi, Arpeggi e Altro) per esplorare infinite combinazioni teoricote.</li>
+              <li><strong>Scala/Accordo:</strong> Naviga fra i tab (Base, Modi, Arpeggi e Altro) per esplorare infinite combinazioni teoriche.</li>
               <li><strong>Mano:</strong> Passa da "Destro" a "Mancino" se suoni specularmente.</li>
             </ul>
           </div>
@@ -58,8 +59,8 @@
             <p>Questa applicazione non invia nessun dato ad un server web, il che significa che è iper sicura e velocissima.</p>
             <ul>
               <li>Clicca sull'icona col cuore <strong>❤️</strong> (Salva Preferito) nell'header in alto a destra quando ti sei costruito una scala o un arpeggio di nicchia.</li>
-              <li>Dai un nome al tuo settaggio (es. "Slap Groove Re Minore"). Apparirà magicamente di fianco il menù <strong>🔖 Preferiti</strong> da dove potrai richiamarvelo per i prossimi studi!</li>
-              <li>L'App supporta PWA: installala sullo schermo del tuo cellulare per allenarti fisicamente in sala prove **senza connessione a internet**.</li>
+              <li>Dai un nome al tuo settaggio (es. "Slap Groove Re Minore"). Apparirà magicamente di fianco il menù <strong>🔖 Preferiti</strong> da dove potrai richiamarlo per i prossimi studi!</li>
+              <li>L'App supporta PWA: installala sullo schermo del tuo cellulare per allenarti in sala prove <strong>senza connessione a internet</strong>.</li>
             </ul>
           </div>
 
@@ -71,12 +72,33 @@
           <div class="help-section">
             <h3>🖨️ Stampa ed Esportazione</h3>
             <ul>
-              <li>Tasto <strong>SVG Esporta Manico</strong> in alto a destra per esportare la visualizzazione ESATTA che hai a schermo per stamparla e aggiungerla al tuo fascicolo. (Ora stamperà in comodissimo orizzontale A4).</li>
+              <li>Tasto <strong>SVG Esporta Manico</strong> in alto a destra per esportare la visualizzazione ESATTA che hai a schermo per stamparla e aggiungerla al tuo fascicolo (orizzontale A4).</li>
               <li>Tasto <strong>📚 (Manici Vuoti)</strong>: La "Teacher Mode", pensata per aprire un tool utile a Maestri e Insegnanti che vogliono generare e stampare tabulati bianchi pronti per scrivere l'esercizio in sede di lezione per l'allievo.</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h3>🎵 Audio Playback</h3>
+            <p>Bassmate non è solo visivo: <strong>clicca su qualsiasi nota</strong> del manico e sentirai il suono sintetizzato di una corda di basso pizzicata, con la frequenza esatta di quella nota e accordatura.</p>
+            <ul>
+              <li>Il suono viene generato al volo tramite la <strong>Web Audio API</strong> del browser: zero download, funziona offline al 100%.</li>
+              <li>Usa il bottone <strong>🔊/🔇</strong> nell'header per attivare o disattivare l'audio quando vuoi.</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h3>🥁 Metronomo Integrato</h3>
+            <p>Studia le scale <strong>a tempo</strong> con il metronomo professionale integrato. Clicca il tasto <strong>🥁 Metro</strong> nella barra dei controlli per aprire il pannello.</p>
+            <ul>
+              <li><strong>Precisione assoluta:</strong> usa un <em>lookahead scheduler</em> sul clock della Web Audio API. Nessuna deriva temporale, nemmeno a BPM elevati.</li>
+              <li><strong>BPM da 30 a 240:</strong> regola con lo slider, i pulsanti +/− oppure tieni premuto per scorrere velocemente.</li>
+              <li><strong>Battute:</strong> scegli tra 2/4, 3/4, 4/4 e 6/8. I punti visuali si aggiornano in tempo reale.</li>
+              <li><strong>Accento visivo:</strong> il primo beat è sempre in oro, gli altri in azzurro — non perdi mai il&nbsp;"1".</li>
             </ul>
           </div>
         </div>
 
+        <!-- ENGLISH -->
         <div id="text-en" style="display:none;">
           <h1 class="help-title">📖 Bassmate User Guide</h1>
           
@@ -102,12 +124,12 @@
           </div>
 
           <div class="help-section">
-            <h3>❤️ Favorites & Offline</h3>
+            <h3>❤️ Favorites &amp; Offline</h3>
             <p>This application does not send any data to web servers, making it hyper-secure and incredibly fast.</p>
             <ul>
               <li>Click the heart icon <strong>❤️</strong> (Save Favorite) in the top right header when you've discovered a niche scale or arpeggio.</li>
               <li>Give your preset a name (e.g. "D Minor Slap Groove"). It will magically appear in the <strong>🔖 Favorites</strong> dropdown for your next practice sessions!</li>
-              <li>The App supports PWA: install it on your mobile home screen to practice physically in the rehearsal room **without an internet connection**.</li>
+              <li>The App supports PWA: install it on your mobile home screen to practice in the rehearsal room <strong>without an internet connection</strong>.</li>
             </ul>
           </div>
 
@@ -117,10 +139,30 @@
           </div>
           
           <div class="help-section">
-            <h3>🖨️ Printing & Exporting</h3>
+            <h3>🖨️ Printing &amp; Exporting</h3>
             <ul>
-              <li>The <strong>SVG Export</strong> button top right exports the EXACT visualization you have on screen to print and add to your workbook (Now prints in comfortable horizontal A4!).</li>
+              <li>The <strong>SVG Export</strong> button top right exports the EXACT visualization you have on screen to print and add to your workbook (horizontal A4).</li>
               <li>The <strong>📚 (Blank Fretboards)</strong> button: "Teacher Mode" designed to open a useful tool for Instructors wanting to generate and print blank tabs ready for writing exercises during lessons.</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h3>🎵 Audio Playback</h3>
+            <p>Bassmate is not just visual: <strong>click on any note</strong> on the fretboard and you'll hear the synthesized sound of a plucked bass string, at the exact pitch for that note and tuning.</p>
+            <ul>
+              <li>Sound is generated on-the-fly via the browser's <strong>Web Audio API</strong>: no downloads, no connection needed — works 100% offline.</li>
+              <li>Use the <strong>🔊/🔇</strong> button in the header to toggle audio on or off without stopping anything.</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h3>🥁 Built-in Metronome</h3>
+            <p>Practice scales <strong>in time</strong> with the professional integrated metronome. Click the <strong>🥁 Metro</strong> button in the controls bar to open the panel.</p>
+            <ul>
+              <li><strong>Sample-accurate timing:</strong> uses a <em>lookahead scheduler</em> against the Web Audio API clock, not standard browser timers. Zero drift, even at high BPMs.</li>
+              <li><strong>30 to 240 BPM:</strong> adjust with the slider, the +/− buttons, or hold them down to scroll quickly.</li>
+              <li><strong>Time Signatures:</strong> choose 2/4, 3/4, 4/4 or 6/8. The visual dots update in real-time.</li>
+              <li><strong>Visual accent:</strong> beat 1 is always highlighted in gold, others in blue — you never lose the "1".</li>
             </ul>
           </div>
         </div>
