@@ -1,11 +1,13 @@
-const CACHE_NAME = 'bass-scales-v4';
+const CACHE_NAME = 'bassmate-v5';
 const URLS_TO_CACHE = [
   './',
   './index.html',
   './donate.html',
+  './help.html',
+  './exercises.html',
+  './grids.html',
   './header.html',
   './footer.html',
-  './grids.html',
   './style.css',
   './app.js',
   './icon.svg',

@@ -25,7 +25,10 @@ const I18N = {
     f_quote: "\"Ho creato questo strumento per non perdermi sul manico... ora lo metto a disposizione per farvi perdere su questo sito! 🤘\"",
     f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffè) ☕</a>",
     right: "Destro", lefty: "Mancino", hand: "Mano",
-    back_btn: "⬅️ Torna alla Tastiera"
+    back_btn: "⬅️ Torna alla Tastiera",
+    quiz_score: "🏆 Punteggio:",
+    quiz_wrong: "(Ahi!)",
+    quiz_initial: "🏆 Punteggio: 0"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -50,7 +53,10 @@ const I18N = {
     f_quote: "\"I created this tool so I wouldn't get lost on the fretboard... now I'm sharing it so you can get lost on this site! 🤘\"",
     f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) ☕</a>",
     right: "Right", lefty: "Lefty", hand: "Hand",
-    back_btn: "⬅️ Back to Fretboard"
+    back_btn: "⬅️ Back to Fretboard",
+    quiz_score: "🏆 Score:",
+    quiz_wrong: "(Ouch!)",
+    quiz_initial: "🏆 Score: 0"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -366,7 +372,8 @@ function syncScalePills() {
 ══════════════════════════════════════ */
 function startQuiz() {
   quizScore = 0;
-  document.getElementById('quizScore').innerText = '🏆 Punteggio: 0';
+  const qs = document.getElementById('quizScore');
+  if (qs) qs.innerText = tl('quiz_initial');
   generateQuizNode();
 }
 
@@ -385,7 +392,7 @@ function handleQuizGuess(ni, btn) {
    if (ni === quizActiveNote.ni) {
        btn.classList.add('correct');
        quizScore += 10;
-       document.getElementById('quizScore').innerText = '🏆 Punteggio: ' + quizScore;
+       document.getElementById('quizScore').innerText = tl('quiz_score') + ' ' + quizScore;
        setTimeout(() => {
            btn.classList.remove('correct');
            generateQuizNode();
@@ -393,8 +400,8 @@ function handleQuizGuess(ni, btn) {
        }, 300);
    } else {
        btn.classList.add('wrong');
-       quizScore = 0; // Punizione spietata!
-       document.getElementById('quizScore').innerText = '🏆 Punteggio: 0 (Ahi!)';
+       quizScore = 0;
+       document.getElementById('quizScore').innerText = tl('quiz_initial') + ' ' + tl('quiz_wrong');
        setTimeout(() => btn.classList.remove('wrong'), 400);
    }
 }
@@ -437,11 +444,19 @@ function updateI18nLabels() {
     enBlock.style.display = S.lang === 'en' ? 'block' : 'none';
   }
   
+  
+  // Aggiorna l'attributo lang dell'HTML dinamicamente
+  document.documentElement.lang = S.lang;
+
   const tc = document.getElementById('tuningCtrl');
   if (tc) {
     Array.from(tc.options).forEach(opt => { opt.text = tl(TUNINGS[opt.value].short); });
     document.querySelectorAll('.sg-panel [data-v]').forEach(el => el.textContent = tl(SCALES[el.dataset.v].short));
   }
+  
+  // Aggiorna score quiz se a zero (non sovrascrivere punteggio in corso)
+  const qs = document.getElementById('quizScore');
+  if (qs && quizScore === 0) qs.innerText = tl('quiz_initial');
 }
 
 function render() {
