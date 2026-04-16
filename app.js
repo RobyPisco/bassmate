@@ -792,8 +792,10 @@ async function initApp() {
       qTog.addEventListener('click', () => {
         if(S.view === 'quiz') {
           S.view = document.getElementById('viewCtrl').value || 'full';
+          document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='none');
         } else {
           S.view = 'quiz';
+          document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='inline-flex');
         }
         if(S.view === 'quiz') startQuiz();
         render();
@@ -916,32 +918,68 @@ function syncScalePills() {
 function startQuiz() {
   quizScore = 0;
   quizCombo = 1;
-  quizTimeLeft = 60;
-  isQuizRunning = true;
+  const tc = document.getElementById('quizTimeCtrl');
+  const timeStr = tc ? tc.value : '60';
+  isQuizRunning = false; 
   if(quizTimerId) clearInterval(quizTimerId);
   
   const qs = document.getElementById('quizScore');
   const qc = document.getElementById('quizCombo');
   const qt = document.getElementById('quizTime');
   const fill = document.getElementById('quizTimerFill');
+  const btns = document.getElementById('quizBtns');
   
-  if (qs) qs.innerText = 'Go!';
-  if (qc) { qc.innerText = 'Combo x1'; qc.className = 'quiz-combo'; }
-  if (qt) qt.innerText = '⏱️ 60s';
+  if (qs) qs.innerText = 'Pronti?';
+  if (qc) { qc.innerText = ''; qc.className = 'quiz-combo'; }
+  if (qt) qt.innerText = '⏱️ ...';
   if (fill) { fill.style.width = '100%'; fill.classList.remove('urgent'); }
-  
-  generateQuizNode();
+  if (btns) btns.style.opacity = '0.5';
 
-  quizTimerId = setInterval(() => {
-    quizTimeLeft--;
-    if(qt) qt.innerText = '⏱️ ' + quizTimeLeft + 's';
-    if(fill) {
-      const pct = (quizTimeLeft / 60) * 100;
-      fill.style.width = pct + '%';
-      if(quizTimeLeft <= 10) fill.classList.add('urgent');
-    }
-    if(quizTimeLeft <= 0) {
-      endQuizMode();
+  quizActiveNote = null; // Disabilita click durante il countdown
+  renderFretboard();
+
+  // Countdown overlay e Toast
+  let count = 3;
+  showToast(count + '...');
+  
+  const countdownInterval = setInterval(() => {
+    count--;
+    if(count > 0) {
+      showToast(count + '...');
+    } else {
+      clearInterval(countdownInterval);
+      showToast('GO! 🔥');
+      
+      isQuizRunning = true;
+      if(btns) btns.style.opacity = '1';
+      if(qs) qs.innerText = 'Go!';
+      if(qc) qc.innerText = 'Combo x1';
+      
+      generateQuizNode();
+      renderFretboard();
+
+      if (timeStr !== 'infinite') {
+        const totalTime = parseInt(timeStr, 10);
+        quizTimeLeft = totalTime;
+        if(fill) fill.style.display = 'block';
+        if(qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+
+        quizTimerId = setInterval(() => {
+          quizTimeLeft--;
+          if(qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+          if(fill) {
+            const pct = (quizTimeLeft / totalTime) * 100;
+            fill.style.width = pct + '%';
+            if(quizTimeLeft <= 10) fill.classList.add('urgent');
+          }
+          if(quizTimeLeft <= 0) {
+            endQuizMode();
+          }
+        }, 1000);
+      } else {
+        if(qt) qt.innerText = '⏱️ ∞';
+        if(fill) fill.style.display = 'none';
+      }
     }
   }, 1000);
 }
