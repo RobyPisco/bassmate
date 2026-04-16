@@ -101,11 +101,11 @@ const SCALES = {
 };
 
 const TUNINGS = {
-  'std-4':  { strings:4, notes:[7,2,9,4],      labels:['G','D','A','E'],         desc:'Standard 4-Corde',   short:'Std (4)' },
-  'dropd-4':{ strings:4, notes:[7,2,9,2],      labels:['G','D','A','D'],         desc:'Drop D (D-A-D-G)',   short:'Drop D' },
-  'eb-4':   { strings:4, notes:[6,1,8,3],      labels:['Gb','Db','Ab','Eb'],     desc:'Half-Step Down',     short:'Eb (4)' },
-  'std-5':  { strings:5, notes:[7,2,9,4,11],   labels:['G','D','A','E','B'],     desc:'Standard 5-Corde',   short:'Std (5)' },
-  'std-6':  { strings:6, notes:[0,7,2,9,4,11], labels:['C','G','D','A','E','B'], desc:'Standard 6-Corde',   short:'Std (6)' },
+  'std-4':  { strings:4, notes:[7,2,9,4],      labels:['G','D','A','E'],         midiBase:[43,38,33,28], desc:'Standard 4-Corde',   short:'Std (4)' },
+  'dropd-4':{ strings:4, notes:[7,2,9,2],      labels:['G','D','A','D'],         midiBase:[43,38,33,26], desc:'Drop D (D-A-D-G)',   short:'Drop D' },
+  'eb-4':   { strings:4, notes:[6,1,8,3],      labels:['Gb','Db','Ab','Eb'],     midiBase:[42,37,32,27], desc:'Half-Step Down',     short:'Eb (4)' },
+  'std-5':  { strings:5, notes:[7,2,9,4,11],   labels:['G','D','A','E','B'],     midiBase:[43,38,33,28,23], desc:'Standard 5-Corde',   short:'Std (5)' },
+  'std-6':  { strings:6, notes:[0,7,2,9,4,11], labels:['C','G','D','A','E','B'], midiBase:[48,43,38,33,28,23], desc:'Standard 6-Corde',   short:'Std (6)' },
 };
 
 const THICKNESS = { 4:[1.5,2.5,3.5,4.5], 5:[1.5,2,3,4,5], 6:[1,1.5,2,3,4,5] };
@@ -115,10 +115,71 @@ const MARKERS      = [3,5,7,9,12,15];
 const DOUBLE_MARKS = new Set([12]);
 
 const defaultLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
-const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', hand:'right', boxStart:0, lang: defaultLang };
+const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', hand:'right', boxStart:0, lang: defaultLang, audio: true };
 
 let quizActiveNote = null;
 let quizScore = 0;
+
+/* ══════════════════════════════════════
+   AUDIO ENGINE
+══════════════════════════════════════ */
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Resume context if suspended (browser autoplay policy)
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+function playNote(midi) {
+  if (!S.audio) return;
+  try {
+    const ctx = getAudioCtx();
+    const freq = 440 * Math.pow(2, (midi - 69) / 12);
+    const now = ctx.currentTime;
+
+    // Main oscillator: sawtooth (biting bass character)
+    const osc1 = ctx.createOscillator();
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(freq, now);
+
+    // Sub oscillator: sine one octave below (adds warmth)
+    const osc2 = ctx.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(freq / 2, now);
+
+    // Low-pass filter: softens harshness, sweeps down like a pluck
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1200, now);
+    filter.frequency.exponentialRampToValueAtTime(180, now + 0.4);
+    filter.Q.setValueAtTime(1.2, now);
+
+    // Master gain envelope: punchy attack, natural decay
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.45, now + 0.008); // fast attack
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8); // decay
+
+    // Sub gain (quieter blend)
+    const gain2 = ctx.createGain();
+    gain2.gain.setValueAtTime(0.18, now);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+    // Connect graph
+    osc1.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 1.8);
+    osc2.stop(now + 1.8);
+  } catch(e) { console.warn('Audio error:', e); }
+}
 
 function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.className=cls; return d; }
 
@@ -598,9 +659,14 @@ function renderFretboard() {
       d.style.left = `calc(${f - fStart + 0.5} * 60px)`;
       
       const span = mkEl('span'); span.textContent = dotLabel(ni, f); d.appendChild(span);
-      d.title = `${getNoteName(ni)}  ·  grado ${getDeg(ni)}  ·  fret ${f}`;
+      d.title = `${getNoteName(ni)}  ·  ${getDeg(ni)}  ·  fret ${f}`;
       
-      d.onclick = function() { d.classList.add('playing'); setTimeout(()=>d.classList.remove('playing'), 200); };
+      const midiNote = t.midiBase[si] + f;
+      d.onclick = function() {
+        d.classList.add('playing');
+        setTimeout(() => d.classList.remove('playing'), 300);
+        playNote(midiNote);
+      };
       row.appendChild(d);
     }
     sa.appendChild(row);
