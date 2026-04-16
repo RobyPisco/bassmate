@@ -15,6 +15,35 @@
   --neck-bg1: #151522;
   --neck-bg2: #1e1e2d;
 }
+
+/* ════ LIGHT MODE ════ */
+[data-theme="light"] {
+  --bg:       #f4f4fb;
+  --surface:  rgba(255,255,255,0.92);
+  --s2:       #eceef8;
+  --s3:       #e2e4f2;
+  --border:   #c8cae0;
+  --text:     #18182e;
+  --muted:    #7070aa;
+  --root-c:   #c97b10;
+  --root-g:   rgba(201,123,16,.35);
+  --note-c:   #0891b2;
+  --note-g:   rgba(8,145,178,.3);
+  --accent:   #6d28d9;
+  --neck-bd:  #bbbdd8;
+  --neck-bg1: #dddff0;
+  --neck-bg2: #e6e8f4;
+}
+[data-theme="light"] .app {
+  background: radial-gradient(circle at top center, #d8d8f0, var(--bg) 65%) !important;
+}
+[data-theme="light"] .nd.sn { background: var(--note-c); color: #fff; }
+[data-theme="light"] .nd.rn { background: var(--root-c); color: #fff; }
+[data-theme="light"] body { background: var(--bg); }
+[data-theme="light"] .p.on { color: #fff; }
+[data-theme="light"] .fb-str::before { background: var(--neck-bg1); }
+[data-theme="light"] .fb-dot { background: #a0a0c0; box-shadow: 0 0 6px rgba(110,100,180,.5); }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
 
