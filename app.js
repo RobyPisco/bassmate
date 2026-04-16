@@ -159,6 +159,7 @@ let quizScore = 0;
 let quizCombo = 1;
 let quizTimeLeft = 60;
 let quizTimerId = null;
+let quizCountdownId = null;
 let isQuizRunning = false;
 
 /* ══════════════════════════════════════
@@ -793,14 +794,23 @@ async function initApp() {
         if(S.view === 'quiz') {
           S.view = document.getElementById('viewCtrl').value || 'full';
           document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='none');
+          stopQuiz(); // Stop if navigating away
         } else {
           S.view = 'quiz';
           document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='inline-flex');
+          resetQuiz(); // Reset to clean state when opening
         }
-        if(S.view === 'quiz') startQuiz();
         render();
       });
     }
+
+    // QUIZ CONTROLS
+    const qsBtn = document.getElementById('quizStartBtn');
+    const qstBtn = document.getElementById('quizStopBtn');
+    const qrBtn = document.getElementById('quizResetBtn');
+    if(qsBtn) qsBtn.addEventListener('click', () => { if(!isQuizRunning) startQuiz(); });
+    if(qstBtn) qstBtn.addEventListener('click', stopQuiz);
+    if(qrBtn) qrBtn.addEventListener('click', resetQuiz);
 
     // QUIZ BTNS BUILDER OR UPDATE
     function buildQuizBtns() {
@@ -942,18 +952,19 @@ function startQuiz() {
   let count = 3;
   showToast(count + '...');
   
-  const countdownInterval = setInterval(() => {
+  quizCountdownId = setInterval(() => {
     count--;
     if(count > 0) {
       showToast(count + '...');
     } else {
-      clearInterval(countdownInterval);
+      clearInterval(quizCountdownId);
       showToast('GO! 🔥');
       
       isQuizRunning = true;
       if(btns) btns.style.opacity = '1';
       if(qs) qs.innerText = 'Go!';
       if(qc) qc.innerText = 'Combo x1';
+
       
       generateQuizNode();
       renderFretboard();
@@ -984,9 +995,38 @@ function startQuiz() {
   }, 1000);
 }
 
+function stopQuiz() {
+  isQuizRunning = false;
+  if(quizTimerId) clearInterval(quizTimerId);
+  if(quizCountdownId) clearInterval(quizCountdownId);
+  quizActiveNote = null;
+  const qt = document.getElementById('quizTime');
+  if(qt) qt.innerText = '⏱️ PAUSA';
+  const btns = document.getElementById('quizBtns');
+  if(btns) btns.style.opacity = '0.5';
+  renderFretboard();
+}
+
+function resetQuiz() {
+  stopQuiz();
+  quizScore = 0;
+  quizCombo = 1;
+  const qs = document.getElementById('quizScore');
+  const qc = document.getElementById('quizCombo');
+  const fill = document.getElementById('quizTimerFill');
+  const tc = document.getElementById('quizTimeCtrl');
+  
+  if (qs) qs.innerText = 'Punteggio: 0';
+  if (qc) { qc.innerText = 'Combo x1'; qc.className = 'quiz-combo'; }
+  if (fill) { fill.style.width = '100%'; fill.classList.remove('urgent'); }
+  const qt = document.getElementById('quizTime');
+  if (qt) qt.innerText = '⏱️ ' + (tc ? tc.value : '60') + 's';
+}
+
 function endQuizMode() {
   isQuizRunning = false;
   clearInterval(quizTimerId);
+  if(quizCountdownId) clearInterval(quizCountdownId);
   quizActiveNote = null;
   recordQuizSession(quizScore);
   const qs = document.getElementById('quizScore');

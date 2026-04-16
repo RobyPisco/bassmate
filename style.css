@@ -369,6 +369,13 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 .quiz-combo.pop { transform: scale(1.4); color: #22d3ee; }
 .quiz-time { font-size: 16px; font-weight: 700; color: var(--text); font-family: 'Space Mono', monospace; }
 
+.quiz-ctrl-btn {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all .2s; outline: none;
+}
+.quiz-ctrl-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.quiz-ctrl-btn:active { transform: translateY(0); }
 @keyframes shake {
   0% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
