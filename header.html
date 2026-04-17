@@ -6,26 +6,35 @@
       <div class="logo-text">Bassmate<small>PiscoFactory</small></div>
     </a>
     
-    <div class="td-icons" style="display:flex; align-items:center; gap:8px;">
+    <div class="td-icons" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+      <button class="icon-btn export-btn-sm" id="kbdHintBtn" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
       <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi">🔗</button>
-      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta Fretboard">📸</button>
-      
+      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta immagine fretboard">📸</button>
+      <button class="icon-btn export-btn-sm" id="exportBtn" data-i18n-title="export_btn" title="Stampa / Esporta PDF manico corrente">🖨️</button>
+      <a href="grids.html" class="icon-btn export-btn-sm" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
+      <a href="exercises.html" class="icon-btn export-btn-sm" title="Esercizi pratici" style="text-decoration:none;">📚</a>
       <select id="favCtrl" class="sel-wrap" style="width:auto; display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold; margin-left:6px;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
       <button class="icon-btn export-btn-sm" id="favBtn" data-i18n-title="fav_save" title="Salva Preferito">❤️</button>
+      <button class="icon-btn export-btn-sm" id="favDelBtn" title="Elimina preferito selezionato" style="display:none; color:#ef4444; border-color:rgba(239,68,68,0.4);">🗑️</button>
       <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè" style="text-decoration:none;">☕</a>
     </div>
   </div>
 
   <!-- Music Controls (Visibili solo nel Tab Studio) -->
   <div class="music-controls" id="studioMusicControls">
-    <!-- Root Note -->
-    <div class="scroller-row">
-      <div class="row-label" data-i18n="root_note" style="display:none;">Tonica</div>
-      <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
-      <div class="hz-grid root-scroll" id="rootCtrl"></div>
-      <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
+    <!-- Root Note + Metro + Reset in one row -->
+    <div style="display:flex; align-items:center; gap:8px; padding: 0 16px 6px;">
+      <!-- ◄ notes ► gruppo compatto -->
+      <div style="display:flex; align-items:center; gap:0;">
+        <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
+        <div class="hz-grid root-scroll" id="rootCtrl"></div>
+        <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
+      </div>
+      <!-- Metro + Reset -->
+      <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metronomo</span></button>
+      <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄 <span data-i18n="reset_btn">Reset</span></button>
     </div>
 
     <!-- Scale Selectors -->

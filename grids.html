@@ -15,9 +15,15 @@
     .fret-n { position: absolute; transform: translateX(-50%); text-align: center; }
     
     @media print {
-      body { margin: 0; padding: 0; }
-      #printBtn, #backBtn { display: none !important; }
-      @page { margin: 1cm; }
+      @page { size: A4 portrait; margin: 1.2cm 1.5cm; }
+      body { margin: 0; padding: 0; background: #fff !important; }
+      #printBtn, #backBtn, #stringCtrl, label, #dl-ctrl { display: none !important; }
+      .hw-header input { border-bottom: 1px solid #000 !important; }
+      .grid-container { gap: 18px !important; }
+      svg { height: 100px !important; }
+      /* forza tutto su una sola pagina */
+      .grid-container, .hw-header { page-break-after: avoid; page-break-inside: avoid; }
+      html, body { overflow: hidden; height: auto; }
     }
   </style>
 </head>
@@ -61,7 +67,7 @@
 
     function renderGrids() {
       container.innerHTML = '';
-      for(let i=0; i<6; i++) {
+      for(let i=0; i<5; i++) {
         const wrapper = document.createElement('div');
         const svgn = 'http://www.w3.org/2000/svg';
         const svg = document.createElementNS(svgn, 'svg');

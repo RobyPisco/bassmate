@@ -27,7 +27,7 @@ const I18N = {
     right: "Destro", lefty: "Mancino", hand: "Mano",
     back_btn: "⬅️ Torna alla Tastiera",
     quiz_score: "🏆 Punteggio:", quiz_wrong: "(Ahi!)", quiz_initial: "🏆 Punteggio: 0",
-    metro_btn: "Metronomo", metro_btn_lbl: "Metro", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop",
+    metro_btn: "Metronomo", metro_btn_lbl: "Metronomo", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop",
     share_btn: "Condividi Scala", share_copied: "🔗 Link copiato negli appunti!", share_fail: "Copia questo link:",
     kbd_title: "⌨️ Scorciatoie da Tastiera",
     kbd_root_lr: "← / →", kbd_root_lr_desc: "Cambia nota radice",
@@ -47,7 +47,9 @@ const I18N = {
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-corde)", "D Standard (4)": "D Standard (4-corde)",
     "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
     settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
-    language: "Lingua", theme: "Tema", audio_engine: "Motore Audio"
+    language: "Lingua", theme: "Tema", audio_engine: "Motore Audio",
+    nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Suddividi", metro_trainer: "Speed Up",
+    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -74,7 +76,7 @@ const I18N = {
     right: "Right", lefty: "Lefty", hand: "Hand",
     back_btn: "⬅️ Back to Fretboard",
     quiz_score: "🏆 Score:", quiz_wrong: "(Ouch!)", quiz_initial: "🏆 Score: 0",
-    metro_btn: "Metronome", metro_btn_lbl: "Metro", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop",
+    metro_btn: "Metronome", metro_btn_lbl: "Metronome", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop",
     share_btn: "Share Scale", share_copied: "🔗 Link copied to clipboard!", share_fail: "Copy this link:",
     kbd_title: "⌨️ Keyboard Shortcuts",
     kbd_root_lr: "← / →", kbd_root_lr_desc: "Change root note",
@@ -94,7 +96,9 @@ const I18N = {
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-string)", "D Standard (4)": "D Standard (4-string)",
     "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
-    language: "Language", theme: "Theme", audio_engine: "Audio Engine"
+    language: "Language", theme: "Theme", audio_engine: "Audio Engine",
+    nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Subdivide", metro_trainer: "Speed Up",
+    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -242,41 +246,104 @@ function playNote(midi) {
 const metro = {
   running: false,
   bpm: 80,
-  beats: 4,         // beats per bar
+  beats: 4,         // battiti per battuta
   currentBeat: 0,
   nextNoteTime: 0.0,
-  lookahead: 25.0,      // ms — how often to call scheduler
-  scheduleAhead: 0.1,   // sec — how far ahead to schedule audio
+  lookahead: 25.0,      // ms — intervallo del scheduler
+  scheduleAhead: 0.1,   // sec — anticipo scheduling
   timerID: null,
-  queue: []             // [{time, beat}] for visual sync via rAF
+  queue: [],            // per sincronia visuale
+  // Nuove proprietà
+  subdivision: 1,       // 1=quarti, 2=ottavi, 3=terzine, 4=sedicesimi
+  subTick: 0,           // tick progressivo nelle suddivisioni
+  tapTimes: [],         // per calcolo tap tempo
+  autoIncr: false,      // speed trainer attivo
+  totalBeats: 0,        // contatore battiti totali per auto-incremento
+  // Opzioni Pro
+  soundSet: 'digital',  // digital, wood, drum
+  flashEnabled: true,
+  timerEnabled: false,
+  timerMin: 5,
+  timerRemaining: 0,
+  incrBpm: 1,
+  incrInterval: 8
 };
 
-function _metroClick(time, isAccent) {
+function _metroClick(time, isAccent, isSub = false) {
   const ctx = getAudioCtx();
   const osc  = ctx.createOscillator();
   const gain = ctx.createGain();
 
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(isAccent ? 1050 : 630, time);
-
-  gain.gain.setValueAtTime(0.001, time);
-  gain.gain.linearRampToValueAtTime(isAccent ? 0.55 : 0.28, time + 0.003);
-  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+  if (metro.soundSet === 'wood') {
+    osc.type = 'sine';
+    let freq = isAccent ? 1600 : (isSub ? 800 : 1200);
+    osc.frequency.setValueAtTime(freq, time);
+    gain.gain.setValueAtTime(0.001, time);
+    gain.gain.linearRampToValueAtTime(isAccent ? 0.6 : 0.3, time + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+  } else if (metro.soundSet === 'drum') {
+    osc.type = 'sine';
+    let freqStart = isAccent ? 150 : 100;
+    let freqEnd = isAccent ? 50 : 40;
+    osc.frequency.setValueAtTime(freqStart, time);
+    osc.frequency.exponentialRampToValueAtTime(freqEnd, time + 0.08);
+    gain.gain.setValueAtTime(0.001, time);
+    gain.gain.linearRampToValueAtTime(isAccent ? 0.8 : 0.5, time + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+  } else {
+    // Digital (Default)
+    osc.type = 'sine';
+    let freq = isAccent ? 1050 : (isSub ? 440 : 630);
+    osc.frequency.setValueAtTime(freq, time);
+    gain.gain.setValueAtTime(0.001, time);
+    gain.gain.linearRampToValueAtTime(isAccent ? 0.55 : (isSub ? 0.15 : 0.28), time + 0.003);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+  }
 
   osc.connect(gain);
   gain.connect(ctx.destination);
   osc.start(time);
-  osc.stop(time + 0.07);
+  osc.stop(time + 0.15);
 
-  metro.queue.push({ time, beat: metro.currentBeat });
+  if (!isSub) {
+    metro.queue.push({ time, beat: metro.currentBeat });
+  }
 }
 
 function _metroScheduler() {
   const ctx = getAudioCtx();
+  const step = (60.0 / metro.bpm) / metro.subdivision;
+
   while (metro.nextNoteTime < ctx.currentTime + metro.scheduleAhead) {
-    _metroClick(metro.nextNoteTime, metro.currentBeat === 0);
-    metro.nextNoteTime += (60.0 / metro.bpm);
-    metro.currentBeat  = (metro.currentBeat + 1) % metro.beats;
+    const isMainBeat = (metro.subTick === 0);
+    const isAccent = isMainBeat && (metro.currentBeat === 0);
+    
+    _metroClick(metro.nextNoteTime, isAccent, !isMainBeat);
+
+    // Speed Trainer
+    if (isMainBeat && metro.autoIncr) {
+      metro.totalBeats++;
+      if (metro.totalBeats >= metro.incrInterval) {
+        metro.totalBeats = 0;
+        _setMetroBpm(metro.bpm + metro.incrBpm);
+      }
+    }
+
+    // Timer Sessione
+    if (isMainBeat && metro.timerEnabled) {
+      metro.timerRemaining -= (60.0 / metro.bpm);
+      if (metro.timerRemaining <= 0) {
+        metro.timerRemaining = 0;
+        _metroToggle();
+        showToast("Sessione terminata! 🏁");
+      }
+    }
+
+    metro.nextNoteTime += step;
+    metro.subTick = (metro.subTick + 1) % metro.subdivision;
+    if (metro.subTick === 0) {
+      metro.currentBeat = (metro.currentBeat + 1) % metro.beats;
+    }
   }
   metro.timerID = setTimeout(_metroScheduler, metro.lookahead);
 }
@@ -289,14 +356,46 @@ function _metroDraw() {
     const info = metro.queue.shift();
     _metroLightBeat(info.beat);
   }
+
+  // Update Countdown & Progress Bar
+  if (metro.timerEnabled && metro.timerRemaining > 0) {
+    const elapsed = (metro.timerMin * 60) - metro.timerRemaining;
+    const progress = (elapsed / (metro.timerMin * 60)) * 100;
+    
+    const fill = document.getElementById('metroProgressFill');
+    const tel = document.getElementById('metroTimerElapsed');
+    const tto = document.getElementById('metroTimerTotal');
+    
+    if (fill) fill.style.width = `${progress}%`;
+    if (tel) {
+      const m = Math.floor(elapsed / 60);
+      const s = Math.floor(elapsed % 60);
+      tel.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+    if (tto) tto.textContent = `${String(metro.timerMin).padStart(2,'0')}:00`;
+  }
+
   requestAnimationFrame(_metroDraw);
 }
 
 function _metroLightBeat(beat) {
+  // Illuminazione pallini: SEMPRE ATTIVA per feedback visivo
   const dots = document.querySelectorAll('.metro-beat-dot');
   dots.forEach((d, i) => d.classList.toggle('lit', i === beat));
-  // Auto-off after ~70ms so the dot doesn't stay lit until next beat
-  setTimeout(() => dots.forEach(d => d.classList.remove('lit')), 80);
+  
+  // Flash visivo sul pannello: SOLO SE ABILITATO dalle opzioni
+  const panel = document.getElementById('metroPanel');
+  if (panel && metro.flashEnabled) {
+    panel.classList.remove('flash');
+    void panel.offsetWidth; // trigger reflow
+    panel.classList.add('flash');
+  }
+
+  // Auto-off dopo ~80ms
+  setTimeout(() => {
+    dots.forEach(d => d.classList.remove('lit'));
+    if (panel) panel.classList.remove('flash');
+  }, 80);
 }
 
 function _buildMetroDots() {
@@ -310,12 +409,27 @@ function _buildMetroDots() {
   }
 }
 
+function _getBpmTerm(bpm) {
+  if (bpm < 40) return 'Grave';
+  if (bpm < 60) return 'Largo';
+  if (bpm < 66) return 'Adagio';
+  if (bpm < 76) return 'Andante';
+  if (bpm < 108) return 'Moderato';
+  if (bpm < 120) return 'Allegretto';
+  if (bpm < 156) return 'Allegro';
+  if (bpm < 176) return 'Vivace';
+  if (bpm < 200) return 'Presto';
+  return 'Prestissimo';
+}
+
 function _setMetroBpm(bpm) {
   metro.bpm = Math.max(30, Math.min(240, bpm));
-  const numEl  = document.getElementById('metroBpmNum');
-  const slider = document.getElementById('metroBpmSlider');
-  if (numEl)  numEl.textContent  = metro.bpm;
-  if (slider) slider.value       = metro.bpm;
+  localStorage.setItem('metro_bpm', metro.bpm);
+  
+  const numEl = document.getElementById('metroBpmNum');
+  const termEl = document.getElementById('metroBpmTerm');
+  if (numEl) numEl.textContent = metro.bpm;
+  if (termEl) termEl.textContent = _getBpmTerm(metro.bpm);
 }
 
 function _metroToggle() {
@@ -325,23 +439,31 @@ function _metroToggle() {
     clearTimeout(metro.timerID);
     metro.queue = [];
     metro.currentBeat = 0;
+    metro.subTick = 0;
+    metro.totalBeats = 0;
     document.querySelectorAll('.metro-beat-dot').forEach(d => d.classList.remove('lit'));
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.remove('running'); btn.querySelector('[data-i18n]').dataset.i18n = 'metro_start'; btn.querySelector('[data-i18n]').textContent = tl('metro_start'); }
+    if (btn) { btn.classList.remove('running'); btn.innerHTML = `▶`; }
     if (togBtn) togBtn.classList.remove('metroTogBtn-active');
   } else {
-    // START — resume AudioContext if needed (browser autoplay policy)
-    getAudioCtx();
+    // START
     metro.running    = true;
     metro.currentBeat = 0;
+    metro.subTick    = 0;
+    metro.totalBeats = 0;
     metro.queue      = [];
+    
+    if (metro.timerEnabled) {
+      metro.timerRemaining = metro.timerMin * 60;
+    }
+
     metro.nextNoteTime = getAudioCtx().currentTime + 0.05;
     _metroScheduler();
     requestAnimationFrame(_metroDraw);
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.add('running'); btn.querySelector('[data-i18n]').dataset.i18n = 'metro_stop'; btn.querySelector('[data-i18n]').textContent = tl('metro_stop'); }
+    if (btn) { btn.classList.add('running'); btn.innerHTML = `⏹`; }
     if (togBtn) togBtn.classList.add('metroTogBtn-active');
   }
 }
@@ -651,7 +773,7 @@ async function initApp() {
   
   updateI18nLabels();
 
-  if (document.getElementById('tuningCtrl')) {
+  if (document.getElementById('fretboard')) {
     
     // BUILD CONTROLS
     Object.entries(TUNINGS).forEach(([k, t]) => {
@@ -659,11 +781,14 @@ async function initApp() {
       if (k === S.tuning) b.selected = true;
       document.getElementById('tuningCtrl').appendChild(b);
     });
-    for(let i=0; i<12; i++) {
-      const b = mkEl('button','p'); b.dataset.v = i; b.textContent = getNoteName(i);
-      b.id = 'rootBtn_' + i;
-      if (i===S.root) b.classList.add('on');
-      document.getElementById('rootCtrl').appendChild(b);
+    const rootCtrlEl = document.getElementById('rootCtrl');
+    if (rootCtrlEl) {
+      for(let i=0; i<12; i++) {
+        const b = mkEl('button','p'); b.dataset.v = i; b.textContent = getNoteName(i);
+        b.id = 'rootBtn_' + i;
+        if (i===S.root) b.classList.add('on');
+        rootCtrlEl.appendChild(b);
+      }
     }
     ['base','modes','arps','other'].forEach(g => {
       const panel = document.getElementById('sg-'+g);
@@ -709,19 +834,22 @@ async function initApp() {
       });
     }
     bindPills('rootCtrl',  'root',   true);
+    bindPills('langCtrl',  'lang',   false);
 
     const viewCtrlEl = document.getElementById('viewCtrl');
     if(viewCtrlEl) viewCtrlEl.addEventListener('change', ()=>{ S.boxStart=0; });
 
-    document.getElementById('sgTabs').addEventListener('click', e => {
+    const sgTabsEl = document.getElementById('sgTabs');
+    if (sgTabsEl) sgTabsEl.addEventListener('click', e => {
       const tab = e.target.closest('.sg-tab');
       if (!tab) return;
       const g = tab.dataset.g;
       document.querySelectorAll('.sg-tab').forEach(t=>t.classList.remove('on'));
       document.querySelectorAll('.sg-panel').forEach(p=>p.classList.remove('show'));
       tab.classList.add('on');
-      document.getElementById('sg-'+g).classList.add('show');
-      
+      const sgPanel = document.getElementById('sg-'+g);
+      if (sgPanel) sgPanel.classList.add('show');
+
       if (SCALES[S.scale].g !== g) {
         const first = Object.keys(SCALES).find(k=>SCALES[k].g===g);
         if (first) { S.scale = first; syncScalePills(); }
@@ -730,7 +858,9 @@ async function initApp() {
     });
 
     ['base','modes','arps','other'].forEach(g => {
-      document.getElementById('sg-'+g).addEventListener('click', e => {
+      const sgPanel = document.getElementById('sg-'+g);
+      if (!sgPanel) return;
+      sgPanel.addEventListener('click', e => {
         const btn = e.target.closest('[data-v]');
         if (!btn) return;
         S.scale = btn.dataset.v;
@@ -791,8 +921,10 @@ async function initApp() {
       });
     }
     if(favCtrl) {
+      const favDelBtn = document.getElementById('favDelBtn');
       favCtrl.addEventListener('change', (e) => {
         const val = e.target.value;
+        if(favDelBtn) favDelBtn.style.display = val !== '' ? 'flex' : 'none';
         if(val === '') return;
         const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
         if(favs[val]) {
@@ -802,7 +934,20 @@ async function initApp() {
            render();
         }
         e.target.value = '';
+        if(favDelBtn) favDelBtn.style.display = 'none';
       });
+      if(favDelBtn) {
+        favDelBtn.addEventListener('click', () => {
+          const idx = parseInt(favCtrl.value, 10);
+          if(isNaN(idx) || idx < 0) return;
+          const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
+          favs.splice(idx, 1);
+          localStorage.setItem('bass_favs', JSON.stringify(favs));
+          favCtrl.value = '';
+          favDelBtn.style.display = 'none';
+          updateFavDropdown();
+        });
+      }
       updateFavDropdown();
     }
     
@@ -884,6 +1029,142 @@ async function initApp() {
     const metroBpmSlider = document.getElementById('metroBpmSlider');
     if (metroBpmSlider) metroBpmSlider.addEventListener('input', e => _setMetroBpm(+e.target.value));
 
+    // TAP TEMPO Area
+    const tapArea = document.getElementById('metroTapArea');
+    if (tapArea) {
+      tapArea.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        const now = performance.now();
+        // Reset se è passato troppo tempo (> 2 sec)
+        if (metro.tapTimes.length > 0 && now - metro.tapTimes[metro.tapTimes.length-1] > 2000) {
+          metro.tapTimes = [];
+        }
+        metro.tapTimes.push(now);
+        if (metro.tapTimes.length > 1) {
+          if (metro.tapTimes.length > 5) metro.tapTimes.shift();
+          const diffs = [];
+          for (let i = 1; i < metro.tapTimes.length; i++) diffs.push(metro.tapTimes[i] - metro.tapTimes[i-1]);
+          const avg = diffs.reduce((a,b)=>a+b) / diffs.length;
+          _setMetroBpm(Math.round(60000 / avg));
+        }
+      });
+    }
+
+    // SUBDIVISIONS
+    const subContainer = document.getElementById('metroSubdivs');
+    if (subContainer) {
+      subContainer.addEventListener('click', e => {
+        const btn = e.target.closest('[data-v]');
+        if (!btn) return;
+        metro.subdivision = +btn.dataset.v;
+        metro.subTick = 0;
+        subContainer.querySelectorAll('[data-v]').forEach(b => b.classList.toggle('on', b === btn));
+      });
+    }
+
+    // SPEED TRAINER TOGGLE
+    const metroTrainerTog = document.getElementById('metroTrainerTog');
+    if (metroTrainerTog) {
+      metroTrainerTog.addEventListener('change', e => {
+        metro.autoIncr = e.target.checked;
+        metro.totalBeats = 0;
+      });
+    }
+
+    // ADVANCED TOGGLE
+    const metroAdvBtn = document.getElementById('metroAdvBtn');
+    if (metroAdvBtn) {
+      metroAdvBtn.addEventListener('click', () => {
+        const adv = document.getElementById('metroAdvanced');
+        if (adv) adv.classList.toggle('hide');
+      });
+    }
+
+    // TIMER INPUT
+    const tMin = document.getElementById('metroTimerMin');
+    if (tMin) tMin.addEventListener('change', e => { metro.timerMin = +e.target.value; localStorage.setItem('metro_timer_min', metro.timerMin); });
+    
+    const tTog = document.getElementById('metroTimerTog');
+    if (tTog) tTog.addEventListener('change', e => { metro.timerEnabled = e.target.checked; });
+
+    // INCR PARAMS
+    const iBpm = document.getElementById('metroIncrBpm');
+    if (iBpm) iBpm.addEventListener('change', e => { metro.incrBpm = +e.target.value; });
+    const iBars = document.getElementById('metroIncrBars');
+    if (iBars) iBars.addEventListener('change', e => { metro.incrInterval = (+e.target.value) * metro.beats; });
+
+    // SOUNDSET CYCLE
+    const metroSoundCycleBtn = document.getElementById('metroSoundCycleBtn');
+    if (metroSoundCycleBtn) {
+      const sets = ['digital', 'wood', 'drum'];
+      metroSoundCycleBtn.addEventListener('click', () => {
+        let idx = (sets.indexOf(metro.soundSet) + 1) % sets.length;
+        metro.soundSet = sets[idx];
+        const sSet = document.getElementById('metroSoundSet');
+        if (sSet) sSet.value = metro.soundSet;
+        localStorage.setItem('metro_soundset', metro.soundSet);
+        showToast(`Suono: ${metro.soundSet.toUpperCase()}`);
+      });
+    }
+
+    // FLASH TOGGLE UI
+    const metroFlashBtnUI = document.getElementById('metroFlashBtnUI');
+    if (metroFlashBtnUI) {
+      metroFlashBtnUI.addEventListener('click', () => {
+        metro.flashEnabled = !metro.flashEnabled;
+        metroFlashBtnUI.classList.toggle('on', metro.flashEnabled);
+        const fTog = document.getElementById('metroFlashTog');
+        if (fTog) fTog.checked = metro.flashEnabled;
+        localStorage.setItem('metro_flash', metro.flashEnabled);
+        showToast(metro.flashEnabled ? "Flash ON ✨" : "Flash OFF 🌑");
+      });
+    }
+
+    // TRAINER UI ICON SYNC
+    const mTrainerTog = document.getElementById('metroTrainerTog');
+    const mTrainerIcon = document.getElementById('metroTrainerIcon');
+    if (mTrainerTog) {
+      mTrainerTog.addEventListener('change', () => {
+        if (mTrainerIcon) mTrainerIcon.parentElement.classList.toggle('on', mTrainerTog.checked);
+      });
+    }
+
+    // Persistenza carichi
+    const savedSound = localStorage.getItem('metro_soundset');
+    if (savedSound) { 
+      metro.soundSet = savedSound; 
+      const sSet = document.getElementById('metroSoundSet');
+      if (sSet) sSet.value = savedSound; 
+    }
+    const savedFlash = localStorage.getItem('metro_flash');
+    if (savedFlash !== null) { 
+      metro.flashEnabled = (savedFlash === 'true'); 
+      const fTogUI = document.getElementById('metroFlashBtnUI');
+      if (fTogUI) fTogUI.classList.toggle('on', metro.flashEnabled);
+      const fTog = document.getElementById('metroFlashTog');
+      if (fTog) fTog.checked = metro.flashEnabled; 
+    }
+    
+    // Inizializza termine musicale
+    _setMetroBpm(metro.bpm);
+
+    const metroTimeSig = document.getElementById('metroTimeSig');
+    if (metroTimeSig) {
+      metroTimeSig.addEventListener('change', e => {
+        metro.beats = +e.target.value;
+        metro.currentBeat = 0;
+        
+        // Update increment interval if trainer is active
+        const iBarsVal = document.getElementById('metroIncrBars')?.value || 2;
+        metro.incrInterval = (+iBarsVal) * metro.beats;
+
+        _buildMetroDots();
+        if (metro.running) {
+          clearTimeout(metro.timerID);
+          metro.queue = [];
+          metro.nextNoteTime = getAudioCtx().currentTime + 0.05;
+          _metroScheduler();
+        }
       });
     }
 
@@ -941,21 +1222,22 @@ async function initApp() {
     const themeBtn = document.getElementById('themeTogBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
-    // TUNER TOGGLE
-    const tunerTogBtn = document.getElementById('tunerTogBtn');
-    if(tunerTogBtn) {
-      tunerTogBtn.addEventListener('click', () => {
-        const panel = document.getElementById('tunerPanel');
-        if(!panel) return;
-        const isOpen = panel.classList.toggle('show');
-        if(isOpen) {
-          startTuner();
-          tunerTogBtn.style.background = 'var(--accent)';
-          tunerTogBtn.style.color = '#fff';
-        } else {
+    // TUNER START/STOP — mic chiesta solo su click utente
+    const tunerStartBtn = document.getElementById('tunerStartBtn');
+    if (tunerStartBtn) {
+      tunerStartBtn.addEventListener('click', async () => {
+        if (tunerActive) {
           stopTuner();
-          tunerTogBtn.style.background = '';
-          tunerTogBtn.style.color = '';
+          tunerStartBtn.classList.remove('active');
+          document.getElementById('tunerStartBtnLabel').textContent = 'Avvia Tuner';
+        } else {
+          tunerStartBtn.disabled = true;
+          await startTuner();
+          tunerStartBtn.disabled = false;
+          if (tunerActive) {
+            tunerStartBtn.classList.add('active');
+            document.getElementById('tunerStartBtnLabel').textContent = 'Ferma Tuner';
+          }
         }
       });
     }
@@ -964,16 +1246,14 @@ async function initApp() {
     switchTab('studio'); // Initial view
 
     // Sincronizza pulsanti iniziali modale
-    const audioBtn = document.getElementById('audioTogBtn');
     if (audioBtn) {
       audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
       audioBtn.style.opacity = S.audio ? '1' : '0.5';
     }
-    const themeBtn = document.getElementById('themeTogBtn');
     if (themeBtn) {
       themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️ Light' : '🌙 Dark';
     }
-
+    
     loadURL();
     if(S.view === 'quiz') switchTab('quiz');
     render();
@@ -994,7 +1274,7 @@ function syncScalePills() {
 
 function switchTab(tabName) {
   S.activeTab = tabName;
-  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tools');
+  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro');
   document.body.classList.add('tab-' + tabName);
   
   // Update UI active state
@@ -1010,15 +1290,12 @@ function switchTab(tabName) {
 
   // Auto-start/stop features based on Tab
   if (tabName === 'quiz') {
-    startQuiz();
+    resetQuiz(); // mostra stato "pronto", NON avvia automaticamente
   } else if (isQuizRunning) {
     stopQuiz();
   }
 
-  if (tabName === 'tools') {
-    startTuner();
-    // Metronome stays as is (user starts it manually)
-  } else {
+  if (tabName !== 'tuner') {
     if (tunerActive) stopTuner();
   }
 
@@ -1036,13 +1313,6 @@ function closeSettings() {
   if (modal) modal.classList.add('hide');
 }
 
-function stopQuiz() {
-  isQuizRunning = false;
-  if(quizTimerId) clearInterval(quizTimerId);
-  if(quizCountdownId) clearInterval(quizCountdownId);
-  quizActiveNote = null;
-  render(); 
-}
 
 /* ══════════════════════════════════════
    CHROMATIC TUNER ENGINE
@@ -1161,79 +1431,101 @@ function stopTuner() {
   if(freqEl)  freqEl.textContent = '— Hz';
   if(centsEl) { centsEl.textContent = '0 cents'; centsEl.style.color = ''; }
   if(needleEl){ needleEl.style.left = '50%'; needleEl.className = 'tuner-needle'; }
-  if(statusEl) statusEl.textContent = 'Premi 🎹 Tuner per iniziare';
+  if(statusEl) statusEl.textContent = 'Premi il pulsante per iniziare';
+  const sb = document.getElementById('tunerStartBtn');
+  const sl = document.getElementById('tunerStartBtnLabel');
+  if(sb) sb.classList.remove('active');
+  if(sl) sl.textContent = 'Avvia Tuner';
 }
 
 /* ══════════════════════════════════════
    ARCADE QUIZ ENGINE
 ══════════════════════════════════════ */
+function _removeQuizCdOverlay() {
+  const old = document.getElementById('quizCdOverlay');
+  if (old) old.remove();
+}
+
 function startQuiz() {
   quizScore = 0;
   quizCombo = 1;
   quizBestCombo = 0;
   const tc = document.getElementById('quizTimeCtrl');
   const timeStr = tc ? tc.value : '60';
-  isQuizRunning = false; 
+  isQuizRunning = false;
   if(quizTimerId) clearInterval(quizTimerId);
-  
+  if(quizCountdownId) clearInterval(quizCountdownId);
+  _removeQuizCdOverlay();
+
   const qs = document.getElementById('quizScore');
   const qc = document.getElementById('quizCombo');
   const qt = document.getElementById('quizTime');
   const fill = document.getElementById('quizTimerFill');
   const btns = document.getElementById('quizBtns');
-  
-  if (qs) qs.innerText = 'Pronti?';
+
+  if (qs) qs.innerText = tl('quiz_initial');
   if (qc) { qc.innerText = ''; qc.className = 'quiz-combo'; }
   if (qt) qt.innerText = '⏱️ ...';
-  if (fill) { fill.style.width = '100%'; fill.classList.remove('urgent'); }
+  if (fill) { fill.style.width = '100%'; fill.style.display = 'block'; fill.classList.remove('urgent'); }
   if (btns) btns.style.opacity = '0.5';
 
-  quizActiveNote = null; // Disabilita click durante il countdown
+  quizActiveNote = null;
   renderFretboard();
 
-  // Countdown overlay e Toast
+  // --- Countdown overlay grande sul fretboard ---
+  const fbArea = document.querySelector('.fb-area');
   let count = 3;
-  showToast(count + '...');
-  
+
+  function _showCdFrame(n) {
+    _removeQuizCdOverlay();
+    const overlay = document.createElement('div');
+    overlay.id = 'quizCdOverlay';
+    overlay.className = 'quiz-cd-overlay' + (n === 0 ? ' go' : '');
+    overlay.innerHTML = `<span class="quiz-cd-num">${n === 0 ? 'GO!' : n}</span>`;
+    if (fbArea) fbArea.appendChild(overlay);
+  }
+
+  _showCdFrame(count);
+
   quizCountdownId = setInterval(() => {
     count--;
-    if(count > 0) {
-      showToast(count + '...');
+    if (count > 0) {
+      _showCdFrame(count);
     } else {
       clearInterval(quizCountdownId);
-      showToast('GO! 🔥');
-      
-      isQuizRunning = true;
-      if(btns) btns.style.opacity = '1';
-      if(qs) qs.innerText = 'Go!';
-      if(qc) qc.innerText = 'Combo x1';
+      _showCdFrame(0); // "GO!"
 
-      
-      generateQuizNode();
-      renderFretboard();
+      setTimeout(() => {
+        _removeQuizCdOverlay();
+        isQuizRunning = true;
+        if (btns) btns.style.opacity = '1';
+        if (qs) qs.innerText = tl('quiz_initial');
+        if (qc) qc.innerText = 'Combo x1';
 
-      if (timeStr !== 'infinite') {
-        const totalTime = parseInt(timeStr, 10);
-        quizTimeLeft = totalTime;
-        if(fill) fill.style.display = 'block';
-        if(qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+        generateQuizNode();
+        renderFretboard();
 
-        quizTimerId = setInterval(() => {
-          quizTimeLeft--;
-          if(qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
-          if(fill) {
-            const pct = (quizTimeLeft / totalTime) * 100;
-            fill.style.width = pct + '%';
-            if(quizTimeLeft <= 10) fill.classList.add('urgent');
-          }
-          if(quizTimeLeft <= 0) {
-            endQuizMode();
-          }
-        }, 1000);
-      } else {
-        if(qt) qt.innerText = '⏱️ ∞';
-        if(fill) fill.style.display = 'none';
-      }
+        if (timeStr !== 'infinite') {
+          const totalTime = parseInt(timeStr, 10);
+          quizTimeLeft = totalTime;
+          if (fill) { fill.style.display = 'block'; }
+          if (qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+
+          quizTimerId = setInterval(() => {
+            quizTimeLeft--;
+            if (qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+            if (fill) {
+              const pct = (quizTimeLeft / totalTime) * 100;
+              fill.style.width = pct + '%';
+              if (quizTimeLeft <= 10) fill.classList.add('urgent');
+            }
+            if (quizTimeLeft <= 0) endQuizMode();
+          }, 1000);
+        } else {
+          if (qt) qt.innerText = '⏱️ ∞';
+          if (fill) fill.style.display = 'none';
+        }
+      }, 700);
     }
   }, 1000);
 }
@@ -1242,6 +1534,7 @@ function stopQuiz() {
   isQuizRunning = false;
   if(quizTimerId) clearInterval(quizTimerId);
   if(quizCountdownId) clearInterval(quizCountdownId);
+  _removeQuizCdOverlay();
   quizActiveNote = null;
   const qt = document.getElementById('quizTime');
   if(qt) qt.innerText = '⏱️ PAUSA';
@@ -1263,7 +1556,10 @@ function resetQuiz() {
   if (qc) { qc.innerText = 'Combo x1'; qc.className = 'quiz-combo'; }
   if (fill) { fill.style.width = '100%'; fill.classList.remove('urgent'); }
   const qt = document.getElementById('quizTime');
-  if (qt) qt.innerText = '⏱️ ' + (tc ? tc.value : '60') + 's';
+  if (qt) {
+    const val = tc ? tc.value : '60';
+    qt.innerText = val === 'infinite' ? '⏱️ ∞' : '⏱️ ' + val + 's';
+  }
 }
 
 function endQuizMode() {
@@ -1345,10 +1641,7 @@ function generateQuizNode() {
 }
 
 function handleQuizGuess(ni, btn) {
-   if (!quizActiveNote || !isQuizRunning) {
-     if(!isQuizRunning && quizTimeLeft <= 0) startQuiz(); // Restart upon click
-     return;
-   }
+   if (!quizActiveNote || !isQuizRunning) return;
    
    const qs = document.getElementById('quizScore');
    const qc = document.getElementById('quizCombo');
@@ -1460,21 +1753,15 @@ function updateI18nLabels() {
 function render() {
   updateI18nLabels();
   const qp = document.getElementById('quizPanel');
-  const sl = document.querySelector('.td-row-scales');
-  const sr = document.querySelector('.td-row-root');
   const info = document.getElementById('scaleInfo');
   const leg = document.getElementById('fbLegend');
-  
+
   if (S.view === 'quiz') {
       if(qp) qp.classList.add('show');
-      if(sl) sl.style.display = 'none';
-      if(sr) sr.style.display = 'none';
       if(info) info.style.display = 'none';
       if(leg) leg.style.display = 'none';
   } else {
       if(qp) qp.classList.remove('show');
-      if(sl) sl.style.display = 'flex';
-      if(sr) sr.style.display = 'flex';
       if(info) info.style.display = 'flex';
       if(leg) leg.style.display = 'flex';
       quizActiveNote = null;
