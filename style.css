@@ -97,14 +97,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
   width: 100%;
 }
 
-/* MODALITÀ MINIMALE PER PAGINE SECONDARIE */
-body.minimal-header .td-actions,
-body.minimal-header .td-row-root,
-body.minimal-header .td-row-scales {
+/* MODALITÀ MINIMALE PER PAGINE SECONDARIE (Esercizi, Contatti, Donate...) */
+body.minimal-header .music-controls,
+body.minimal-header .bottom-tab-bar,
+body.minimal-header .scale-info,
+body.minimal-header .pos-bar {
   display: none !important;
 }
 body.minimal-header .top-dashboard {
-  padding-bottom: 12px;
+  padding-bottom: 0;
 }
 
 .td-row {
