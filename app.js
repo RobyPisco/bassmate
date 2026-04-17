@@ -1662,7 +1662,7 @@ function handleQuizGuess(ni, btn) {
    const qs = document.getElementById('quizScore');
    const qc = document.getElementById('quizCombo');
    const panel = document.getElementById('quizPanel');
-   const qrl = document.getElementById('quizRankLabel'); progress 167
+   const qrl = document.getElementById('quizRankLabel');
 
    if (ni === quizActiveNote.ni) {
        btn.classList.add('correct');
