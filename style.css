@@ -376,6 +376,33 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 }
 .quiz-ctrl-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 .quiz-ctrl-btn:active { transform: translateY(0); }
+#quizStartBtn { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 0 12px rgba(139,92,246,.4); }
+#quizStartBtn:hover { filter: brightness(1.15); color: #fff; transform: translateY(-2px); }
+
+/* === QUIZ RESULT MODAL === */
+.quiz-result-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; z-index: 99999;
+  animation: fadeIn .25s ease;
+}
+.quiz-result-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+  padding: 36px 40px; max-width: 380px; width: 90%; text-align: center;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+.quiz-result-title { font-size: 18px; color: var(--muted); margin-bottom: 8px; }
+.quiz-result-score { font-size: 72px; font-weight: 900; color: #f59e0b; font-family: 'Space Mono', monospace; line-height: 1; }
+.quiz-result-label { font-size: 13px; color: var(--muted); margin: 6px 0 24px; text-transform: uppercase; letter-spacing: 2px; }
+.quiz-result-stats { display: flex; justify-content: space-around; margin-bottom: 20px; gap: 12px; }
+.quiz-result-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--s2); border-radius: 10px; padding: 12px 16px; flex: 1; }
+.qrs-val { font-size: 22px; font-weight: 900; color: var(--text); font-family: 'Space Mono', monospace; }
+.qrs-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+.quiz-result-new-record {
+  font-size: 16px; font-weight: 800; color: #f59e0b;
+  background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3);
+  border-radius: 8px; padding: 8px; margin-bottom: 20px;
+}
+
 @keyframes shake {
   0% { transform: translateX(0); }
   25% { transform: translateX(-4px); }

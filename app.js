@@ -157,6 +157,7 @@ const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', han
 let quizActiveNote = null;
 let quizScore = 0;
 let quizCombo = 1;
+let quizBestCombo = 0;
 let quizTimeLeft = 60;
 let quizTimerId = null;
 let quizCountdownId = null;
@@ -496,10 +497,11 @@ function recordQuizResult(ni, correct) {
   if (!stats.bestScore) stats.bestScore = 0;
   saveQuizStats(stats);
 }
-function recordQuizSession(score) {
+function recordQuizSession(score, bestCombo) {
   const stats = getQuizStats();
   stats.sessions = (stats.sessions || 0) + 1;
   stats.bestScore = Math.max(stats.bestScore || 0, score);
+  stats.bestCombo = Math.max(stats.bestCombo || 0, bestCombo || 0);
   // Daily streak
   const today = new Date().toDateString();
   if (stats.lastDate !== today) {
@@ -928,6 +930,7 @@ function syncScalePills() {
 function startQuiz() {
   quizScore = 0;
   quizCombo = 1;
+  quizBestCombo = 0;
   const tc = document.getElementById('quizTimeCtrl');
   const timeStr = tc ? tc.value : '60';
   isQuizRunning = false; 
@@ -1028,11 +1031,60 @@ function endQuizMode() {
   clearInterval(quizTimerId);
   if(quizCountdownId) clearInterval(quizCountdownId);
   quizActiveNote = null;
-  recordQuizSession(quizScore);
-  const qs = document.getElementById('quizScore');
-  const qt = document.getElementById('quizTime');
-  if(qs) qs.innerText = 'TIME UP! Score: ' + quizScore;
-  if(qt) qt.innerText = '⏱️ 0s';
+  recordQuizSession(quizScore, quizBestCombo);
+  const stats = getQuizStats();
+  
+  // --- Risultato finale: modale ---
+  const existing = document.getElementById('quizResultModal');
+  if(existing) existing.remove();
+
+  const weakNote = (() => {
+    if (!stats.notes) return '—';
+    let worst = null, worstRatio = -1;
+    Object.entries(stats.notes).forEach(([ni, d]) => {
+      const total = d.c + d.w;
+      if (total < 3) return;
+      const ratio = d.w / total;
+      if (ratio > worstRatio) { worstRatio = ratio; worst = +ni; }
+    });
+    return worst !== null ? getNoteName(worst) : '—';
+  })();
+
+  const modal = document.createElement('div');
+  modal.id = 'quizResultModal';
+  modal.className = 'quiz-result-modal';
+  modal.innerHTML = `
+    <div class="quiz-result-card">
+      <div class="quiz-result-title">⏱️ Tempo scaduto!</div>
+      <div class="quiz-result-score">${quizScore}</div>
+      <div class="quiz-result-label">Punti totali</div>
+      <div class="quiz-result-stats">
+        <div class="quiz-result-stat">
+          <span class="qrs-val">x${quizBestCombo}</span>
+          <span class="qrs-lbl">Combo Max</span>
+        </div>
+        <div class="quiz-result-stat">
+          <span class="qrs-val">${stats.bestScore}</span>
+          <span class="qrs-lbl">Record</span>
+        </div>
+        <div class="quiz-result-stat">
+          <span class="qrs-val">${weakNote}</span>
+          <span class="qrs-lbl">Nota debole</span>
+        </div>
+      </div>
+      ${quizScore >= (stats.bestScore || 0) ? '<div class="quiz-result-new-record">🏆 Nuovo Record!</div>' : ''}
+      <div style="display:flex; gap:12px;">
+        <button class="quiz-ctrl-btn" id="quizResultRetry" style="flex:1; background:var(--accent); color:#fff; border-color:var(--accent);">▶️ Rigioca</button>
+        <button class="quiz-ctrl-btn" id="quizResultClose" style="flex:1;">✖ Chiudi</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if(e.target === modal) modal.remove(); });
+  document.getElementById('quizResultRetry').addEventListener('click', () => { modal.remove(); startQuiz(); });
+  document.getElementById('quizResultClose').addEventListener('click', () => modal.remove());
+
   setTimeout(updateQuizStatsDisplay, 100);
   renderFretboard();
 }
@@ -1066,6 +1118,7 @@ function handleQuizGuess(ni, btn) {
        const pointsEarned = 10 * quizCombo;
        quizScore += pointsEarned;
        quizCombo++;
+       if(quizCombo - 1 > quizBestCombo) quizBestCombo = quizCombo - 1;
        
        if (qs) qs.innerText = 'Score: ' + quizScore;
        if (qc) {
@@ -1083,7 +1136,20 @@ function handleQuizGuess(ni, btn) {
        btn.classList.add('wrong');
        recordQuizResult(quizActiveNote.ni, false);
        
-       // Sbagliato? Perdi la combo ma non il punteggio!
+       // Fai lampeggiare il pallino sbagliato sul manico in rosso
+       const wrongDot = document.querySelector('.nd.q-dot');
+       if(wrongDot) {
+         wrongDot.style.background = '#ef4444';
+         wrongDot.style.boxShadow = '0 0 20px #ef4444';
+         wrongDot.style.transform = 'translate(-50%,-50%) scale(1.3)';
+         setTimeout(() => {
+           wrongDot.style.background = '';
+           wrongDot.style.boxShadow = '';
+           wrongDot.style.transform = '';
+         }, 500);
+       }
+       
+       // Sbagliato? Perdi la combo
        quizCombo = 1;
        if (qc) {
          qc.innerText = 'Combo Break!';
