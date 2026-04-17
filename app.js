@@ -163,6 +163,12 @@ let quizTimerId = null;
 let quizCountdownId = null;
 let isQuizRunning = false;
 
+// Tuner state
+let tunerActive = false;
+let tunerStream = null;
+let tunerAnimId = null;
+let tunerAnalyser = null;
+
 /* ══════════════════════════════════════
    AUDIO ENGINE
 ══════════════════════════════════════ */
@@ -904,6 +910,25 @@ async function initApp() {
     const themeBtn = document.getElementById('themeTogBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
+    // TUNER TOGGLE
+    const tunerTogBtn = document.getElementById('tunerTogBtn');
+    if(tunerTogBtn) {
+      tunerTogBtn.addEventListener('click', () => {
+        const panel = document.getElementById('tunerPanel');
+        if(!panel) return;
+        const isOpen = panel.classList.toggle('show');
+        if(isOpen) {
+          startTuner();
+          tunerTogBtn.style.background = 'var(--accent)';
+          tunerTogBtn.style.color = '#fff';
+        } else {
+          stopTuner();
+          tunerTogBtn.style.background = '';
+          tunerTogBtn.style.color = '';
+        }
+      });
+    }
+
     initTheme();
 
     loadURL();
@@ -922,6 +947,126 @@ async function initApp() {
 
 function syncScalePills() {
   document.querySelectorAll('.sg-panel [data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===S.scale));
+}
+
+/* ══════════════════════════════════════
+   CHROMATIC TUNER ENGINE
+══════════════════════════════════════ */
+const TUNER_NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function autoCorrelate(buf, sampleRate) {
+  // RMS silence check
+  let rms = 0;
+  for(let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / buf.length);
+  if(rms < 0.01) return -1; // too quiet
+
+  // Autocorrelation
+  const SIZE = buf.length;
+  const corr = new Float32Array(SIZE);
+  for(let lag = 0; lag < SIZE; lag++) {
+    let s = 0;
+    for(let i = 0; i < SIZE - lag; i++) s += buf[i] * buf[i + lag];
+    corr[lag] = s;
+  }
+
+  // Find first peak after initial dip
+  let d = 0;
+  while(d < SIZE && corr[d] > corr[d+1]) d++;  // go downhill
+  let maxVal = -Infinity, maxPos = -1;
+  for(let i = d; i < SIZE; i++) {
+    if(corr[i] > maxVal) { maxVal = corr[i]; maxPos = i; }
+  }
+  if(maxPos === -1 || corr[maxPos] < corr[0] * 0.5) return -1; // weak correlation
+
+  // Sub-sample interpolation for accuracy
+  const x0 = corr[maxPos - 1], x1 = corr[maxPos], x2 = corr[maxPos + 1] || 0;
+  const shift = (x2 - x0) / (2 * (2 * x1 - x2 - x0)) || 0;
+  return sampleRate / (maxPos + shift);
+}
+
+function freqToNoteInfo(freq) {
+  // A4 = 440 Hz
+  const semitones = 12 * Math.log2(freq / 440);
+  const noteIndex = Math.round(semitones) % 12;
+  const noteI = ((noteIndex % 12) + 12) % 12;
+  const noteName = TUNER_NOTES[noteI];
+  const cents = Math.round((semitones - Math.round(semitones)) * 100);
+  const octave = Math.floor((Math.round(semitones) + 57) / 12) + 1;
+  return { noteName, cents, octave };
+}
+
+async function startTuner() {
+  const statusEl  = document.getElementById('tunerStatus');
+  try {
+    tunerStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  } catch(e) {
+    if(statusEl) statusEl.textContent = '❌ Microfono non accessibile. Controlla i permessi.';
+    return;
+  }
+
+  const ctx = getAudioCtx();
+  const source = ctx.createMediaStreamSource(tunerStream);
+  tunerAnalyser = ctx.createAnalyser();
+  tunerAnalyser.fftSize = 2048;
+  source.connect(tunerAnalyser);
+
+  const buf = new Float32Array(tunerAnalyser.fftSize);
+  tunerActive = true;
+  if(statusEl) statusEl.textContent = '🎵 Ascolto in corso...';
+
+  function tick() {
+    if(!tunerActive) return;
+    tunerAnimId = requestAnimationFrame(tick);
+    tunerAnalyser.getFloatTimeDomainData(buf);
+    const freq = autoCorrelate(buf, ctx.sampleRate);
+
+    const noteEl   = document.getElementById('tunerNote');
+    const freqEl   = document.getElementById('tunerFreq');
+    const centsEl  = document.getElementById('tunerCents');
+    const needleEl = document.getElementById('tunerNeedle');
+
+    if(freq < 0) {
+      if(noteEl)  { noteEl.textContent = '—'; noteEl.className = 'tuner-note-display'; }
+      if(freqEl)  freqEl.textContent = '— Hz';
+      if(centsEl) centsEl.textContent = '— cents';
+      if(needleEl){ needleEl.style.left = '50%'; needleEl.className = 'tuner-needle'; }
+      return;
+    }
+
+    const { noteName, cents, octave } = freqToNoteInfo(freq);
+    const absCents = Math.abs(cents);
+    const status = absCents <= 5 ? 'in-tune' : absCents <= 15 ? 'close' : 'out';
+
+    if(noteEl)  { noteEl.textContent = noteName + octave; noteEl.className = 'tuner-note-display ' + status; }
+    if(freqEl)  freqEl.textContent = freq.toFixed(1) + ' Hz';
+    if(centsEl) { centsEl.textContent = (cents >= 0 ? '+' : '') + cents + ' cents'; centsEl.style.color = status === 'in-tune' ? '#10b981' : status === 'close' ? '#f59e0b' : '#ef4444'; }
+
+    // Move needle: 0 cents = 50%, ±50 cents = 0% / 100%
+    if(needleEl) {
+      const clampedCents = Math.max(-50, Math.min(50, cents));
+      const pct = 50 + clampedCents; // 0-100
+      needleEl.style.left = pct + '%';
+      needleEl.className = 'tuner-needle ' + status;
+    }
+  }
+  tick();
+}
+
+function stopTuner() {
+  tunerActive = false;
+  if(tunerAnimId) cancelAnimationFrame(tunerAnimId);
+  if(tunerStream) { tunerStream.getTracks().forEach(t => t.stop()); tunerStream = null; }
+  const noteEl   = document.getElementById('tunerNote');
+  const freqEl   = document.getElementById('tunerFreq');
+  const centsEl  = document.getElementById('tunerCents');
+  const needleEl = document.getElementById('tunerNeedle');
+  const statusEl = document.getElementById('tunerStatus');
+  if(noteEl)  { noteEl.textContent = '—'; noteEl.className = 'tuner-note-display'; }
+  if(freqEl)  freqEl.textContent = '— Hz';
+  if(centsEl) { centsEl.textContent = '0 cents'; centsEl.style.color = ''; }
+  if(needleEl){ needleEl.style.left = '50%'; needleEl.className = 'tuner-needle'; }
+  if(statusEl) statusEl.textContent = 'Premi 🎹 Tuner per iniziare';
 }
 
 /* ══════════════════════════════════════
