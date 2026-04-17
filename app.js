@@ -1318,7 +1318,10 @@ function getDeg(ni) {
 function dotLabel(ni, f) {
   if (S.label === 'finger') {
     if (f === 0) return '0';
-    if (S.view === 'full' || S.view === 'quiz') return '?';
+    if (S.view === 'quiz') return '?';
+    // In full view: show finger relative to natural 4-fret hand position block
+    // Fret 1-4 = 1,2,3,4 | Fret 5-8 = 1,2,3,4 | etc.
+    if (S.view === 'full') return String(((f - 1) % 4) + 1);
     return String(Math.min(4, Math.max(1, f - S.boxStart + 1)));
   }
   return (S.label === 'note' || S.label === 'solfege') ? getNoteName(ni) : getDeg(ni); 
