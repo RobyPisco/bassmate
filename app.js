@@ -1,13 +1,13 @@
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    I18N DICTIONARY & STATE
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const I18N = {
   it: {
     tuning: "Accordatura", root_note: "Nota radice", scale_chord: "Scala/Accordo", labels: "Etichette", settings: "Vista",
     base: "Base", modes: "Modi", arps: "Arpeggi", other: "Altro",
     degrees: "Gradi", notes: "Note", finger: "Dita (Box)", all: "Tutto", box: "Box 5fr", right: "Destro", lefty: "Mancino",
-    quiz_mode: "🎯 Quiz",
-    export_pdf: "Esporta PDF", donate: "Offrimi un caffè", pos_root: "Nota radice", pos_note: "Nota della scala", 
+    quiz_mode: "ðŸŽ¯ Quiz",
+    export_pdf: "Esporta PDF", donate: "Offrimi un caffÃ¨", pos_root: "Nota radice", pos_note: "Nota della scala", 
     position: "Posizione: fret", string_title: "Basso a", strings_label: "Corde",
     "Magg.": "Magg.", "Maggiore": "Maggiore", "Min.": "Min.", "Minore Naturale": "Minore Naturale", "Pent.M": "Pent.M", 
     "Pentatonica Maggiore": "Pentatonica Maggiore", "Pent.m": "Pent.m", "Pentatonica Minore": "Pentatonica Minore", 
@@ -19,31 +19,31 @@ const I18N = {
     "Half-Step Down": "Mezzo tono sotto",
     "Cromatica": "Cromatica", "Crom.": "Crom.",
     "solfege": "Note (Do, Re, Mi)", "notes": "Note (C, D, E)",
-    quiz_btn: "🎯 Gioca Quiz", fav_def: "🔖 Preferiti", fav_save: "Salva Preferito",
-    coffee: "Offrimi un caffè", reset_btn: "Reset Tastiera", ex_btn: "Esercizi Pratici",
+    quiz_btn: "ðŸŽ¯ Gioca Quiz", fav_def: "ðŸ”– Preferiti", fav_save: "Salva Preferito",
+    coffee: "Offrimi un caffÃ¨", reset_btn: "Reset Tastiera", ex_btn: "Esercizi Pratici",
     grids_btn: "Stampa Manici Vuoti", help_btn: "Aiuto e Istruzioni", export_btn: "Esporta PDF (Manico Corrente)",
-    f_quote: "\"Ho creato questo strumento per non perdermi sul manico... ora lo metto a disposizione per farvi perdere su questo sito! 🤘\"",
-    f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffè) ☕</a>",
+    f_quote: "\"Ho creato questo strumento per non perdermi sul manico... ora lo metto a disposizione per farvi perdere su questo sito! ðŸ¤˜\"",
+    f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffÃ¨) â˜•</a>",
     right: "Destro", lefty: "Mancino", hand: "Mano",
-    back_btn: "⬅️ Torna alla Tastiera",
-    quiz_score: "🏆 Punteggio:", quiz_wrong: "(Ahi!)", quiz_initial: "🏆 Punteggio: 0",
+    back_btn: "â¬…ï¸ Torna alla Tastiera",
+    quiz_score: "ðŸ† Punteggio:", quiz_wrong: "(Ahi!)", quiz_initial: "ðŸ† Punteggio: 0",
     metro_btn: "Metronomo", metro_btn_lbl: "Metronomo", metro_sig: "Battuta", metro_start: "Start", metro_stop: "Stop",
-    share_btn: "Condividi Scala", share_copied: "🔗 Link copiato negli appunti!", share_fail: "Copia questo link:",
-    kbd_title: "⌨️ Scorciatoie da Tastiera",
-    kbd_root_lr: "← / →", kbd_root_lr_desc: "Cambia nota radice",
+    share_btn: "Condividi Scala", share_copied: "ðŸ”— Link copiato negli appunti!", share_fail: "Copia questo link:",
+    kbd_title: "âŒ¨ï¸ Scorciatoie da Tastiera",
+    kbd_root_lr: "â† / â†’", kbd_root_lr_desc: "Cambia nota radice",
     kbd_quiz: "Q", kbd_quiz_desc: "Attiva/Disattiva Quiz",
     kbd_metro: "M", kbd_metro_desc: "Apri/Chiudi Metronomo",
     kbd_reset: "R", kbd_reset_desc: "Reset tastiera",
     kbd_help: "?", kbd_help_desc: "Mostra queste scorciatoie",
-    stats_title: "Le tue statistiche", stats_sessions: "Sessioni", stats_best: "Best Score", stats_weak: "Nota più difficile", stats_none: "Nessun dato ancora!",
-    tour_skip: "Salta tour", tour_next: "Avanti →", tour_done: "Fatto! 🎸",
-    tour_0_t: "Benvenuto su Bassmate! 🎸", tour_0_b: "Ti guidiamo in un veloce tour delle funzioni principali. Dura meno di un minuto!",
-    tour_1_t: "🎵 Nota Radice", tour_1_b: "Clicca una nota (Do, Re, Mi...) per impostare la fondamentale. Cambierà tutto il manico in tempo reale.",
-    tour_2_t: "🎹 Scala / Accordo", tour_2_b: "Naviga tra i tab Base, Modi, Arpeggi per esplorare le infinite combinazioni. La scala attiva è evidenziata in viola.",
-    tour_3_t: "🎺 Manico Interattivo", tour_3_b: "Clicca su qualsiasi nota del manico per sentirne il suono. Usa 'Etichette' per scegliere se vedere gradi, note o dita.",
-    tour_4_t: "🎯 Quiz Mode", tour_4_b: "Metti alla prova la tua memoria! Il manico si svuoterà e dovrai indovinare la nota sul tasto evidenziato.",
-    tour_5_t: "🥁 Metronomo", tour_5_b: "Studia le scale a tempo preciso. Regola BPM e battuta, poi premi Start. Puoi suonare le note sul manico mentre il metro batte!",
-    tour_6_t: "Sei pronto! 🤘", tour_6_b: "Buono studio bassista! Ricorda: la guida completa è sempre accessibile dall'icona \u2753 in alto a destra.",
+    stats_title: "Le tue statistiche", stats_sessions: "Sessioni", stats_best: "Best Score", stats_weak: "Nota piÃ¹ difficile", stats_none: "Nessun dato ancora!",
+    tour_skip: "Salta tour", tour_next: "Avanti â†’", tour_done: "Fatto! ðŸŽ¸",
+    tour_0_t: "Benvenuto su Bassmate! ðŸŽ¸", tour_0_b: "Ti guidiamo in un veloce tour delle funzioni principali. Dura meno di un minuto!",
+    tour_1_t: "ðŸŽµ Nota Radice", tour_1_b: "Clicca una nota (Do, Re, Mi...) per impostare la fondamentale. CambierÃ  tutto il manico in tempo reale.",
+    tour_2_t: "ðŸŽ¹ Scala / Accordo", tour_2_b: "Naviga tra i tab Base, Modi, Arpeggi per esplorare le infinite combinazioni. La scala attiva Ã¨ evidenziata in viola.",
+    tour_3_t: "ðŸŽº Manico Interattivo", tour_3_b: "Clicca su qualsiasi nota del manico per sentirne il suono. Usa 'Etichette' per scegliere se vedere gradi, note o dita.",
+    tour_4_t: "ðŸŽ¯ Quiz Mode", tour_4_b: "Metti alla prova la tua memoria! Il manico si svuoterÃ  e dovrai indovinare la nota sul tasto evidenziato.",
+    tour_5_t: "ðŸ¥ Metronomo", tour_5_b: "Studia le scale a tempo preciso. Regola BPM e battuta, poi premi Start. Puoi suonare le note sul manico mentre il metro batte!",
+    tour_6_t: "Sei pronto! ðŸ¤˜", tour_6_b: "Buono studio bassista! Ricorda: la guida completa Ã¨ sempre accessibile dall'icona \u2753 in alto a destra.",
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-corde)", "D Standard (4)": "D Standard (4-corde)",
     "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
     settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
@@ -56,7 +56,7 @@ const I18N = {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
     base: "Base", modes: "Modes", arps: "Arps", other: "Other",
     degrees: "Degrees", notes: "Notes", finger: "Fingers (Box)", all: "All", box: "Box 5fr", right: "Right", lefty: "Lefty",
-    quiz_mode: "🎯 Quiz Mode",
+    quiz_mode: "ðŸŽ¯ Quiz Mode",
     export_pdf: "Export PDF", donate: "Buy me a coffee", pos_root: "Root Note", pos_note: "Scale Note", 
     position: "Position: fret", string_title: "Bass", strings_label: "Strings",
     "Magg.": "Major", "Maggiore": "Major", "Min.": "Minor", "Minore Naturale": "Natural Minor", "Pent.M": "Maj.Pent", 
@@ -69,31 +69,31 @@ const I18N = {
     "Mezzo tono sotto": "Half-Step Down",
     "Cromatica": "Chromatic", "Crom.": "Chrom.",
     "solfege": "Solfege (Do,Re)", "notes": "Notes (C,D,E)",
-    quiz_btn: "🎯 Play Quiz", fav_def: "🔖 Favorites", fav_save: "Save Favorite",
+    quiz_btn: "ðŸŽ¯ Play Quiz", fav_def: "ðŸ”– Favorites", fav_save: "Save Favorite",
     coffee: "Buy me a coffee", reset_btn: "Reset Fretboard", ex_btn: "Practice Exercises",
     grids_btn: "Print Blank Grids", help_btn: "Help & Guide", export_btn: "Export PDF (Current View)",
-    f_quote: "\"I created this tool so I wouldn't get lost on the fretboard... now I'm sharing it so you can get lost on this site! 🤘\"",
-    f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) ☕</a>",
+    f_quote: "\"I created this tool so I wouldn't get lost on the fretboard... now I'm sharing it so you can get lost on this site! ðŸ¤˜\"",
+    f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) â˜•</a>",
     right: "Right", lefty: "Lefty", hand: "Hand",
-    back_btn: "⬅️ Back to Fretboard",
-    quiz_score: "🏆 Score:", quiz_wrong: "(Ouch!)", quiz_initial: "🏆 Score: 0",
+    back_btn: "â¬…ï¸ Back to Fretboard",
+    quiz_score: "ðŸ† Score:", quiz_wrong: "(Ouch!)", quiz_initial: "ðŸ† Score: 0",
     metro_btn: "Metronome", metro_btn_lbl: "Metronome", metro_sig: "Time Sig", metro_start: "Start", metro_stop: "Stop",
-    share_btn: "Share Scale", share_copied: "🔗 Link copied to clipboard!", share_fail: "Copy this link:",
-    kbd_title: "⌨️ Keyboard Shortcuts",
-    kbd_root_lr: "← / →", kbd_root_lr_desc: "Change root note",
+    share_btn: "Share Scale", share_copied: "ðŸ”— Link copied to clipboard!", share_fail: "Copy this link:",
+    kbd_title: "âŒ¨ï¸ Keyboard Shortcuts",
+    kbd_root_lr: "â† / â†’", kbd_root_lr_desc: "Change root note",
     kbd_quiz: "Q", kbd_quiz_desc: "Toggle Quiz Mode",
     kbd_metro: "M", kbd_metro_desc: "Open/Close Metronome",
     kbd_reset: "R", kbd_reset_desc: "Reset fretboard",
     kbd_help: "?", kbd_help_desc: "Show these shortcuts",
     stats_title: "Your Statistics", stats_sessions: "Sessions", stats_best: "Best Score", stats_weak: "Weakest Note", stats_none: "No data yet!",
-    tour_skip: "Skip tour", tour_next: "Next →", tour_done: "Let's play! 🎸",
-    tour_0_t: "Welcome to Bassmate! 🎸", tour_0_b: "Let's take a quick 1-minute tour of the main features!",
-    tour_1_t: "🎵 Root Note", tour_1_b: "Click a note (C, D, E...) to set the root. The entire fretboard updates in real-time.",
-    tour_2_t: "🎹 Scale / Chord", tour_2_b: "Browse tabs (Base, Modes, Arpeggios) to explore endless combinations. The active scale is highlighted in purple.",
-    tour_3_t: "🎺 Interactive Fretboard", tour_3_b: "Click any dot to hear the note! Use 'Labels' to toggle between degrees, notes, or finger positions.",
-    tour_4_t: "🎯 Quiz Mode", tour_4_b: "Test your memory! The fretboard empties and you guess the highlighted fret's note.",
-    tour_5_t: "🥁 Metronome", tour_5_b: "Practice in time. Set BPM and time signature, press Start. You can still play notes while it ticks!",
-    tour_6_t: "You're all set! 🤘", tour_6_b: "Happy Grooving! The full guide is always accessible from the \u2753 icon in the top right.",
+    tour_skip: "Skip tour", tour_next: "Next â†’", tour_done: "Let's play! ðŸŽ¸",
+    tour_0_t: "Welcome to Bassmate! ðŸŽ¸", tour_0_b: "Let's take a quick 1-minute tour of the main features!",
+    tour_1_t: "ðŸŽµ Root Note", tour_1_b: "Click a note (C, D, E...) to set the root. The entire fretboard updates in real-time.",
+    tour_2_t: "ðŸŽ¹ Scale / Chord", tour_2_b: "Browse tabs (Base, Modes, Arpeggios) to explore endless combinations. The active scale is highlighted in purple.",
+    tour_3_t: "ðŸŽº Interactive Fretboard", tour_3_b: "Click any dot to hear the note! Use 'Labels' to toggle between degrees, notes, or finger positions.",
+    tour_4_t: "ðŸŽ¯ Quiz Mode", tour_4_b: "Test your memory! The fretboard empties and you guess the highlighted fret's note.",
+    tour_5_t: "ðŸ¥ Metronome", tour_5_b: "Practice in time. Set BPM and time signature, press Start. You can still play notes while it ticks!",
+    tour_6_t: "You're all set! ðŸ¤˜", tour_6_b: "Happy Grooving! The full guide is always accessible from the \u2753 icon in the top right.",
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-string)", "D Standard (4)": "D Standard (4-string)",
     "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
@@ -122,26 +122,26 @@ function intervalFormula(ivs) {
 
 const SCALES = {
   major:    {g:'base',  name:'Maggiore',              short:'Magg.',     iv:[0,2,4,5,7,9,11],    dg:['1','2','3','4','5','6','7']},
-  minor:    {g:'base',  name:'Minore Naturale',        short:'Min.',      iv:[0,2,3,5,7,8,10],    dg:['1','2','♭3','4','5','♭6','♭7']},
+  minor:    {g:'base',  name:'Minore Naturale',        short:'Min.',      iv:[0,2,3,5,7,8,10],    dg:['1','2','â™­3','4','5','â™­6','â™­7']},
   majPenta: {g:'base',  name:'Pentatonica Maggiore',   short:'Pent.M',    iv:[0,2,4,7,9],         dg:['1','2','3','5','6']},
-  minPenta: {g:'base',  name:'Pentatonica Minore',     short:'Pent.m',    iv:[0,3,5,7,10],        dg:['1','♭3','4','5','♭7']},
-  blues:    {g:'base',  name:'Blues',                  short:'Blues',     iv:[0,3,5,6,7,10],      dg:['1','♭3','4','♭5','5','♭7']},
-  dorian:   {g:'modes', name:'Dorian',                 short:'Dorian',    iv:[0,2,3,5,7,9,10],    dg:['1','2','♭3','4','5','6','♭7']},
-  phrygian: {g:'modes', name:'Phrygian',               short:'Phrygian',  iv:[0,1,3,5,7,8,10],    dg:['1','♭2','♭3','4','5','♭6','♭7']},
-  lydian:   {g:'modes', name:'Lydian',                 short:'Lydian',    iv:[0,2,4,6,7,9,11],    dg:['1','2','3','♯4','5','6','7']},
-  mixo:     {g:'modes', name:'Mixolydian',             short:'Mixo.',     iv:[0,2,4,5,7,9,10],    dg:['1','2','3','4','5','6','♭7']},
-  locrian:  {g:'modes', name:'Locrian',                short:'Locrian',   iv:[0,1,3,5,6,8,10],    dg:['1','♭2','♭3','4','♭5','♭6','♭7']},
+  minPenta: {g:'base',  name:'Pentatonica Minore',     short:'Pent.m',    iv:[0,3,5,7,10],        dg:['1','â™­3','4','5','â™­7']},
+  blues:    {g:'base',  name:'Blues',                  short:'Blues',     iv:[0,3,5,6,7,10],      dg:['1','â™­3','4','â™­5','5','â™­7']},
+  dorian:   {g:'modes', name:'Dorian',                 short:'Dorian',    iv:[0,2,3,5,7,9,10],    dg:['1','2','â™­3','4','5','6','â™­7']},
+  phrygian: {g:'modes', name:'Phrygian',               short:'Phrygian',  iv:[0,1,3,5,7,8,10],    dg:['1','â™­2','â™­3','4','5','â™­6','â™­7']},
+  lydian:   {g:'modes', name:'Lydian',                 short:'Lydian',    iv:[0,2,4,6,7,9,11],    dg:['1','2','3','â™¯4','5','6','7']},
+  mixo:     {g:'modes', name:'Mixolydian',             short:'Mixo.',     iv:[0,2,4,5,7,9,10],    dg:['1','2','3','4','5','6','â™­7']},
+  locrian:  {g:'modes', name:'Locrian',                short:'Locrian',   iv:[0,1,3,5,6,8,10],    dg:['1','â™­2','â™­3','4','â™­5','â™­6','â™­7']},
   maj7:     {g:'arps',  name:'Maggiore 7',             short:'Maj7',      iv:[0,4,7,11],          dg:['1','3','5','7']},
-  min7:     {g:'arps',  name:'Minore 7',               short:'Min7',      iv:[0,3,7,10],          dg:['1','♭3','5','♭7']},
-  dom7:     {g:'arps',  name:'Dominante 7',            short:'Dom7',      iv:[0,4,7,10],          dg:['1','3','5','♭7']},
-  m7b5:     {g:'arps',  name:'Semidiminuito',          short:'m7♭5',      iv:[0,3,6,10],          dg:['1','♭3','♭5','♭7']},
-  dim7:     {g:'arps',  name:'Diminuito 7',            short:'Dim7',      iv:[0,3,6,9],           dg:['1','♭3','♭5','bb7']},
-  aug:      {g:'arps',  name:'Aumentata',              short:'Aug',       iv:[0,4,8],             dg:['1','3','♯5']},
-  harmMin:  {g:'other', name:'Minore Armonica',        short:'Min.Arm.',  iv:[0,2,3,5,7,8,11],    dg:['1','2','♭3','4','5','♭6','7']},
-  melMin:   {g:'other', name:'Minore Melodica',        short:'Min.Mel.',  iv:[0,2,3,5,7,9,11],    dg:['1','2','♭3','4','5','6','7']},
-  dim:      {g:'other', name:'Diminuita',              short:'Dim.',      iv:[0,2,3,5,6,8,9,11],  dg:['1','2','♭3','4','♭5','♭6','6','7']},
-  whole:    {g:'other', name:'Whole Tone',             short:'Whole',     iv:[0,2,4,6,8,10],      dg:['1','2','3','♯4','♯5','♭7']},
-  chromatic:{g:'other', name:'Cromatica',              short:'Crom.',     iv:[0,1,2,3,4,5,6,7,8,9,10,11], dg:['1','♭2','2','♭3','3','4','♭5','5','♭6','6','♭7','7']},
+  min7:     {g:'arps',  name:'Minore 7',               short:'Min7',      iv:[0,3,7,10],          dg:['1','â™­3','5','â™­7']},
+  dom7:     {g:'arps',  name:'Dominante 7',            short:'Dom7',      iv:[0,4,7,10],          dg:['1','3','5','â™­7']},
+  m7b5:     {g:'arps',  name:'Semidiminuito',          short:'m7â™­5',      iv:[0,3,6,10],          dg:['1','â™­3','â™­5','â™­7']},
+  dim7:     {g:'arps',  name:'Diminuito 7',            short:'Dim7',      iv:[0,3,6,9],           dg:['1','â™­3','â™­5','bb7']},
+  aug:      {g:'arps',  name:'Aumentata',              short:'Aug',       iv:[0,4,8],             dg:['1','3','â™¯5']},
+  harmMin:  {g:'other', name:'Minore Armonica',        short:'Min.Arm.',  iv:[0,2,3,5,7,8,11],    dg:['1','2','â™­3','4','5','â™­6','7']},
+  melMin:   {g:'other', name:'Minore Melodica',        short:'Min.Mel.',  iv:[0,2,3,5,7,9,11],    dg:['1','2','â™­3','4','5','6','7']},
+  dim:      {g:'other', name:'Diminuita',              short:'Dim.',      iv:[0,2,3,5,6,8,9,11],  dg:['1','2','â™­3','4','â™­5','â™­6','6','7']},
+  whole:    {g:'other', name:'Whole Tone',             short:'Whole',     iv:[0,2,4,6,8,10],      dg:['1','2','3','â™¯4','â™¯5','â™­7']},
+  chromatic:{g:'other', name:'Cromatica',              short:'Crom.',     iv:[0,1,2,3,4,5,6,7,8,9,10,11], dg:['1','â™­2','2','â™­3','3','4','â™­5','5','â™­6','6','â™­7','7']},
 };
 
 const TUNINGS = {
@@ -179,9 +179,9 @@ let tunerStream = null;
 let tunerAnimId = null;
 let tunerAnalyser = null;
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    AUDIO ENGINE
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 let _audioCtx = null;
 function getAudioCtx() {
   if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -240,22 +240,22 @@ function playNote(midi) {
   } catch(e) { console.warn('Audio error:', e); }
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    METRONOME ENGINE (Lookahead Scheduler)
    Uses Web Audio clock for sample-accurate timing.
    No setInterval drift.
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const metro = {
   running: false,
   bpm: 80,
   beats: 4,         // battiti per battuta
   currentBeat: 0,
   nextNoteTime: 0.0,
-  lookahead: 25.0,      // ms — intervallo del scheduler
-  scheduleAhead: 0.1,   // sec — anticipo scheduling
+  lookahead: 25.0,      // ms â€” intervallo del scheduler
+  scheduleAhead: 0.1,   // sec â€” anticipo scheduling
   timerID: null,
   queue: [],            // per sincronia visuale
-  // Nuove proprietà
+  // Nuove proprietÃ 
   subdivision: 1,       // 1=quarti, 2=ottavi, 3=terzine, 4=sedicesimi
   subTick: 0,           // tick progressivo nelle suddivisioni
   tapTimes: [],         // per calcolo tap tempo
@@ -337,7 +337,7 @@ function _metroScheduler() {
       if (metro.timerRemaining <= 0) {
         metro.timerRemaining = 0;
         _metroToggle();
-        showToast("Sessione terminata! 🏁");
+        showToast("Sessione terminata! ðŸ");
       }
     }
 
@@ -446,7 +446,7 @@ function _metroToggle() {
     document.querySelectorAll('.metro-beat-dot').forEach(d => d.classList.remove('lit'));
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.remove('running'); btn.innerHTML = `▶`; }
+    if (btn) { btn.classList.remove('running'); btn.innerHTML = `â–¶`; }
     if (togBtn) togBtn.classList.remove('metroTogBtn-active');
   } else {
     // START
@@ -465,16 +465,16 @@ function _metroToggle() {
     requestAnimationFrame(_metroDraw);
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.add('running'); btn.innerHTML = `⏹`; }
+    if (btn) { btn.classList.add('running'); btn.innerHTML = `â¹`; }
     if (togBtn) togBtn.classList.add('metroTogBtn-active');
   }
 }
 
 function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.className=cls; return d; }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TOAST NOTIFICATION
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function showToast(msg, duration = 2500) {
   let t = document.getElementById('_toast');
   if (!t) {
@@ -488,13 +488,13 @@ function showToast(msg, duration = 2500) {
   t._timer = setTimeout(() => t.className = '', duration);
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    THEME TOGGLE (Dark / Light)
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btn = document.getElementById('themeTogBtn');
-  if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+  if (btn) btn.textContent = theme === 'light' ? 'â˜€ï¸' : 'ðŸŒ™';
   localStorage.setItem('bass_theme', theme);
 }
 
@@ -512,13 +512,13 @@ function toggleTheme() {
   
   const themeBtn = document.getElementById('themeTogBtn');
   if (themeBtn) {
-    themeBtn.textContent = newTheme === 'light' ? '☀️ Light' : '🌙 Dark';
+    themeBtn.textContent = newTheme === 'light' ? 'â˜€ï¸ Light' : 'ðŸŒ™ Dark';
   }
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SHARE BUTTON
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function shareCurrentScale() {
   syncURL();
   const url = window.location.href;
@@ -535,9 +535,9 @@ function shareCurrentScale() {
   }
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    IMAGE EXPORT (html2canvas)
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function exportFretboardImage() {
   if (typeof html2canvas === 'undefined') {
     showToast('Libreria in caricamento, riprova tra un istante...');
@@ -548,7 +548,7 @@ function exportFretboardImage() {
   if (!el) return;
 
   const bgCol = getComputedStyle(document.body).backgroundColor;
-  showToast('Generazione immagine in corso... 📸');
+  showToast('Generazione immagine in corso... ðŸ“¸');
 
   html2canvas(el, { 
     backgroundColor: bgCol,
@@ -559,13 +559,13 @@ function exportFretboardImage() {
     link.href = canvas.toDataURL('image/png');
     link.click();
   }).catch(() => {
-    showToast('Errore durante l\'esportazione ❌');
+    showToast('Errore durante l\'esportazione âŒ');
   });
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    KEYBOARD SHORTCUTS
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function initKeyboardShortcuts() {
   document.addEventListener('keydown', e => {
     if (e.target.matches('input, select, textarea')) return;
@@ -610,13 +610,13 @@ function toggleKbdPanel() {
     panel.innerHTML = `
       <h3 class="kbd-title" id="kbdTitle">${tl('kbd_title')}</h3>
       <div class="kbd-list">
-        <span class="kbd-key">← / →</span><span>${tl('kbd_root_lr_desc')}</span>
+        <span class="kbd-key">â† / â†’</span><span>${tl('kbd_root_lr_desc')}</span>
         <span class="kbd-key">Q</span><span>${tl('kbd_quiz_desc')}</span>
         <span class="kbd-key">M</span><span>${tl('kbd_metro_desc')}</span>
         <span class="kbd-key">R</span><span>${tl('kbd_reset_desc')}</span>
         <span class="kbd-key">?</span><span>${tl('kbd_help_desc')}</span>
       </div>
-      <button class="kbd-close" onclick="document.getElementById('kbdPanel').remove()">✕</button>
+      <button class="kbd-close" onclick="document.getElementById('kbdPanel').remove()">âœ•</button>
     `;
     document.body.appendChild(panel);
     setTimeout(() => panel.classList.add('kbd-show'), 10);
@@ -625,9 +625,9 @@ function toggleKbdPanel() {
   }
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    QUIZ STATISTICS
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function getQuizStats() {
   try { return JSON.parse(localStorage.getItem('bass_quiz_stats') || '{}'); } catch(e) { return {}; }
 }
@@ -663,7 +663,7 @@ function updateQuizStatsDisplay() {
   const stats = getQuizStats();
   if (!stats.sessions) { el.textContent = tl('stats_none'); return; }
   const weakNote = (() => {
-    if (!stats.notes) return '—';
+    if (!stats.notes) return 'â€”';
     let worst = null, worstRatio = -1;
     Object.entries(stats.notes).forEach(([ni, d]) => {
       const total = d.c + d.w;
@@ -671,17 +671,17 @@ function updateQuizStatsDisplay() {
       const ratio = d.w / total;
       if (ratio > worstRatio) { worstRatio = ratio; worst = +ni; }
     });
-    return worst !== null ? getNoteName(worst) : '—';
+    return worst !== null ? getNoteName(worst) : 'â€”';
   })();
-  el.innerHTML = `<span>📊 ${tl('stats_sessions')}: <strong>${stats.sessions}</strong></span>
-    <span>🏅 ${tl('stats_best')}: <strong>${stats.bestScore}</strong></span>
-    <span>⚡ ${tl('stats_weak')}: <strong>${weakNote}</strong></span>
-    ${stats.streak > 1 ? `<span>🔥 Streak: <strong>${stats.streak}gg</strong></span>` : ''}`;
+  el.innerHTML = `<span>ðŸ“Š ${tl('stats_sessions')}: <strong>${stats.sessions}</strong></span>
+    <span>ðŸ… ${tl('stats_best')}: <strong>${stats.bestScore}</strong></span>
+    <span>âš¡ ${tl('stats_weak')}: <strong>${weakNote}</strong></span>
+    ${stats.streak > 1 ? `<span>ðŸ”¥ Streak: <strong>${stats.streak}gg</strong></span>` : ''}`;
 }
 
-/* ══════════════════════════════════════
-   ONBOARDING TOUR (Simple Modal — no spotlight)
-══════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ONBOARDING TOUR (Simple Modal â€” no spotlight)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function startTour() {
   if (document.getElementById('tourOverlay')) return;
   if (!document.getElementById('fretboard')) return;
@@ -737,9 +737,9 @@ function maybeStartTour() {
   setTimeout(startTour, 800);
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ASYNC INIT AND INJECTIONS
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 async function initApp() {
   const hp = document.getElementById('header-placeholder');
   const fp = document.getElementById('footer-placeholder');
@@ -989,7 +989,8 @@ async function initApp() {
       if(!qb) return;
       qb.innerHTML = '';
       for(let i=0; i<12; i++) {
-          const b = mkEl('button', 'quiz-btn');
+          const isAccidental = getNoteName(i).includes('#');
+          const b = mkEl('button', 'quiz-btn' + (isAccidental ? ' accidental' : ''));
           b.innerText = getNoteName(i);
           b.onclick = () => handleQuizGuess(i, b);
           qb.appendChild(b);
@@ -1041,7 +1042,7 @@ async function initApp() {
       tapArea.addEventListener('pointerdown', e => {
         e.preventDefault();
         const now = performance.now();
-        // Reset se è passato troppo tempo (> 2 sec)
+        // Reset se Ã¨ passato troppo tempo (> 2 sec)
         if (metro.tapTimes.length > 0 && now - metro.tapTimes[metro.tapTimes.length-1] > 2000) {
           metro.tapTimes = [];
         }
@@ -1122,7 +1123,7 @@ async function initApp() {
         const fTog = document.getElementById('metroFlashTog');
         if (fTog) fTog.checked = metro.flashEnabled;
         localStorage.setItem('metro_flash', metro.flashEnabled);
-        showToast(metro.flashEnabled ? "Flash ON ✨" : "Flash OFF 🌑");
+        showToast(metro.flashEnabled ? "Flash ON âœ¨" : "Flash OFF ðŸŒ‘");
       });
     }
 
@@ -1202,7 +1203,7 @@ async function initApp() {
     if (audioBtn) {
       audioBtn.addEventListener('click', () => {
         S.audio = !S.audio;
-        audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+        audioBtn.textContent = S.audio ? 'ðŸ”Š ON' : 'ðŸ”‡ OFF';
         audioBtn.style.opacity = S.audio ? '1' : '0.5';
       });
     }
@@ -1228,7 +1229,7 @@ async function initApp() {
     const themeBtn = document.getElementById('themeTogBtn');
     if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
 
-    // TUNER START/STOP — mic chiesta solo su click utente
+    // TUNER START/STOP â€” mic chiesta solo su click utente
     const tunerStartBtn = document.getElementById('tunerStartBtn');
     if (tunerStartBtn) {
       tunerStartBtn.addEventListener('click', async () => {
@@ -1253,11 +1254,11 @@ async function initApp() {
 
     // Sincronizza pulsanti iniziali modale
     if (audioBtn) {
-      audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+      audioBtn.textContent = S.audio ? 'ðŸ”Š ON' : 'ðŸ”‡ OFF';
       audioBtn.style.opacity = S.audio ? '1' : '0.5';
     }
     if (themeBtn) {
-      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️ Light' : '🌙 Dark';
+      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'â˜€ï¸ Light' : 'ðŸŒ™ Dark';
     }
     
     loadURL();
@@ -1320,9 +1321,9 @@ function closeSettings() {
 }
 
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CHROMATIC TUNER ENGINE
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const TUNER_NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
 function autoCorrelate(buf, sampleRate) {
@@ -1372,7 +1373,7 @@ async function startTuner() {
   try {
     tunerStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
   } catch(e) {
-    if(statusEl) statusEl.textContent = '❌ Microfono non accessibile. Controlla i permessi.';
+    if(statusEl) statusEl.textContent = 'âŒ Microfono non accessibile. Controlla i permessi.';
     return;
   }
 
@@ -1384,7 +1385,7 @@ async function startTuner() {
 
   const buf = new Float32Array(tunerAnalyser.fftSize);
   tunerActive = true;
-  if(statusEl) statusEl.textContent = '🎵 Ascolto in corso...';
+  if(statusEl) statusEl.textContent = 'ðŸŽµ Ascolto in corso...';
 
   function tick() {
     if(!tunerActive) return;
@@ -1398,9 +1399,9 @@ async function startTuner() {
     const needleEl = document.getElementById('tunerNeedle');
 
     if(freq < 0) {
-      if(noteEl)  { noteEl.textContent = '—'; noteEl.className = 'tuner-note-display'; }
-      if(freqEl)  freqEl.textContent = '— Hz';
-      if(centsEl) centsEl.textContent = '— cents';
+      if(noteEl)  { noteEl.textContent = 'â€”'; noteEl.className = 'tuner-note-display'; }
+      if(freqEl)  freqEl.textContent = 'â€” Hz';
+      if(centsEl) centsEl.textContent = 'â€” cents';
       if(needleEl){ needleEl.style.left = '50%'; needleEl.className = 'tuner-needle'; }
       return;
     }
@@ -1413,7 +1414,7 @@ async function startTuner() {
     if(freqEl)  freqEl.textContent = freq.toFixed(1) + ' Hz';
     if(centsEl) { centsEl.textContent = (cents >= 0 ? '+' : '') + cents + ' cents'; centsEl.style.color = status === 'in-tune' ? '#10b981' : status === 'close' ? '#f59e0b' : '#ef4444'; }
 
-    // Move needle: 0 cents = 50%, ±50 cents = 0% / 100%
+    // Move needle: 0 cents = 50%, Â±50 cents = 0% / 100%
     if(needleEl) {
       const clampedCents = Math.max(-50, Math.min(50, cents));
       const pct = 50 + clampedCents; // 0-100
@@ -1433,8 +1434,8 @@ function stopTuner() {
   const centsEl  = document.getElementById('tunerCents');
   const needleEl = document.getElementById('tunerNeedle');
   const statusEl = document.getElementById('tunerStatus');
-  if(noteEl)  { noteEl.textContent = '—'; noteEl.className = 'tuner-note-display'; }
-  if(freqEl)  freqEl.textContent = '— Hz';
+  if(noteEl)  { noteEl.textContent = 'â€”'; noteEl.className = 'tuner-note-display'; }
+  if(freqEl)  freqEl.textContent = 'â€” Hz';
   if(centsEl) { centsEl.textContent = '0 cents'; centsEl.style.color = ''; }
   if(needleEl){ needleEl.style.left = '50%'; needleEl.className = 'tuner-needle'; }
   if(statusEl) statusEl.textContent = 'Premi il pulsante per iniziare';
@@ -1444,12 +1445,21 @@ function stopTuner() {
   if(sl) sl.textContent = 'Avvia Tuner';
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ARCADE QUIZ ENGINE
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function _removeQuizCdOverlay() {
   const old = document.getElementById('quizCdOverlay');
   if (old) old.remove();
+}
+
+function getQuizRank(score) {
+  if (score >= 10000) return { name: "Bass Legend 🎸", msg: "Sei un dio del groove!" };
+  if (score >= 6000) return { name: "Diamond Finger 💎", msg: "Precisione chirurgica!" };
+  if (score >= 3000) return { name: "Platinum Groove 📀", msg: "Stai infuocando il palco!" };
+  if (score >= 1500) return { name: "Gold Sessionist 🥇", msg: "Ottimo lavoro, prosegui così!" };
+  if (score >= 500) return { name: "Silver Student 🥈", msg: "Niente male, il manico non ha segreti." };
+  return { name: "Bronze Novice 🥉", msg: "Continua a fare pratica!" };
 }
 
 function startQuiz() {
@@ -1471,7 +1481,7 @@ function startQuiz() {
 
   if (qs) qs.innerText = tl('quiz_initial');
   if (qc) { qc.innerText = ''; qc.className = 'quiz-combo'; }
-  if (qt) qt.innerText = '⏱️ ...';
+  if (qt) qt.innerText = 'â ±ï¸  ...';
   if (fill) { fill.style.width = '100%'; fill.style.display = 'block'; fill.classList.remove('urgent'); }
   if (btns) btns.style.opacity = '0.5';
 
@@ -1515,7 +1525,7 @@ function startQuiz() {
           const totalTime = parseInt(timeStr, 10);
           quizTimeLeft = totalTime;
           if (fill) { fill.style.display = 'block'; }
-          if (qt) qt.innerText = `⏱️ ${quizTimeLeft}s`;
+          if (qt) qt.innerText = `â ±ï¸  ${quizTimeLeft}s`;
 
           quizTimerId = setInterval(() => {
             quizTimeLeft--;
@@ -1543,7 +1553,7 @@ function stopQuiz() {
   _removeQuizCdOverlay();
   quizActiveNote = null;
   const qt = document.getElementById('quizTime');
-  if(qt) qt.innerText = '⏱️ PAUSA';
+  if(qt) qt.innerText = 'â ±ï¸  PAUSA';
   const btns = document.getElementById('quizBtns');
   if(btns) btns.style.opacity = '0.5';
   renderFretboard();
@@ -1564,7 +1574,7 @@ function resetQuiz() {
   const qt = document.getElementById('quizTime');
   if (qt) {
     const val = tc ? tc.value : '60';
-    qt.innerText = val === 'infinite' ? '⏱️ ∞' : '⏱️ ' + val + 's';
+    qt.innerText = val === 'infinite' ? 'â ±ï¸  âˆž' : 'â ±ï¸  ' + val + 's';
   }
 }
 
@@ -1581,7 +1591,7 @@ function endQuizMode() {
   if(existing) existing.remove();
 
   const weakNote = (() => {
-    if (!stats.notes) return '—';
+    if (!stats.notes) return 'â€”';
     let worst = null, worstRatio = -1;
     Object.entries(stats.notes).forEach(([ni, d]) => {
       const total = d.c + d.w;
@@ -1589,7 +1599,7 @@ function endQuizMode() {
       const ratio = d.w / total;
       if (ratio > worstRatio) { worstRatio = ratio; worst = +ni; }
     });
-    return worst !== null ? getNoteName(worst) : '—';
+    return worst !== null ? getNoteName(worst) : 'â€”';
   })();
 
   const modal = document.createElement('div');
@@ -1597,7 +1607,7 @@ function endQuizMode() {
   modal.className = 'quiz-result-modal';
   modal.innerHTML = `
     <div class="quiz-result-card">
-      <div class="quiz-result-title">⏱️ Tempo scaduto!</div>
+      <div class="quiz-result-title">â±ï¸ Tempo scaduto!</div>
       <div class="quiz-result-score">${quizScore}</div>
       <div class="quiz-result-label">Punti totali</div>
       <div class="quiz-result-stats">
@@ -1614,10 +1624,10 @@ function endQuizMode() {
           <span class="qrs-lbl">Nota debole</span>
         </div>
       </div>
-      ${quizScore >= (stats.bestScore || 0) ? '<div class="quiz-result-new-record">🏆 Nuovo Record!</div>' : ''}
+      ${quizScore >= (stats.bestScore || 0) ? '<div class="quiz-result-new-record">ðŸ† Nuovo Record!</div>' : ''}
       <div style="display:flex; gap:12px;">
-        <button class="quiz-ctrl-btn" id="quizResultRetry" style="flex:1; background:var(--accent); color:#fff; border-color:var(--accent);">▶️ Rigioca</button>
-        <button class="quiz-ctrl-btn" id="quizResultClose" style="flex:1;">✖ Chiudi</button>
+        <button class="quiz-ctrl-btn" id="quizResultRetry" style="flex:1; background:var(--accent); color:#fff; border-color:var(--accent);">â–¶ï¸ Rigioca</button>
+        <button class="quiz-ctrl-btn" id="quizResultClose" style="flex:1;">âœ– Chiudi</button>
       </div>
     </div>
   `;
@@ -1651,6 +1661,8 @@ function handleQuizGuess(ni, btn) {
    
    const qs = document.getElementById('quizScore');
    const qc = document.getElementById('quizCombo');
+   const panel = document.getElementById('quizPanel');
+   const qrl = document.getElementById('quizRankLabel'); progress 167
 
    if (ni === quizActiveNote.ni) {
        btn.classList.add('correct');
@@ -1673,6 +1685,10 @@ function handleQuizGuess(ni, btn) {
        }, 300);
    } else {
        btn.classList.add('wrong');
+       if(panel) {
+         panel.classList.add('quiz-shake');
+         setTimeout(() => panel.classList.remove('quiz-shake'), 400);
+       }
        recordQuizResult(quizActiveNote.ni, false);
        
        // Fai lampeggiare il pallino sbagliato sul manico in rosso
@@ -1700,9 +1716,9 @@ function handleQuizGuess(ni, btn) {
 }
 
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CORE LOGIC & RENDER
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function scaleNotes() { return SCALES[S.scale].iv.map(i=>(S.root+i)%12); }
 function getDeg(ni) {
   const d = ((ni-S.root)+12)%12;
@@ -1791,7 +1807,7 @@ function renderInfo() {
   const sd = SCALES[S.scale];
   const t  = TUNINGS[S.tuning];
   
-  document.title = `${getNoteName(S.root)} ${tl(sd.name)} — ${tl('string_title')} ${t.strings} ${tl('strings_label')} | Bassmate`;
+  document.title = `${getNoteName(S.root)} ${tl(sd.name)} â€” ${tl('string_title')} ${t.strings} ${tl('strings_label')} | Bassmate`;
   
   const scaleInfoId = document.getElementById('scaleInfo');
   if(!scaleInfoId) return;
@@ -1799,7 +1815,7 @@ function renderInfo() {
   const html = `
      <div class="si-left">
        <div class="si-name">${getNoteName(S.root)} ${tl(sd.name)}</div>
-       <div class="si-sub">${tl(t.desc)} &nbsp;·&nbsp; ${intervalFormula(sd.iv)}</div>
+       <div class="si-sub">${tl(t.desc)} &nbsp;Â·&nbsp; ${intervalFormula(sd.iv)}</div>
      </div>
      <div class="notes-row">` +
     sn.map((ni,i)=>`<div class="nb ${ni===S.root?'root':''}">
@@ -1824,7 +1840,7 @@ function renderFretboard() {
   const pb = document.getElementById('posBar');
   if (isBox) {
     pb.classList.remove('hide');
-    document.getElementById('posTxt').textContent = `${tl('position')} ${fStart} – ${fEnd}`;
+    document.getElementById('posTxt').textContent = `${tl('position')} ${fStart} â€“ ${fEnd}`;
   } else {
     pb.classList.add('hide');
   }
@@ -1889,7 +1905,7 @@ function renderFretboard() {
       d.style.left = `calc(${f - fStart + 0.5} * 60px)`;
       
       const span = mkEl('span'); span.textContent = dotLabel(ni, f); d.appendChild(span);
-      d.title = `${getNoteName(ni)}  ·  ${getDeg(ni)}  ·  fret ${f}`;
+      d.title = `${getNoteName(ni)}  Â·  ${getDeg(ni)}  Â·  fret ${f}`;
       
       const midiNote = t.midiBase[si] + f;
       d.onclick = function() {
@@ -1915,9 +1931,9 @@ function numRow(fStart,fEnd) {
   return row;
 }
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    URL SYNC
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function syncURL() {
   history.replaceState(null,'',`#r=${S.root}&s=${S.scale}&t=${S.tuning}&l=${S.label}&v=${S.view}&h=${S.hand}&b=${S.boxStart}&lang=${S.lang}`);
 }
