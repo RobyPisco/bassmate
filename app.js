@@ -1,6 +1,6 @@
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* =========================================================================
    I18N DICTIONARY & STATE
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ========================================================================= */
 const I18N = {
   it: {
     tuning: "Accordatura", root_note: "Nota radice", scale_chord: "Scala/Accordo", labels: "Etichette", settings: "Vista",
@@ -50,7 +50,13 @@ const I18N = {
     language: "Lingua", theme: "Tema", audio_engine: "Motore Audio",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Suddividi", metro_trainer: "Speed Up",
     metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash",
-    co    quiz_mode: "🎯 Quiz Mode",
+    contact_link: "Contatti", contact_btn: "Scrivimi un'email"
+  },
+  en: {
+    tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
+    base: "Base", modes: "Modes", arps: "Arps", other: "Other",
+    degrees: "Degrees", notes: "Notes", finger: "Fingers (Box)", all: "All", box: "Box 5fr", right: "Right", lefty: "Lefty",
+    quiz_mode: "🎯 Quiz Mode",
     export_pdf: "Export PDF", donate: "Buy me a coffee", pos_root: "Root Note", pos_note: "Scale Note", 
     position: "Position: fret", string_title: "Bass", strings_label: "Strings",
     "Magg.": "Major", "Maggiore": "Major", "Min.": "Minor", "Minore Naturale": "Natural Minor", "Pent.M": "Maj.Pent", 
@@ -135,11 +141,7 @@ const SCALES = {
   melMin:   {g:'other', name:'Minore Melodica',        short:'Min.Mel.',  iv:[0,2,3,5,7,9,11],    dg:['1','2','♭3','4','5','6','7']},
   dim:      {g:'other', name:'Diminuita',              short:'Dim.',      iv:[0,2,3,5,6,8,9,11],  dg:['1','2','♭3','4','♭5','♭6','6','7']},
   whole:    {g:'other', name:'Whole Tone',             short:'Whole',     iv:[0,2,4,6,8,10],      dg:['1','2','3','♯4','♯5','♭7']},
-  chromatic:{g:'other', name:'Cromatica',              short:'Crom.',     iv:[0,1,2,3,4,5,6,7,8,9,10,11], dg:['1','♭2','2','♭3','3','4','♭5','5','♭6','6','♭7','7']},']},
-  melMin:   {g:'other', name:'Minore Melodica',        short:'Min.Mel.',  iv:[0,2,3,5,7,9,11],    dg:['1','2','â™­3','4','5','6','7']},
-  dim:      {g:'other', name:'Diminuita',              short:'Dim.',      iv:[0,2,3,5,6,8,9,11],  dg:['1','2','â™­3','4','â™­5','â™­6','6','7']},
-  whole:    {g:'other', name:'Whole Tone',             short:'Whole',     iv:[0,2,4,6,8,10],      dg:['1','2','3','â™¯4','â™¯5','â™­7']},
-  chromatic:{g:'other', name:'Cromatica',              short:'Crom.',     iv:[0,1,2,3,4,5,6,7,8,9,10,11], dg:['1','â™­2','2','â™­3','3','4','â™­5','5','â™­6','6','â™­7','7']},
+  chromatic:{g:'other', name:'Cromatica',              short:'Crom.',     iv:[0,1,2,3,4,5,6,7,8,9,10,11], dg:['1','♭2','2','♭3','3','4','♭5','5','♭6','6','♭7','7']},
 };
 
 const TUNINGS = {
