@@ -133,6 +133,91 @@
   </main>
 
   <div id="footer-placeholder"></div>
+
+  <!-- ================= SETTINGS MODAL ================= -->
+  <div id="settingsModal" class="settings-modal flex-center hide">
+    <div class="sm-card">
+      <div class="sm-header">
+        <h2 data-i18n="settings_title">Impostazioni</h2>
+        <button id="smCloseBtn" class="icon-btn-text">✖</button>
+      </div>
+      <div class="sm-content">
+         <!-- General -->
+         <div class="sm-group">
+           <h3 data-i18n="sm_general">Generale</h3>
+           <div class="sm-row">
+             <span data-i18n="language">Lingua</span>
+             <div class="lang-ctrl" id="langCtrl">
+               <button class="p on" data-v="it">IT</button>
+               <button class="p" data-v="en">EN</button>
+             </div>
+           </div>
+           <div class="sm-row">
+             <span data-i18n="theme">Tema</span>
+             <button class="icon-btn-text" id="themeTogBtn">🌙 Dark</button>
+           </div>
+           <div class="sm-row">
+             <span data-i18n="audio_engine">Motore Audio</span>
+             <button class="icon-btn-text" id="audioTogBtn">🔊 ON</button>
+           </div>
+         </div>
+
+         <!-- Display -->
+         <div class="sm-group">
+           <h3 data-i18n="sm_display">Visualizzazione</h3>
+           <label class="sm-row">
+             <span data-i18n="hand">Mano</span>
+             <select id="handCtrl" class="sm-select">
+               <option value="right" data-i18n="right">Destro</option>
+               <option value="left" data-i18n="lefty">Mancino</option>
+             </select>
+           </label>
+           <label class="sm-row">
+             <span data-i18n="labels">Etichette</span>
+             <select id="labelCtrl" class="sm-select">
+               <option value="deg" data-i18n="degrees">Gradi</option>
+               <option value="note" data-i18n="notes">Note (C,D,E)</option>
+               <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
+               <option value="finger" data-i18n="finger">Dita (Box)</option>
+             </select>
+           </label>
+           <label class="sm-row">
+             <span data-i18n="settings">Vista</span>
+             <select id="viewCtrl" class="sm-select">
+               <option value="full" data-i18n="all">Tutto</option>
+               <option value="box" data-i18n="box">Box 5fr</option>
+             </select>
+           </label>
+           <label class="sm-row">
+             <span data-i18n="tuning">Accordatura</span>
+             <select id="tuningCtrl" class="sm-select"></select>
+           </label>
+         </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BOTTOM TAB NAV ================= -->
+  <nav class="bottom-tab-bar">
+    <button class="tab-btn active" data-tab="studio">
+      <div class="tab-icon">🎸</div>
+      <span class="tab-label">Studio</span>
+    </button>
+    <button class="tab-btn" data-tab="quiz">
+      <div class="tab-icon">🎯</div>
+      <span class="tab-label">Quiz</span>
+    </button>
+    <button class="tab-btn" data-tab="tools">
+      <div class="tab-icon">🛠️</div>
+      <span class="tab-label">Tools</span>
+    </button>
+    <button class="tab-btn" data-tab="settings" id="navSettingsBtn">
+      <div class="tab-icon">⚙️</div>
+      <span class="tab-label" data-i18n="nav_settings">Opzioni</span>
+    </button>
+  </nav>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

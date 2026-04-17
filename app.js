@@ -45,7 +45,9 @@ const I18N = {
     tour_5_t: "🥁 Metronomo", tour_5_b: "Studia le scale a tempo preciso. Regola BPM e battuta, poi premi Start. Puoi suonare le note sul manico mentre il metro batte!",
     tour_6_t: "Sei pronto! 🤘", tour_6_b: "Buono studio bassista! Ricorda: la guida completa è sempre accessibile dall'icona \u2753 in alto a destra.",
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-corde)", "D Standard (4)": "D Standard (4-corde)",
-    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)"
+    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
+    settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
+    language: "Lingua", theme: "Tema", audio_engine: "Motore Audio"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -90,7 +92,9 @@ const I18N = {
     tour_5_t: "🥁 Metronome", tour_5_b: "Practice in time. Set BPM and time signature, press Start. You can still play notes while it ticks!",
     tour_6_t: "You're all set! 🤘", tour_6_b: "Happy Grooving! The full guide is always accessible from the \u2753 icon in the top right.",
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-string)", "D Standard (4)": "D Standard (4-string)",
-    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)"
+    "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
+    settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
+    language: "Language", theme: "Theme", audio_engine: "Audio Engine"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -152,7 +156,7 @@ const MARKERS      = [3,5,7,9,12,15];
 const DOUBLE_MARKS = new Set([12]);
 
 const defaultLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
-const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', hand:'right', boxStart:0, lang: defaultLang, audio: true };
+const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', hand:'right', boxStart:0, lang: defaultLang, audio: true, activeTab: 'studio' };
 
 let quizActiveNote = null;
 let quizScore = 0;
@@ -377,8 +381,15 @@ function initTheme() {
 }
 
 function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
-  applyTheme(current === 'dark' ? 'light' : 'dark');
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const newTheme = isLight ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('bass_theme', newTheme);
+  
+  const themeBtn = document.getElementById('themeTogBtn');
+  if (themeBtn) {
+    themeBtn.textContent = newTheme === 'light' ? '☀️ Light' : '🌙 Dark';
+  }
 }
 
 /* ══════════════════════════════════════
@@ -873,19 +884,39 @@ async function initApp() {
     const metroBpmSlider = document.getElementById('metroBpmSlider');
     if (metroBpmSlider) metroBpmSlider.addEventListener('input', e => _setMetroBpm(+e.target.value));
 
-    const metroTimeSig = document.getElementById('metroTimeSig');
-    if (metroTimeSig) {
-      metroTimeSig.addEventListener('change', e => {
-        metro.beats = +e.target.value;
-        metro.currentBeat = 0;
-        _buildMetroDots();
-        // Restart scheduler if running to apply immediately
-        if (metro.running) {
-          clearTimeout(metro.timerID);
-          metro.queue = [];
-          metro.nextNoteTime = getAudioCtx().currentTime + 0.05;
-          _metroScheduler();
+      });
+    }
+
+    // TAB NAVIGATION
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        if (tab === 'settings') {
+          openSettings();
+        } else {
+          switchTab(tab);
         }
+      });
+    });
+
+    // SETTINGS MODAL
+    const smCloseBtn = document.getElementById('smCloseBtn');
+    if (smCloseBtn) smCloseBtn.addEventListener('click', closeSettings);
+    
+    const settingsModal = document.getElementById('settingsModal');
+    if (settingsModal) {
+      settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) closeSettings();
+      });
+    }
+
+    // AUDIO TOGGLE (Refactored)
+    const audioBtn = document.getElementById('audioTogBtn');
+    if (audioBtn) {
+      audioBtn.addEventListener('click', () => {
+        S.audio = !S.audio;
+        audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+        audioBtn.style.opacity = S.audio ? '1' : '0.5';
       });
     }
 
@@ -930,9 +961,21 @@ async function initApp() {
     }
 
     initTheme();
+    switchTab('studio'); // Initial view
+
+    // Sincronizza pulsanti iniziali modale
+    const audioBtn = document.getElementById('audioTogBtn');
+    if (audioBtn) {
+      audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+      audioBtn.style.opacity = S.audio ? '1' : '0.5';
+    }
+    const themeBtn = document.getElementById('themeTogBtn');
+    if (themeBtn) {
+      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️ Light' : '🌙 Dark';
+    }
 
     loadURL();
-    if(S.view === 'quiz') startQuiz();
+    if(S.view === 'quiz') switchTab('quiz');
     render();
     updateQuizStatsDisplay();
     maybeStartTour();
@@ -947,6 +990,58 @@ async function initApp() {
 
 function syncScalePills() {
   document.querySelectorAll('.sg-panel [data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===S.scale));
+}
+
+function switchTab(tabName) {
+  S.activeTab = tabName;
+  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tools');
+  document.body.classList.add('tab-' + tabName);
+  
+  // Update UI active state
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+
+  // Handle music controls visibility
+  const musicControls = document.getElementById('studioMusicControls');
+  if (musicControls) {
+    musicControls.style.display = (tabName === 'studio') ? 'block' : 'none';
+  }
+
+  // Auto-start/stop features based on Tab
+  if (tabName === 'quiz') {
+    startQuiz();
+  } else if (isQuizRunning) {
+    stopQuiz();
+  }
+
+  if (tabName === 'tools') {
+    startTuner();
+    // Metronome stays as is (user starts it manually)
+  } else {
+    if (tunerActive) stopTuner();
+  }
+
+  // Trigger render
+  render();
+}
+
+function openSettings() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) modal.classList.remove('hide');
+}
+
+function closeSettings() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) modal.classList.add('hide');
+}
+
+function stopQuiz() {
+  isQuizRunning = false;
+  if(quizTimerId) clearInterval(quizTimerId);
+  if(quizCountdownId) clearInterval(quizCountdownId);
+  quizActiveNote = null;
+  render(); 
 }
 
 /* ══════════════════════════════════════

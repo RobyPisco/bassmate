@@ -1,110 +1,48 @@
 <header class="top-dashboard">
-  <!-- RIGA 1: LOGO E ICONE DI SISTEMA -->
-  <div class="td-row td-row-main" style="border-bottom:none; padding-bottom:0;">
-    <a href="index.html" class="sb-logo" style="text-decoration: none; color: inherit;" title="Torna alla Home Page">
+  <!-- Minimal Top Bar -->
+  <div class="td-row-main td-nav-bar">
+    <a href="index.html" class="sb-logo" title="Torna alla Home Page" style="text-decoration:none; color:inherit;">
       <div class="logo-icon">𝄢</div>
       <div class="logo-text">Bassmate<small>PiscoFactory</small></div>
     </a>
     
-    <div class="td-icons" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto;">
-      <div class="lang-ctrl" id="langCtrl">
-         <button class="p on" data-v="it">IT</button>
-         <button class="p" data-v="en">EN</button>
-      </div>
-
-      <button class="icon-btn export-btn-sm" id="audioTogBtn" title="Audio ON/OFF" style="font-size:16px;" onclick="
-        window._S = window._S || (typeof S !== 'undefined' ? S : null);
-        if(window._S) { window._S.audio = !window._S.audio; this.textContent = window._S.audio ? '🔊' : '🔇'; this.style.opacity = window._S.audio ? '1' : '0.5'; }
-      ">🔊</button>
-      <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi Scala">🔗</button>
-      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta Immagine Fretboard">📸</button>
-      <button class="icon-btn export-btn-sm" id="themeTogBtn" title="Dark / Light Mode" style="font-size:16px;">🌙</button>
-      <select id="favCtrl" class="sel-wrap" style="width: auto; display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold; margin-left:6px;">
+    <div class="td-icons" style="display:flex; align-items:center; gap:8px;">
+      <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi">🔗</button>
+      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta Fretboard">📸</button>
+      
+      <select id="favCtrl" class="sel-wrap" style="width:auto; display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold; margin-left:6px;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
       <button class="icon-btn export-btn-sm" id="favBtn" data-i18n-title="fav_save" title="Salva Preferito">❤️</button>
-      <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè">☕</a>
-      <button class="icon-btn export-btn-sm" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera" style="font-size:14px;">🔄</button>
-      <a href="exercises.html" class="icon-btn export-btn-sm" data-i18n-title="ex_btn" title="Esercizi Pratici" style="text-decoration:none">🏋️</a>
-      <a href="grids.html" target="_blank" class="icon-btn export-btn-sm" data-i18n-title="grids_btn" title="Stampa Manici Vuoti" style="text-decoration:none">📚</a>
-      <a href="help.html" class="icon-btn export-btn-sm" data-i18n-title="help_btn" title="Aiuto e Istruzioni" style="text-decoration:none">❓</a>
-      <button class="icon-btn export-btn-sm" id="exportBtn" data-i18n-title="export_btn" title="Esporta PDF (Manico Corrente)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      </button>
+      <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè" style="text-decoration:none;">☕</a>
     </div>
   </div>
 
-  <!-- RIGA 2: CONTROLLI E IMPOSTAZIONI TASTIERA -->
-  <div class="td-row td-actions" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; padding-top: 4px;">
-      <label class="sel-wrap">
-        <span data-i18n="tuning">Accordatura</span>
-        <select id="tuningCtrl"></select>
-      </label>
-      
-      <label class="sel-wrap">
-        <span data-i18n="labels">Etichette</span>
-        <select id="labelCtrl">
-          <option value="deg" data-i18n="degrees">Gradi</option>
-          <option value="note" data-i18n="notes">Note (C,D,E)</option>
-          <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
-          <option value="finger" data-i18n="finger">Dita (Box)</option>
-        </select>
-      </label>
-
-      <label class="sel-wrap">
-        <span data-i18n="settings">Vista</span>
-        <select id="viewCtrl">
-          <option value="full" data-i18n="all">Tutto</option>
-          <option value="box" data-i18n="box">Box 5fr</option>
-        </select>
-      </label>
-
-      <label class="sel-wrap quiz-time-opt" style="display:none;">
-        <span data-i18n="quiz_len">Durata</span>
-        <select id="quizTimeCtrl">
-          <option value="60">60s</option>
-          <option value="120">120s</option>
-          <option value="infinite">Infinito</option>
-        </select>
-      </label>
-
-      <button id="quizTogBtn" class="icon-btn" data-i18n="quiz_btn" style="width:auto; padding:4px 12px; background:var(--accent); color:white; border:none; border-radius:6px; font-weight:bold; font-size:12px; box-shadow:0 0 10px rgba(124,58,237,0.5);">🎯 Gioca Quiz</button>
-      
-      <button id="metroTogBtn" class="icon-btn export-btn-sm" data-i18n-title="metro_btn" title="Metronomo" style="width:auto; padding:4px 12px; font-size:12px; font-weight:bold; gap:4px; display:inline-flex; align-items:center;">🥁 <span data-i18n="metro_btn_lbl">Metro</span></button>
-
-      <button id="tunerTogBtn" class="icon-btn export-btn-sm" title="Accordatore Cromatico" style="width:auto; padding:4px 12px; font-size:12px; font-weight:bold; gap:4px; display:inline-flex; align-items:center;">🎙️ Tuner</button>
-      
-      <label class="sel-wrap">
-        <span data-i18n="hand">Mano</span>
-        <select id="handCtrl">
-          <option value="right" data-i18n="right">Destro</option>
-          <option value="left" data-i18n="lefty">Mancino</option>
-        </select>
-      </label>
-  </div>
-
-  <!-- RIGA 3: SCELTA NOTA RADICE -->
-  <div class="td-row td-row-root" style="padding-top: 6px;">
-    <div class="row-label" data-i18n="root_note">Nota radice</div>
-    <button class="p" id="transpDn" title="Semitono giù" style="padding:4px 8px; flex-shrink:0;">&#9664;</button>
-    <div class="hz-grid" id="rootCtrl"></div>
-    <button class="p" id="transpUp" title="Semitono su" style="padding:4px 8px; flex-shrink:0;">&#9654;</button>
-  </div>
-
-  <!-- RIGA 4: SCELTA SCALA/ACCORDO -->
-  <div class="td-row td-row-scales">
-    <div class="row-label" data-i18n="scale_chord">Scala/Accordo</div>
-    <div class="sg-tabs" id="sgTabs">
-      <div class="sg-tab on" data-g="base" data-i18n="base">Base</div>
-      <div class="sg-tab"    data-g="modes" data-i18n="modes">Modi</div>
-      <div class="sg-tab"    data-g="arps" data-i18n="arps">Arpeggi</div>
-      <div class="sg-tab"    data-g="other" data-i18n="other">Altro</div>
+  <!-- Music Controls (Visibili solo nel Tab Studio) -->
+  <div class="music-controls" id="studioMusicControls">
+    <!-- Root Note -->
+    <div class="scroller-row">
+      <div class="row-label" data-i18n="root_note" style="display:none;">Tonica</div>
+      <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
+      <div class="hz-grid root-scroll" id="rootCtrl"></div>
+      <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
     </div>
-    <div class="panels-hz">
-      <div id="sg-base"  class="sg-panel show" data-g="base"></div>
-      <div id="sg-modes" class="sg-panel"      data-g="modes"></div>
-      <div id="sg-arps"  class="sg-panel"      data-g="arps"></div>
-      <div id="sg-other" class="sg-panel"      data-g="other"></div>
+
+    <!-- Scale Selectors -->
+    <div class="scroller-row scales-row">
+      <div class="sg-tabs" id="sgTabs">
+        <div class="sg-tab on" data-g="base" data-i18n="base">Base</div>
+        <div class="sg-tab"    data-g="modes" data-i18n="modes">Modi</div>
+        <div class="sg-tab"    data-g="arps" data-i18n="arps">Arp</div>
+        <div class="sg-tab"    data-g="other" data-i18n="other">Altro</div>
+      </div>
+      <div class="panels-hz scales-scroll">
+        <div id="sg-base"  class="sg-panel show" data-g="base"></div>
+        <div id="sg-modes" class="sg-panel"      data-g="modes"></div>
+        <div id="sg-arps"  class="sg-panel"      data-g="arps"></div>
+        <div id="sg-other" class="sg-panel"      data-g="other"></div>
+      </div>
     </div>
   </div>
 </header>
+
