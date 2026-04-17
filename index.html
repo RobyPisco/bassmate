@@ -109,6 +109,19 @@
         <!-- Advanced Panel (Hidden by default) -->
         <div id="metroAdvanced" class="metro-advanced hide">
            <div class="adv-row">
+              <span class="row-label-sm" data-i18n="metro_sig">Battuta</span>
+              <div class="adv-controls">
+                 <select id="metroTimeSig" class="sm-select" style="min-width:70px;">
+                   <option value="2">2/4</option>
+                   <option value="3">3/4</option>
+                   <option value="4" selected>4/4</option>
+                   <option value="5">5/4</option>
+                   <option value="6">6/8</option>
+                   <option value="7">7/8</option>
+                 </select>
+              </div>
+           </div>
+           <div class="adv-row">
               <span class="row-label-sm" data-i18n="metro_timer">Timer Sessione</span>
               <div class="adv-controls">
                  <input type="number" id="metroTimerMin" value="5" min="1" max="99" class="sm-input-num">
@@ -188,8 +201,8 @@
           </div>
         </div>
         <div class="tuner-cents-display" id="tunerCents">0 cents</div>
-        <div class="tuner-status" id="tunerStatus">Premi il pulsante per iniziare</div>
-        <button id="tunerStartBtn" class="tuner-start-btn">🎙️ <span id="tunerStartBtnLabel">Avvia Tuner</span></button>
+        <div class="tuner-status" id="tunerStatus" data-i18n="tuner_prompt">Premi il pulsante per iniziare</div>
+        <button id="tunerStartBtn" class="tuner-start-btn">🎙️ <span id="tunerStartBtnLabel" data-i18n="tuner_start">Avvia Tuner</span></button>
       </div>
     </div>
 

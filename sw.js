@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bassmate-v35';
+const CACHE_NAME = 'bassmate-v36';
 const URLS_TO_CACHE = [
   './',
   './index.html',
@@ -13,7 +13,8 @@ const URLS_TO_CACHE = [
   './app.js',
   './icon.svg',
   './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
 ];
 
 self.addEventListener('install', event => {
