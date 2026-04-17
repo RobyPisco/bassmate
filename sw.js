@@ -1,8 +1,9 @@
-const CACHE_NAME = 'bassmate-v21';
+const CACHE_NAME = 'bassmate-v22';
 const URLS_TO_CACHE = [
   './',
   './index.html',
   './donate.html',
+  './contact.html',
   './help.html',
   './exercises.html',
   './grids.html',

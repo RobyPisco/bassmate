@@ -49,7 +49,8 @@ const I18N = {
     settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
     language: "Lingua", theme: "Tema", audio_engine: "Motore Audio",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Suddividi", metro_trainer: "Speed Up",
-    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash"
+    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash",
+    contact_link: "Contatti", contact_btn: "Scrivimi un'email"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -98,7 +99,8 @@ const I18N = {
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
     language: "Language", theme: "Theme", audio_engine: "Audio Engine",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Subdivide", metro_trainer: "Speed Up",
-    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash"
+    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash",
+    contact_link: "Contact Me", contact_btn: "Send me an email"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -993,7 +995,45 @@ async function initApp() {
     window.buildQuizBtns = buildQuizBtns;
     buildQuizBtns();
 
-    // METRONOME BINDINGS
+    // SHARE BUTTON
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async () => {
+        syncURL();
+        const url = window.location.href;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: 'Bassmate - Scale', url: url });
+            showToast(tl('share_copied'));
+          } catch (err) { console.warn("Share failed:", err); }
+        } else {
+          try {
+            await navigator.clipboard.writeText(url);
+            showToast(tl('share_copied'));
+          } catch (err) {
+            prompt(tl('share_fail'), url);
+          }
+        }
+      });
+    }
+
+    // SNAPSHOT BUTTON
+    const snapBtn = document.getElementById('snapshotBtn');
+    if (snapBtn) {
+      snapBtn.addEventListener('click', () => {
+        const neck = document.querySelector('.fb-neck');
+        if (!neck || !window.html2canvas) return;
+        showToast("📸 Generazione immagine...");
+        html2canvas(neck, { backgroundColor: '#0f0f1e', scale: 2 }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `bassmate-${getNoteName(S.root)}-${S.scale}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+          showToast("✅ Immagine salvata!");
+        });
+      });
+    }
+
     _buildMetroDots();
 
     const metroTogBtn = document.getElementById('metroTogBtn');
@@ -1941,6 +1981,17 @@ function loadURL() {
   document.querySelectorAll('.sg-tab').forEach(t=>t.classList.toggle('on',t.dataset.g===g));
   document.querySelectorAll('.sg-panel').forEach(p2=>p2.classList.toggle('show',p2.dataset.g===g));
   syncScalePills();
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('toast-out');
+    setTimeout(() => t.remove(), 400);
+  }, 2500);
 }
 
 // Lancia l'app all'avvio

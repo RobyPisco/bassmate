@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contatti - Bassmate App</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#080810">
+  <link rel="apple-touch-icon" href="icon.svg">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    .contact-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 60px auto;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+    .emoji-hero { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 28px; font-weight: 900; margin-bottom: 24px; color: var(--text); letter-spacing:-0.5px;}
+    p { color: var(--muted); line-height: 1.6; margin-bottom: 30px; font-size: 16px; text-align: left;}
+    
+    .contact-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--accent); color: #fff;
+      padding: 16px 28px; border-radius: 12px;
+      font-size: 16px; font-weight: 700; font-family: 'Space Mono', monospace;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px var(--accent-g);
+      margin-bottom: 30px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+    .contact-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-g); }
+    
+    .back-link {
+      display: inline-block; color: var(--muted); font-weight: 600; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="app" style="justify-content: center; align-items:flex-start;">
+  <div class="contact-container">
+    
+    <div class="emoji-hero">📧 🎸</div>
+    
+    <div id="text-it" style="display:block;">
+      <h1>Contatti</h1>
+      <p>Hai trovato un bug? Hai un suggerimento per una nuova funzione o vuoi semplicemente salutare? Scrivimi pure!</p>
+      <p>Essendo un progetto nato dalla passione, leggo sempre volentieri i feedback di altri musicisti che usano Bassmate per il loro studio quotidiano.</p>
+    </div>
+
+    <!-- EN CONTENT -->
+    <div id="text-en" style="display:none;">
+      <h1>Contact Me</h1>
+      <p>Found a bug? Have a suggestion for a new feature or just want to say hi? Feel free to reach out!</p>
+      <p>Since this project was born from passion, I always enjoy reading feedback from other musicians using Bassmate for their daily practice.</p>
+    </div>
+
+    <button class="contact-btn" id="emailBtn">
+       ✉️ <span data-i18n-html="contact_btn">Scrivimi un'email</span>
+    </button>
+    
+    <br>
+    <a href="index.html" class="back-link" id="back-btn-text" data-i18n="back_btn">⬅️ Torna al Manico</a>
+  </div>
+</div>
+
+<script>
+  // Simple obfuscation to prevent some bots from scraping the email
+  document.getElementById('emailBtn').addEventListener('click', function() {
+    const user = "roberto.pisconti";
+    const domain = "gmail.com";
+    window.location.href = "mailto:" + user + "@" + domain + "?subject=Bassmate Feedback";
+  });
+
+  // Language management
+  const savedLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
+  if (savedLang === 'en') {
+    document.getElementById('text-it').style.display = 'none';
+    document.getElementById('text-en').style.display = 'block';
+    
+    const btn = document.getElementById('emailBtn');
+    if (btn) btn.innerHTML = "✉️ Send me an email";
+    
+    const back = document.getElementById('back-btn-text');
+    if (back) back.innerText = "⬅️ Back to Fretboard";
+  }
+</script>
+</body>
+</html>
