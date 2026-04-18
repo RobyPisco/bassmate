@@ -1005,7 +1005,7 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 /* ══════════════════════════════
    DISPLAY OPTIONS ROW (header)
 ══════════════════════════════ */
-.display-opts-row {
+.ctrl-row {
   display: flex;
   align-items: center;
   gap: 6px;

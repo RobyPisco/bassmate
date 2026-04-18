@@ -56,31 +56,12 @@
 
   <!-- Music Controls (Visibili solo nel Tab Studio) -->
   <div class="music-controls" id="studioMusicControls">
-    <!-- Root Note row -->
-    <div style="display:flex; align-items:center; gap:0; padding: 0 16px 6px;">
+    <!-- Riga 1: Note + Display opts + Azioni -->
+    <div class="ctrl-row" id="displayOptsRow">
       <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
       <div class="hz-grid root-scroll" id="rootCtrl"></div>
       <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
-    </div>
-
-    <!-- Scale Selectors -->
-    <div class="scroller-row scales-row">
-      <div class="sg-tabs" id="sgTabs">
-        <div class="sg-tab on" data-g="base" data-i18n="base">Base</div>
-        <div class="sg-tab"    data-g="modes" data-i18n="modes">Modi</div>
-        <div class="sg-tab"    data-g="arps" data-i18n="arps">Arp</div>
-        <div class="sg-tab"    data-g="other" data-i18n="other">Altro</div>
-      </div>
-      <div class="panels-hz scales-scroll">
-        <div id="sg-base"  class="sg-panel show" data-g="base"></div>
-        <div id="sg-modes" class="sg-panel"      data-g="modes"></div>
-        <div id="sg-arps"  class="sg-panel"      data-g="arps"></div>
-        <div id="sg-other" class="sg-panel"      data-g="other"></div>
-      </div>
-    </div>
-
-    <!-- Display Options + Actions Row -->
-    <div class="display-opts-row" id="displayOptsRow">
+      <div class="opts-divider"></div>
       <select id="tuningCtrl" class="opt-sel" title="Accordatura"></select>
       <select id="labelCtrl" class="opt-sel" title="Etichette">
         <option value="deg" data-i18n="degrees">Gradi</option>
@@ -99,6 +80,22 @@
       <div class="opts-divider"></div>
       <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metro</span></button>
       <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄</button>
+    </div>
+
+    <!-- Riga 2: Scale selector -->
+    <div class="scroller-row scales-row">
+      <div class="sg-tabs" id="sgTabs">
+        <div class="sg-tab on" data-g="base" data-i18n="base">Base</div>
+        <div class="sg-tab"    data-g="modes" data-i18n="modes">Modi</div>
+        <div class="sg-tab"    data-g="arps" data-i18n="arps">Arp</div>
+        <div class="sg-tab"    data-g="other" data-i18n="other">Altro</div>
+      </div>
+      <div class="panels-hz scales-scroll">
+        <div id="sg-base"  class="sg-panel show" data-g="base"></div>
+        <div id="sg-modes" class="sg-panel"      data-g="modes"></div>
+        <div id="sg-arps"  class="sg-panel"      data-g="arps"></div>
+        <div id="sg-other" class="sg-panel"      data-g="other"></div>
+      </div>
     </div>
   </div>
 </header>
