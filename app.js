@@ -1314,6 +1314,8 @@ function switchTab(tabName) {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabName);
   });
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 
   // Handle music controls visibility
   const musicControls = document.getElementById('studioMusicControls');

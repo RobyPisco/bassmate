@@ -99,7 +99,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 
 /* MODALITÀ MINIMALE PER PAGINE SECONDARIE (Esercizi, Contatti, Donate...) */
 body.minimal-header .music-controls,
-body.minimal-header .bottom-tab-bar,
+body.minimal-header .header-tab-row,
 body.minimal-header .scale-info,
 body.minimal-header .pos-bar {
   display: none !important;
@@ -333,7 +333,7 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
     text-shadow: none !important;
     box-shadow: none !important;
   }
-  .top-dashboard, .pos-bar, .legend, footer, .bottom-tab-bar, .kbd-panel, .tour-spotlight, .tour-tooltip, .settings-panel {
+  .top-dashboard, .pos-bar, .legend, footer, .header-tab-row, .kbd-panel, .tour-spotlight, .tour-tooltip, .settings-panel {
     display: none !important; 
     visibility: hidden !important;
     opacity: 0 !important;
@@ -874,57 +874,51 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 }
 .tour-next-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 16px rgba(124,58,237,.6); }
 /* ══════════════════════════════
-   BOTTOM TAB NAVIGATION
+   HEADER TAB ROW (pills)
 ══════════════════════════════ */
-.bottom-tab-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  background: var(--tab-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
+.header-tab-row {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.header-tab-row::-webkit-scrollbar { display: none; }
 
 .tab-btn {
-  background: none;
-  border: none;
-  color: var(--muted);
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  background: var(--s3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
   cursor: pointer;
   transition: all .2s;
-  flex: 1;
-}
-
-.tab-btn .tab-icon {
-  font-size: 20px;
-  transition: transform .2s;
-}
-
-.tab-btn .tab-label {
-  font-size: 10px;
-  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
-
+.tab-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  transform: translateY(-1px);
+}
 .tab-btn.active {
-  color: var(--accent);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(124,58,237,.35);
 }
-
-.tab-btn.active .tab-icon {
-  transform: translateY(-4px) scale(1.1);
-}
+.tab-btn .tab-icon { font-size: 14px; }
 
 /* ══════════════════════════════
    SETTINGS MODAL
@@ -1111,8 +1105,6 @@ body.tab-tuner .tuner-panel { display: block !important; }
 body.tab-metro .main > *:not(.metro-panel) { display: none !important; }
 body.tab-metro .metro-panel { display: block !important; border-bottom: none; }
 
-/* Add bottom padding to main to prevent content overlap with tab bar */
-.app { padding-bottom: 80px; }
 
 /* ══════════════════════════════
    TOAST NOTIFICATION
