@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chord Library — Bassmate</title>
+  <meta name="description" content="Bass guitar chord library with fretboard diagrams. Power chords, triads, 7th chords for 4-string bass in standard tuning.">
+  <meta name="author" content="PiscoFactory">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#080810">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#080810; --surface:#12121e;
+      --border:rgba(255,255,255,0.08); --text:#e2e8f0;
+      --muted:#64748b; --accent:#7c3aed; --root-c:#f59e0b;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;}
+
+    /* ── top bar ── */
+    .top-bar{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 16px;border-bottom:1px solid var(--border);
+      background:var(--surface);position:sticky;top:0;z-index:100;
+    }
+    .back-btn{
+      text-decoration:none;background:none;border:1px solid var(--border);
+      color:var(--muted);padding:5px 11px;border-radius:6px;font-size:13px;transition:all .15s;
+    }
+    .back-btn:hover{color:var(--text);border-color:var(--accent);}
+    .page-title{font-size:17px;font-weight:700;}
+    .page-sub{font-size:12px;color:var(--muted);}
+    .print-btn{
+      margin-left:auto;padding:6px 14px;border-radius:7px;font-size:13px;font-weight:600;
+      background:var(--accent);border:none;color:#fff;cursor:pointer;transition:opacity .15s;
+    }
+    .print-btn:hover{opacity:.85;}
+
+    /* ── toolbar ── */
+    .toolbar{
+      padding:10px 16px;border-bottom:1px solid var(--border);
+      background:var(--surface);display:flex;flex-direction:column;gap:8px;
+    }
+    .pill-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .row-lbl{font-size:11px;color:var(--muted);min-width:34px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+    .pill{
+      padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;
+      border:1px solid var(--border);background:transparent;color:var(--muted);
+      cursor:pointer;transition:all .15s;font-family:'Space Mono',monospace;
+    }
+    .pill:hover{border-color:var(--accent);color:var(--text);}
+    .pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .pill.root-on{background:var(--root-c);border-color:var(--root-c);color:#000;font-weight:700;}
+
+    /* ── legend ── */
+    .legend-bar{
+      display:flex;align-items:center;gap:14px;padding:7px 16px;
+      font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);flex-wrap:wrap;
+    }
+    .ldot{width:10px;height:10px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:3px;}
+
+    /* ── grid ── */
+    .chord-grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+      gap:12px;padding:14px;max-width:1400px;margin:0 auto;
+    }
+    .chord-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:10px;padding:10px 8px;text-align:center;
+      transition:border-color .15s;display:flex;flex-direction:column;align-items:center;gap:3px;
+    }
+    .chord-card:hover{border-color:rgba(124,58,237,0.5);}
+    .card-name{font-size:15px;font-weight:800;color:var(--text);font-family:'Space Mono',monospace;}
+    .card-type{font-size:10px;color:var(--muted);}
+    .card-pos{font-size:10px;color:#555;}
+    .card-svg{width:100%;}
+    .card-svg svg{width:100%;height:auto;display:block;}
+    .card-notes{font-size:9.5px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.03em;}
+    .empty-msg{grid-column:1/-1;text-align:center;color:var(--muted);padding:48px 20px;font-size:14px;}
+
+    /* ── print title (hidden on screen) ── */
+    .print-title{display:none;}
+
+    /* ── SVG dot classes (overridable by print) ── */
+    .rdot  { fill:#f59e0b; }
+    .idot  { fill:#7c3aed; }
+    .ropen { fill:none; stroke:#f59e0b; stroke-width:1.5; }
+    .iopen { fill:none; stroke:#7c3aed; stroke-width:1.5; }
+    .dot-lbl { fill:white; font-size:7.5px; font-family:monospace; font-weight:bold; }
+
+    @media(max-width:480px){
+      .chord-grid{grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px;padding:10px;}
+      .page-sub{display:none;}
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      @page{size:A4 portrait;margin:1.2cm 1.5cm;}
+      body{background:#fff !important;color:#000 !important;}
+      .top-bar,.toolbar{display:none !important;}
+      .print-title{display:block;text-align:center;padding:8px 0 4px;font-size:16px;font-weight:700;color:#000;}
+      .legend-bar{background:none;border-color:#ccc;color:#444;padding:4px 8px;}
+      .ldot{border:1px solid #999;}
+      .chord-grid{gap:8px;padding:6px;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));}
+      .chord-card{border:1px solid #ccc;background:#fff;border-radius:6px;break-inside:avoid;}
+      .card-name{color:#000;}
+      .card-type,.card-pos{color:#444;}
+      .card-notes{color:#555;}
+      /* SVG dots → B&W */
+      .rdot  {fill:#000 !important;}
+      .idot  {fill:#555 !important;}
+      .ropen {stroke:#000 !important;}
+      .iopen {stroke:#555 !important;}
+      .dot-lbl{fill:#fff !important;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="back-btn">⬅ Bassmate</a>
+  <div class="page-title">🎼 Chord Library</div>
+  <span class="page-sub">Standard 4-string E·A·D·G</span>
+  <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
+</div>
+
+<!-- shown only in print -->
+<div class="print-title" id="printTitle">Chord Library — Bassmate · bassmate.it · PiscoFactory</div>
+
+<div class="toolbar">
+  <div class="pill-row">
+    <span class="row-lbl">Root</span>
+    <div id="rootPills" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  </div>
+  <div class="pill-row">
+    <span class="row-lbl">Type</span>
+    <div id="typePills" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
+  </div>
+</div>
+
+<div class="legend-bar">
+  <span><span class="ldot" style="background:var(--root-c);"></span>Root</span>
+  <span><span class="ldot" style="background:var(--accent);"></span>Interval</span>
+  <span><span class="ldot" style="background:none;border:1.5px solid var(--accent);"></span>Open</span>
+  <span style="margin-left:auto;font-size:10px;">
+    Generated by <a href="https://bassmate.it" style="color:var(--accent);text-decoration:none;">bassmate.it</a> by PiscoFactory
+  </span>
+</div>
+
+<div class="chord-grid" id="chordGrid"></div>
+
+<script>
+/* ────────────────────────────────────────────────────────
+   DATA
+   strIdx: 0=G(open=7), 1=D(open=2), 2=A(open=9), 3=E(open=4)
+   ds = string offset toward higher pitch (ds=1 → one string above root)
+   df = fret offset from rootFret
+   Formula: fret on string n-steps-higher = rootFret + interval - n*5
+   Verified:
+     5th(7)  n=1 → +2     oct(12) n=2 → +2
+     maj3(4) n=1 → -1     min3(3) n=1 → -2
+     5th(7)  n=2 → -3     b7(10)  n=2 →  0
+     maj7(11)n=2 → +1     2nd(2)  n=1 → -3
+     4th(5)  n=1 →  0     #5(8)   n=2 → -2
+     b5(6)   n=2 → -4
+──────────────────────────────────────────────────────── */
+const NOTES     = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const OPEN      = [7, 2, 9, 4];       // strIdx 0=G 1=D 2=A 3=E
+const STR_LABEL = ['G','D','A','E'];  // strIdx 0..3
+
+const TYPES = [
+  {
+    id:'power5', label:'Power 5th', labelIT:'Power 5a', symbol:'5',
+    name:'Power 5th', nameIT:'Power 5a',
+    voicings:[
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:2,deg:'5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:2,deg:'5'}]},
+      {rootStr:1, label:'on D', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:2,deg:'5'}]},
+    ]
+  },
+  {
+    id:'octave', label:'Octave', labelIT:'Ottava', symbol:'8va',
+    name:'Octave', nameIT:'Ottava',
+    voicings:[
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:2,df:2,deg:'8'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:2,df:2,deg:'8'}]},
+    ]
+  },
+  {
+    id:'power5oct', label:'5th+Oct', labelIT:'5a+Ott', symbol:'5+8',
+    name:'Power + Oct', nameIT:'Power + Ott',
+    voicings:[
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:2,deg:'5'},{ds:2,df:2,deg:'8'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:2,deg:'5'},{ds:2,df:2,deg:'8'}]},
+    ]
+  },
+  {
+    id:'major', label:'Major', labelIT:'Maggiore', symbol:'',
+    name:'Major', nameIT:'Maggiore',
+    voicings:[
+      // R(0) · maj3(n=1,df=-1) · 5th(n=2,df=-3)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:-3,deg:'5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:-3,deg:'5'}]},
+    ]
+  },
+  {
+    id:'minor', label:'Minor', labelIT:'Minore', symbol:'m',
+    name:'Minor', nameIT:'Minore',
+    voicings:[
+      // R(0) · min3(n=1,df=-2) · 5th(n=2,df=-3)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:-3,deg:'5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:-3,deg:'5'}]},
+    ]
+  },
+  {
+    id:'sus2', label:'Sus 2', labelIT:'Sus 2', symbol:'sus2',
+    name:'Suspended 2', nameIT:'Sospesa 2',
+    voicings:[
+      // R(0) · 2nd(n=1,df=-3) · 5th(n=2,df=-3)  — same fret, different strings
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-3,deg:'2'},{ds:2,df:-3,deg:'5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-3,deg:'2'},{ds:2,df:-3,deg:'5'}]},
+    ]
+  },
+  {
+    id:'sus4', label:'Sus 4', labelIT:'Sus 4', symbol:'sus4',
+    name:'Suspended 4', nameIT:'Sospesa 4',
+    voicings:[
+      // R(0) · 4th(n=1,df=0) · 5th(n=2,df=-3)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:0,deg:'4'},{ds:2,df:-3,deg:'5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:0,deg:'4'},{ds:2,df:-3,deg:'5'}]},
+    ]
+  },
+  {
+    id:'aug', label:'Aug', labelIT:'Aug', symbol:'+',
+    name:'Augmented', nameIT:'Aumentata',
+    voicings:[
+      // R(0) · maj3(n=1,df=-1) · #5(n=2,df=-2)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:-2,deg:'#5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:-2,deg:'#5'}]},
+    ]
+  },
+  {
+    id:'dim', label:'Dim', labelIT:'Dim', symbol:'°',
+    name:'Diminished', nameIT:'Diminuita',
+    voicings:[
+      // R(0) · min3(n=1,df=-2) · b5(n=2,df=-4)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:-4,deg:'♭5'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:-4,deg:'♭5'}]},
+    ]
+  },
+  {
+    id:'dom7', label:'Dom 7', labelIT:'Dom 7', symbol:'7',
+    name:'Dominant 7', nameIT:'Dominante 7',
+    voicings:[
+      // R(0) · maj3(n=1,df=-1) · b7(n=2,df=0)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:0,deg:'♭7'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:0,deg:'♭7'}]},
+    ]
+  },
+  {
+    id:'maj7', label:'Maj 7', labelIT:'Maj 7', symbol:'maj7',
+    name:'Major 7', nameIT:'Maggiore 7',
+    voicings:[
+      // R(0) · maj3(n=1,df=-1) · maj7(n=2,df=+1)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:1,deg:'7'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-1,deg:'3'},{ds:2,df:1,deg:'7'}]},
+    ]
+  },
+  {
+    id:'min7', label:'Min 7', labelIT:'Min 7', symbol:'m7',
+    name:'Minor 7', nameIT:'Minore 7',
+    voicings:[
+      // R(0) · min3(n=1,df=-2) · b7(n=2,df=0)
+      {rootStr:3, label:'on E', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:0,deg:'♭7'}]},
+      {rootStr:2, label:'on A', dots:[{ds:0,df:0,deg:'R'},{ds:1,df:-2,deg:'♭3'},{ds:2,df:0,deg:'♭7'}]},
+    ]
+  },
+];
+
+const ALL_TYPE = {id:'all', label:'All', labelIT:'Tutti'};
+const lang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
+let selRoot = 0;
+let selType = 'all';
+
+/* ── pills ─────────────────────────────────────────────── */
+const rootEl = document.getElementById('rootPills');
+NOTES.forEach((n, i) => {
+  const b = document.createElement('button');
+  b.className = 'pill' + (i === 0 ? ' root-on' : '');
+  b.textContent = n;
+  b.onclick = () => {
+    selRoot = i;
+    rootEl.querySelectorAll('.pill').forEach((x, j) => x.className = 'pill' + (j === i ? ' root-on' : ''));
+    render();
+  };
+  rootEl.appendChild(b);
+});
+
+const typeEl = document.getElementById('typePills');
+[ALL_TYPE, ...TYPES].forEach(ct => {
+  const b = document.createElement('button');
+  b.className = 'pill' + (ct.id === 'all' ? ' active' : '');
+  b.textContent = lang === 'it' ? ct.labelIT : ct.label;
+  b.onclick = () => {
+    selType = ct.id;
+    typeEl.querySelectorAll('.pill').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    render();
+  };
+  typeEl.appendChild(b);
+});
+
+/* ── compute ────────────────────────────────────────────── */
+function computeDots(voicing) {
+  let rootFret = (selRoot - OPEN[voicing.rootStr] + 12) % 12;
+
+  const mkFrets = rf => voicing.dots.map(d => ({
+    strIdx: voicing.rootStr - d.ds,
+    fret:   rf + d.df,
+    deg:    d.deg,
+    isRoot: d.deg === 'R'
+  }));
+
+  let frets = mkFrets(rootFret);
+  if (frets.some(f => f.fret < 0)) { rootFret += 12; frets = mkFrets(rootFret); }
+
+  for (const f of frets) {
+    if (f.strIdx < 0 || f.strIdx > 3 || f.fret < 0 || f.fret > 15) return null;
+    f.noteName = NOTES[(OPEN[f.strIdx] + f.fret) % 12];
+  }
+  return frets;
+}
+
+/* ── SVG ────────────────────────────────────────────────── */
+function buildSVG(dots) {
+  const SX  = {3:15, 2:36, 1:57, 0:78};  // strIdx → x
+  const SW  = {3:3.5, 2:2.5, 1:1.8, 0:1.2};
+  const NUT_Y = 32, FH = 20, NF = 4;
+
+  const fretted = dots.filter(d => d.fret > 0);
+  const opened  = dots.filter(d => d.fret === 0);
+  const aFrets  = fretted.map(d => d.fret);
+  const minF    = aFrets.length ? Math.min(...aFrets) : 1;
+  const maxF    = aFrets.length ? Math.max(...aFrets) : 1;
+  let sf        = minF;
+  if (maxF - sf >= NF) sf = maxF - NF + 1;
+  const showNut = sf === 1;
+
+  let s = `<svg viewBox="0 0 96 138" xmlns="http://www.w3.org/2000/svg">`;
+
+  // string lines
+  for (let si = 0; si <= 3; si++)
+    s += `<line x1="${SX[si]}" y1="${NUT_Y}" x2="${SX[si]}" y2="${NUT_Y+NF*FH}" stroke="#444" stroke-width="${SW[si]}"/>`;
+
+  // fret lines + nut
+  for (let f = 0; f <= NF; f++) {
+    const y = NUT_Y + f * FH, isNut = f === 0 && showNut;
+    s += `<line x1="${SX[3]}" y1="${y}" x2="${SX[0]}" y2="${y}" stroke="${isNut?'#aaa':'#333'}" stroke-width="${isNut?4:1}"/>`;
+  }
+
+  // position label
+  if (!showNut && aFrets.length)
+    s += `<text x="8" y="${NUT_Y+FH*.65}" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">${sf}fr</text>`;
+
+  // string name labels
+  for (let si = 0; si <= 3; si++)
+    s += `<text x="${SX[si]}" y="${NUT_Y-18}" text-anchor="middle" fill="#555" font-size="8" font-family="monospace">${STR_LABEL[si]}</text>`;
+
+  // open strings
+  for (const d of opened)
+    s += `<circle class="${d.isRoot?'ropen':'iopen'}" cx="${SX[d.strIdx]}" cy="${NUT_Y-8}" r="5"/>`;
+
+  // fretted dots
+  for (const d of fretted) {
+    const row = d.fret - sf;
+    if (row < 0 || row >= NF) continue;
+    const x = SX[d.strIdx], y = NUT_Y + row * FH + FH / 2;
+    s += `<circle class="${d.isRoot?'rdot':'idot'}" cx="${x}" cy="${y}" r="9"/>`;
+    s += `<text class="dot-lbl" x="${x}" y="${y+3.5}" text-anchor="middle">${d.deg}</text>`;
+  }
+
+  return s + '</svg>';
+}
+
+/* ── render ─────────────────────────────────────────────── */
+function render() {
+  const grid = document.getElementById('chordGrid');
+  grid.innerHTML = '';
+  const types = selType === 'all' ? TYPES : TYPES.filter(t => t.id === selType);
+  const rootName = NOTES[selRoot];
+  let count = 0;
+
+  for (const ct of types) {
+    for (const v of ct.voicings) {
+      const dots = computeDots(v);
+      if (!dots) continue;
+
+      const chordName = rootName + ct.symbol;
+      const ctLabel   = lang === 'it' ? ct.nameIT : ct.name;
+      const noteStr   = dots.map(d => d.noteName).join('·');
+
+      const card = document.createElement('div');
+      card.className = 'chord-card';
+      card.innerHTML = `
+        <div class="card-name">${chordName}</div>
+        <div class="card-type">${ctLabel}</div>
+        <div class="card-pos">${v.label}</div>
+        <div class="card-svg">${buildSVG(dots)}</div>
+        <div class="card-notes">${noteStr}</div>
+      `;
+      grid.appendChild(card);
+      count++;
+    }
+  }
+
+  if (!count) grid.innerHTML = '<div class="empty-msg">No voicings available.</div>';
+
+  // update print title
+  const typeName = selType === 'all'
+    ? (lang === 'it' ? 'Tutti i tipi' : 'All types')
+    : (TYPES.find(t => t.id === selType)?.[lang==='it'?'nameIT':'name'] || selType);
+  document.getElementById('printTitle').textContent =
+    `Chord Library — ${rootName} · ${typeName} | bassmate.it · PiscoFactory`;
+}
+
+render();
+</script>
+</body>
+</html>
