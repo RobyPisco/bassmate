@@ -1315,7 +1315,7 @@ function syncScalePills() {
 
 function switchTab(tabName) {
   S.activeTab = tabName;
-  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro', 'tab-settings');
+  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro');
   document.body.classList.add('tab-' + tabName);
   
   // Update UI active state
