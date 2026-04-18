@@ -124,7 +124,7 @@ body.minimal-header .top-dashboard {
 }
 
 /* RIGA 1 - HEADER PRINCIPALE */
-.td-row-main { justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; flex-wrap:wrap; }
+.td-row-main { justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0; flex-wrap: nowrap; align-items: center; padding: 10px 16px; gap: 8px; }
 
 .sb-logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), #0891b2); border-radius: 8px; display: grid; place-items: center; font-size: 18px; box-shadow: 0 0 16px rgba(124,58,237,.4); }
@@ -880,11 +880,12 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex: 1;
+  justify-content: center;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  padding: 0 8px;
 }
 .header-tab-row::-webkit-scrollbar { display: none; }
 
