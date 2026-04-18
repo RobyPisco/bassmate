@@ -6,20 +6,27 @@
       <div class="logo-text">Bassmate<small>PiscoFactory</small></div>
     </a>
     
-    <div class="td-icons" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-      <button class="icon-btn export-btn-sm" id="kbdHintBtn" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
+    <div class="td-icons">
+      <!-- Sempre visibili -->
       <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi">🔗</button>
-      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta immagine fretboard">📸</button>
-      <button class="icon-btn export-btn-sm" id="exportBtn" data-i18n-title="export_btn" title="Stampa / Esporta PDF manico corrente">🖨️</button>
-      <a href="grids.html" class="icon-btn export-btn-sm" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
-      <a href="exercises.html" class="icon-btn export-btn-sm" title="Esercizi pratici" style="text-decoration:none;">📚</a>
-      <select id="favCtrl" class="sel-wrap" style="width:auto; display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold; margin-left:6px;">
+      <select id="favCtrl" class="sel-wrap" style="display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
       <button class="icon-btn export-btn-sm" id="favBtn" data-i18n-title="fav_save" title="Salva Preferito">❤️</button>
       <button class="icon-btn export-btn-sm" id="favDelBtn" title="Elimina preferito selezionato" style="display:none; color:#ef4444; border-color:rgba(239,68,68,0.4);">🗑️</button>
-      <a href="contact.html" class="icon-btn export-btn-sm" title="Contatti">📧</a>
-      <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè" style="text-decoration:none;">☕</a>
+      <!-- Overflow menu -->
+      <div class="overflow-wrap">
+        <button class="icon-btn export-btn-sm" id="overflowBtn" title="Altro">···</button>
+        <div class="overflow-menu" id="overflowMenu">
+          <button class="ovf-item" id="kbdHintBtn" onclick="toggleKbdPanel()">⌨️ <span>Scorciatoie</span></button>
+          <button class="ovf-item" id="snapshotBtn">📸 <span>Snapshot</span></button>
+          <button class="ovf-item" id="exportBtn" data-i18n-title="export_btn">🖨️ <span>Stampa PDF</span></button>
+          <a href="grids.html" class="ovf-item">📋 <span>Manici vuoti</span></a>
+          <a href="exercises.html" class="ovf-item">📚 <span>Esercizi</span></a>
+          <a href="contact.html" class="ovf-item">📧 <span>Contatti</span></a>
+          <a href="donate.html" class="ovf-item" style="color:var(--root-c);">☕ <span>Supporta</span></a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -49,17 +56,11 @@
 
   <!-- Music Controls (Visibili solo nel Tab Studio) -->
   <div class="music-controls" id="studioMusicControls">
-    <!-- Root Note + Metro + Reset in one row -->
-    <div style="display:flex; align-items:center; gap:8px; padding: 0 16px 6px;">
-      <!-- ◄ notes ► gruppo compatto -->
-      <div style="display:flex; align-items:center; gap:0;">
-        <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
-        <div class="hz-grid root-scroll" id="rootCtrl"></div>
-        <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
-      </div>
-      <!-- Metro + Reset -->
-      <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metronomo</span></button>
-      <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄 <span data-i18n="reset_btn">Reset</span></button>
+    <!-- Root Note row -->
+    <div style="display:flex; align-items:center; gap:0; padding: 0 16px 6px;">
+      <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
+      <div class="hz-grid root-scroll" id="rootCtrl"></div>
+      <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
     </div>
 
     <!-- Scale Selectors -->
@@ -78,7 +79,7 @@
       </div>
     </div>
 
-    <!-- Display Options Row -->
+    <!-- Display Options + Actions Row -->
     <div class="display-opts-row" id="displayOptsRow">
       <select id="tuningCtrl" class="opt-sel" title="Accordatura"></select>
       <select id="labelCtrl" class="opt-sel" title="Etichette">
@@ -95,6 +96,9 @@
         <option value="right" data-i18n="right">Destro</option>
         <option value="left" data-i18n="lefty">Mancino</option>
       </select>
+      <div class="opts-divider"></div>
+      <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metro</span></button>
+      <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄</button>
     </div>
   </div>
 </header>

@@ -1026,6 +1026,54 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 }
 .opt-sel:hover, .opt-sel:focus { border-color: var(--accent); }
 
+.opts-divider {
+  width: 1px; height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── OVERFLOW MENU ──────────────────────────────────────── */
+.td-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.overflow-wrap { position: relative; }
+.overflow-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px;
+  z-index: 500;
+  min-width: 170px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  backdrop-filter: blur(12px);
+}
+.overflow-menu.open { display: flex; }
+.ovf-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.ovf-item:hover { background: var(--s3); }
+
 /* ══════════════════════════════
    SETTINGS PANEL (inline tab)
 ══════════════════════════════ */

@@ -765,6 +765,14 @@ async function initApp() {
     console.error("Component fetch failed.", err);
   }
 
+  // OVERFLOW MENU TOGGLE
+  const overflowBtn = document.getElementById('overflowBtn');
+  const overflowMenu = document.getElementById('overflowMenu');
+  if (overflowBtn && overflowMenu) {
+    overflowBtn.addEventListener('click', e => { e.stopPropagation(); overflowMenu.classList.toggle('open'); });
+    document.addEventListener('click', () => overflowMenu.classList.remove('open'));
+  }
+
   // MINIMAL HEADER LOGIC
   const path = window.location.pathname;
   const isHome = path.endsWith('index.html') || path.endsWith('/') || path === '';
