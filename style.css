@@ -1012,6 +1012,7 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
   gap: 6px;
   padding: 0 16px 8px;
   flex-wrap: wrap;
+  justify-content: flex-start;
 }
 .opt-sel {
   background: var(--s3);
