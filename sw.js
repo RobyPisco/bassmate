@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bassmate-v38';
+const CACHE_NAME = 'bassmate-v42';
 const URLS_TO_CACHE = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const URLS_TO_CACHE = [
 
 self.addEventListener('install', event => {
   // Eseguito all'installazione dell'app: memorizza nella cache tutto.
+  self.skipWaiting(); // Attiva subito il nuovo SW senza aspettare la chiusura dei tab
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(URLS_TO_CACHE))

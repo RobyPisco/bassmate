@@ -997,17 +997,32 @@ async function initApp() {
     if(qstBtn) qstBtn.addEventListener('click', stopQuiz);
     if(qrBtn) qrBtn.addEventListener('click', resetQuiz);
 
+    const qModeCtrl = document.getElementById('quizModeCtrl');
+    if(qModeCtrl) qModeCtrl.addEventListener('change', () => { resetQuiz(); if(window.buildQuizBtns) window.buildQuizBtns(); });
+    const qDiffCtrl = document.getElementById('quizDiffCtrl');
+    if(qDiffCtrl) qDiffCtrl.addEventListener('change', () => { if(isQuizRunning) stopQuiz(); });
+
     // QUIZ BTNS BUILDER OR UPDATE
     function buildQuizBtns() {
       const qb = document.getElementById('quizBtns');
       if(!qb) return;
       qb.innerHTML = '';
-      for(let i=0; i<12; i++) {
+      const mode = getQuizMode();
+      if (mode === 'degree') {
+        SCALES[S.scale].dg.forEach((deg, idx) => {
+          const b = mkEl('button', 'quiz-btn');
+          b.innerText = deg;
+          b.onclick = () => handleQuizGuessDeg(idx, b);
+          qb.appendChild(b);
+        });
+      } else {
+        for(let i=0; i<12; i++) {
           const isAccidental = getNoteName(i).includes('#');
           const b = mkEl('button', 'quiz-btn' + (isAccidental ? ' accidental' : ''));
           b.innerText = getNoteName(i);
           b.onclick = () => handleQuizGuess(i, b);
           qb.appendChild(b);
+        }
       }
     }
     
@@ -1193,24 +1208,9 @@ async function initApp() {
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.dataset.tab;
-        if (tab === 'settings') {
-          openSettings();
-        } else {
-          switchTab(tab);
-        }
+        switchTab(tab);
       });
     });
-
-    // SETTINGS MODAL
-    const smCloseBtn = document.getElementById('smCloseBtn');
-    if (smCloseBtn) smCloseBtn.addEventListener('click', closeSettings);
-    
-    const settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) closeSettings();
-      });
-    }
 
     // AUDIO TOGGLE (Refactored)
     const audioBtn = document.getElementById('audioTogBtn');
@@ -1286,7 +1286,18 @@ async function initApp() {
   }
   
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.log('No PWA support.', err));
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing;
+        if (!newSW) return;
+        newSW.addEventListener('statechange', () => {
+          // Nuovo SW attivato: ricarica per applicare l'aggiornamento
+          if (newSW.state === 'activated' && navigator.serviceWorker.controller) {
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(err => console.log('No PWA support.', err));
   }
 }
 
@@ -1296,7 +1307,7 @@ function syncScalePills() {
 
 function switchTab(tabName) {
   S.activeTab = tabName;
-  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro');
+  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro', 'tab-settings');
   document.body.classList.add('tab-' + tabName);
   
   // Update UI active state
@@ -1326,15 +1337,6 @@ function switchTab(tabName) {
   render();
 }
 
-function openSettings() {
-  const modal = document.getElementById('settingsModal');
-  if (modal) modal.classList.remove('hide');
-}
-
-function closeSettings() {
-  const modal = document.getElementById('settingsModal');
-  if (modal) modal.classList.add('hide');
-}
 
 
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
@@ -1657,19 +1659,51 @@ function endQuizMode() {
   renderFretboard();
 }
 
+function getQuizMode() {
+  const el = document.getElementById('quizModeCtrl');
+  return el ? el.value : 'note';
+}
+function getQuizDifficulty() {
+  const el = document.getElementById('quizDiffCtrl');
+  return el ? el.value : 'normal';
+}
+
 function generateQuizNode() {
   const t = TUNINGS[S.tuning];
-  const maxFret = Math.min(12, FRETS);
-  const s = Math.floor(Math.random() * t.strings);
-  const f = Math.floor(Math.random() * maxFret) + 1; 
-  const ni = (t.notes[s] + f) % 12;
-  quizActiveNote = {s, f, ni};
+  const diff = getQuizDifficulty();
+  const mode = getQuizMode();
+  const minFret = diff === 'hard' ? 0 : 1;
+  const maxFret = diff === 'easy' ? 5 : diff === 'hard' ? FRETS : 12;
 
-  // Ear training: suona la nota automaticamente!
-  if(S.audio) {
-    const midi = t.midiBase[s] + f;
-    playNote(midi);
+  let s, f, ni, degIndex = null;
+
+  if (mode === 'degree') {
+    const scaleIv = SCALES[S.scale].iv;
+    const candidates = [];
+    for (let ss = 0; ss < t.strings; ss++) {
+      for (let ff = minFret; ff <= maxFret; ff++) {
+        const noteIdx = (t.notes[ss] + ff) % 12;
+        const di = scaleIv.indexOf(((noteIdx - S.root) + 12) % 12);
+        if (di !== -1) candidates.push({s: ss, f: ff, ni: noteIdx, degIndex: di});
+      }
+    }
+    if (candidates.length > 0) {
+      const pick = candidates[Math.floor(Math.random() * candidates.length)];
+      s = pick.s; f = pick.f; ni = pick.ni; degIndex = pick.degIndex;
+    } else {
+      // Fallback: note mode
+      s = Math.floor(Math.random() * t.strings);
+      f = Math.floor(Math.random() * (maxFret - minFret + 1)) + minFret;
+      ni = (t.notes[s] + f) % 12;
+    }
+  } else {
+    s = Math.floor(Math.random() * t.strings);
+    f = Math.floor(Math.random() * (maxFret - minFret + 1)) + minFret;
+    ni = (t.notes[s] + f) % 12;
   }
+
+  quizActiveNote = {s, f, ni, degIndex};
+  if(S.audio) playNote(t.midiBase[s] + f);
 }
 
 function handleQuizGuess(ni, btn) {
@@ -1731,8 +1765,45 @@ function handleQuizGuess(ni, btn) {
    }
 }
 
+function handleQuizGuessDeg(degIdx, btn) {
+  if (!quizActiveNote || !isQuizRunning || quizActiveNote.degIndex === null) return;
 
-/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
+  const qs = document.getElementById('quizScore');
+  const qc = document.getElementById('quizCombo');
+  const panel = document.getElementById('quizPanel');
+
+  if (degIdx === quizActiveNote.degIndex) {
+    btn.classList.add('correct');
+    const pointsEarned = 10 * quizCombo;
+    quizScore += pointsEarned;
+    quizCombo++;
+    if (quizCombo - 1 > quizBestCombo) quizBestCombo = quizCombo - 1;
+    if (qs) qs.innerText = tl('quiz_score') + ' ' + quizScore;
+    if (qc) { qc.innerText = 'Combo x' + quizCombo; qc.classList.add('pop'); setTimeout(() => qc.classList.remove('pop'), 200); }
+    recordQuizResult(quizActiveNote.ni, true);
+    setTimeout(() => {
+      btn.classList.remove('correct');
+      if (isQuizRunning) { generateQuizNode(); renderFretboard(); }
+    }, 300);
+  } else {
+    btn.classList.add('wrong');
+    if (panel) { panel.classList.add('quiz-shake'); setTimeout(() => panel.classList.remove('quiz-shake'), 400); }
+    recordQuizResult(quizActiveNote.ni, false);
+    const wrongDot = document.querySelector('.nd.q-dot');
+    if (wrongDot) {
+      wrongDot.style.background = '#ef4444';
+      wrongDot.style.boxShadow = '0 0 20px #ef4444';
+      wrongDot.style.transform = 'translate(-50%,-50%) scale(1.3)';
+      setTimeout(() => { wrongDot.style.background = ''; wrongDot.style.boxShadow = ''; wrongDot.style.transform = ''; }, 500);
+    }
+    quizCombo = 1;
+    if (qc) { qc.innerText = tl('combo_break'); qc.style.color = '#ef4444'; setTimeout(() => { qc.innerText = 'Combo x1'; qc.style.color = ''; }, 1000); }
+    setTimeout(() => btn.classList.remove('wrong'), 400);
+  }
+}
+
+
+/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═
    CORE LOGIC & RENDER
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
 function scaleNotes() { return SCALES[S.scale].iv.map(i=>(S.root+i)%12); }

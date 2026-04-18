@@ -163,6 +163,15 @@
           <div class="quiz-time" id="quizTime">⏱️ 60s</div>
         </div>
         <div class="quiz-controls" style="display:flex; justify-content:center; gap:10px; padding-bottom:12px; flex-wrap:wrap;">
+          <select id="quizModeCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
+            <option value="note">🎵 Note</option>
+            <option value="degree">🔢 Gradi</option>
+          </select>
+          <select id="quizDiffCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
+            <option value="easy">⭐ Easy</option>
+            <option value="normal" selected>⭐⭐ Normal</option>
+            <option value="hard">⭐⭐⭐ Hard</option>
+          </select>
           <select id="quizTimeCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
             <option value="30">⏱ 30s</option>
             <option value="60" selected>⏱ 60s</option>
@@ -206,21 +215,8 @@
       </div>
     </div>
 
-    <div class="legend" id="fbLegend">
-      <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>
-      <div class="li"><div class="ld" style="background:var(--note-c); box-shadow: 0 0 8px var(--note-g)"></div><span data-i18n="pos_note">Nota della scala</span></div>
-    </div>
-  </main>
-
-  <div id="footer-placeholder"></div>
-
-  <!-- ================= SETTINGS MODAL ================= -->
-  <div id="settingsModal" class="settings-modal flex-center hide">
-    <div class="sm-card">
-      <div class="sm-header">
-        <h2 data-i18n="settings_title">Impostazioni</h2>
-        <button id="smCloseBtn" class="icon-btn-text">✖</button>
-      </div>
+    <!-- ================= SETTINGS PANEL ================= -->
+    <div id="settingsPanel" class="settings-panel">
       <div class="sm-content">
          <!-- General -->
          <div class="sm-group">
@@ -242,45 +238,20 @@
            </div>
          </div>
 
-         <!-- Display -->
-         <div class="sm-group">
-           <h3 data-i18n="sm_display">Visualizzazione</h3>
-           <label class="sm-row">
-             <span data-i18n="hand">Mano</span>
-             <select id="handCtrl" class="sm-select">
-               <option value="right" data-i18n="right">Destro</option>
-               <option value="left" data-i18n="lefty">Mancino</option>
-             </select>
-           </label>
-           <label class="sm-row">
-             <span data-i18n="labels">Etichette</span>
-             <select id="labelCtrl" class="sm-select">
-               <option value="deg" data-i18n="degrees">Gradi</option>
-               <option value="note" data-i18n="notes">Note (C,D,E)</option>
-               <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
-               <option value="finger" data-i18n="finger">Dita (Box)</option>
-             </select>
-           </label>
-           <label class="sm-row">
-             <span data-i18n="settings">Vista</span>
-             <select id="viewCtrl" class="sm-select">
-               <option value="full" data-i18n="all">Tutto</option>
-               <option value="box" data-i18n="box">Box 5fr</option>
-             </select>
-           </label>
-           <label class="sm-row">
-             <span data-i18n="tuning">Accordatura</span>
-             <select id="tuningCtrl" class="sm-select"></select>
-           </label>
-         </div>
-
       </div>
-      <div class="sm-footer" style="padding: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 10px;">
-          <a href="contact.html" class="back-link" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); text-decoration: none; font-weight: 700;">📧 Contatti</a>
-          <a href="donate.html" class="back-link" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--root-c); text-decoration: none; font-weight: 700;">☕ Supporta il progetto</a>
-       </div>
+      <div class="sm-footer">
+        <a href="contact.html" class="back-link" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); text-decoration: none; font-weight: 700;">📧 Contatti</a>
+        <a href="donate.html" class="back-link" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--root-c); text-decoration: none; font-weight: 700;">☕ Supporta il progetto</a>
+      </div>
     </div>
-  </div>
+
+    <div class="legend" id="fbLegend">
+      <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>
+      <div class="li"><div class="ld" style="background:var(--note-c); box-shadow: 0 0 8px var(--note-g)"></div><span data-i18n="pos_note">Nota della scala</span></div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
 
   <!-- ================= BOTTOM TAB NAV ================= -->
   <nav class="bottom-tab-bar">

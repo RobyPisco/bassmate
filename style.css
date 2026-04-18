@@ -333,7 +333,7 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
     text-shadow: none !important;
     box-shadow: none !important;
   }
-  .top-dashboard, .pos-bar, .legend, footer, .bottom-tab-bar, .kbd-panel, .tour-spotlight, .tour-tooltip, .settings-modal { 
+  .top-dashboard, .pos-bar, .legend, footer, .bottom-tab-bar, .kbd-panel, .tour-spotlight, .tour-tooltip, .settings-panel {
     display: none !important; 
     visibility: hidden !important;
     opacity: 0 !important;
@@ -1007,6 +1007,52 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
   transition: all .2s;
 }
 .icon-btn-text:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ══════════════════════════════
+   DISPLAY OPTIONS ROW (header)
+══════════════════════════════ */
+.display-opts-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px 8px;
+  flex-wrap: wrap;
+}
+.opt-sel {
+  background: var(--s3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.opt-sel:hover, .opt-sel:focus { border-color: var(--accent); }
+
+/* ══════════════════════════════
+   SETTINGS PANEL (inline tab)
+══════════════════════════════ */
+.settings-panel {
+  display: none;
+  padding: 20px 24px;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: fadeIn .3s ease;
+}
+.settings-panel .sm-footer {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+body.tab-settings .main > *:not(.settings-panel) { display: none !important; }
+body.tab-settings .settings-panel { display: block !important; }
 
 /* Custom hide logic for tab views */
 body.tab-studio .quiz-panel,
