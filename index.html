@@ -190,13 +190,12 @@
     <div id="quizPanel" class="quiz-panel">
       <div class="quiz-hud">
         <div class="quiz-timer-bar"><div class="quiz-timer-fill" id="quizTimerFill"></div></div>
-        <div class="quiz-hud-row">
-          <div class="quiz-score" id="quizScore" data-i18n="quiz_initial">🏆 Punteggio: 0</div>
+        <div class="quiz-single-row">
+          <div class="quiz-score" id="quizScore" data-i18n="quiz_initial">🏆 0</div>
           <div id="quizRankLabel" class="quiz-combo" style="color:var(--accent); display:none;">Bronze 🥉</div>
           <div class="quiz-combo" id="quizCombo">Combo x1</div>
           <div class="quiz-time" id="quizTime">⏱️ 60s</div>
-        </div>
-        <div class="quiz-controls" style="display:flex; justify-content:center; gap:10px; padding-bottom:12px; flex-wrap:wrap;">
+          <div class="quiz-sep"></div>
           <select id="quizModeCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
             <option value="note">🎵 Note</option>
             <option value="degree">🔢 Gradi</option>
