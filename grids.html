@@ -14,158 +14,559 @@
   <meta property="og:image" content="https://bassmate.it/icon.svg">
   <link rel="canonical" href="https://bassmate.it/grids.html">
   <style>
-    body { background: #fff; color: #111; padding: 30px; font-family: sans-serif; display:flex; flex-direction:column;}
-    .grid-container {
-      display: flex; flex-direction: column; gap: 40px; margin: 0 auto; max-width: 1000px; width: 100%;
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background: #fff; color: #111; padding: 24px; font-family: sans-serif; display: flex; flex-direction: column; }
+
+    /* ── header ── */
+    .hw-header { text-align: center; margin-bottom: 16px; }
+    .hw-header h1 { margin: 0 0 10px; font-size: 22px; }
+    .hw-header input[type=text] { border: none; border-bottom: 1px solid #000; font-family: inherit; font-size: 15px; outline: none; background: transparent; }
+
+    /* ── toolbar rows ── */
+    .toolbar { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin-top: 12px; }
+    .toolbar select, .toolbar input[type=number] {
+      padding: 5px 8px; border-radius: 6px; border: 1px solid #7c3aed; font-size: 13px; cursor: pointer;
     }
-    .hw-header { text-align: center; margin-bottom: 20px; }
-    .hw-header input { border: none; border-bottom: 1px solid #000; font-family: inherit; font-size: 16px; outline:none; }
-    
-    .fret-nums { position: relative; height: 20px; font-size: 12px; color: #666; margin-top: 5px; }
+    .toolbar label { font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+    .btn { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; border: none; }
+    .btn-outline { border: 1px solid #7c3aed; color: #7c3aed; background: transparent; }
+    .btn-primary { background: #7c3aed; color: #fff; }
+    .btn-green { background: #16a34a; color: #fff; }
+
+    /* ── scale panel ── */
+    .scale-panel {
+      max-width: 1000px; width: 100%; margin: 0 auto 20px;
+      border: 1.5px solid #7c3aed; border-radius: 10px; padding: 14px 18px;
+      background: #faf5ff;
+    }
+    .scale-panel h3 { margin: 0 0 10px; font-size: 15px; color: #6d28d9; }
+    .scale-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .scale-row select { padding: 5px 8px; border-radius: 6px; border: 1px solid #7c3aed; font-size: 13px; }
+    .scale-row label { font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+
+    /* ── grids ── */
+    .grid-container { display: flex; flex-direction: column; gap: 32px; margin: 0 auto; max-width: 1000px; width: 100%; }
+    .grid-wrapper { display: flex; flex-direction: column; gap: 0; }
+    .grid-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .grid-title-input {
+      border: none; border-bottom: 1px dashed #aaa; font-family: inherit; font-size: 13px;
+      font-weight: bold; outline: none; flex: 1; background: transparent; color: #444;
+    }
+    .grid-fret-label { font-size: 11px; color: #888; white-space: nowrap; }
+    .grid-clear-btn { font-size: 11px; color: #dc2626; background: none; border: none; cursor: pointer; padding: 0; }
+
+    .fret-pos-ctrl { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #555; }
+    .fret-pos-ctrl input { width: 44px; padding: 2px 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 12px; text-align: center; }
+
+    .svg-row { display: flex; align-items: stretch; gap: 0; }
+    .string-labels { display: flex; flex-direction: column; justify-content: space-around; padding: 0 5px 0 0; min-width: 22px; height: 120px; align-items: flex-end; }
+    .string-label { font-size: 11px; font-weight: bold; color: #444; text-align: right; line-height: 1; height: 0; overflow: visible; }
+
+    .fret-nums { position: relative; height: 18px; font-size: 11px; color: #888; margin-top: 3px; margin-left: 27px; }
     .fret-n { position: absolute; transform: translateX(-50%); text-align: center; }
-    
+
+    /* ── print ── */
     @media print {
       @page { size: A4 portrait; margin: 1.2cm 1.5cm; }
       body { margin: 0; padding: 0; background: #fff !important; }
-      #printBtn, #backBtn, #stringCtrl, label, #dl-ctrl { display: none !important; }
-      .hw-header input { border-bottom: 1px solid #000 !important; }
+      .no-print { display: none !important; }
+      .hw-header input[type=text] { border-bottom: 1px solid #000 !important; }
+      .grid-title-input { border-bottom: 1px dashed #999 !important; }
       .grid-container { gap: 18px !important; }
-      svg { height: 100px !important; }
-      /* forza tutto su una sola pagina */
-      .grid-container, .hw-header { page-break-after: avoid; page-break-inside: avoid; }
-      html, body { overflow: hidden; height: auto; }
+      .scale-panel { display: none !important; }
+      .grid-clear-btn { display: none !important; }
+      .fret-pos-ctrl { display: none !important; }
+      svg { height: 90px !important; }
     }
+
+    .lang-float { position: absolute; top: 20px; right: 20px; display: flex; gap: 4px; }
+    .p { padding: 4px 8px; cursor: pointer; border: 1px solid #ccc; background: #fff; border-radius: 4px; font-size: 12px; }
+    .p.on { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+
+    .brandline { max-width: 1000px; margin: 0 auto 16px; width: 100%; text-align: right; font-size: 10px; color: #bbb; }
   </style>
 </head>
 <body>
+
+  <div class="lang-float no-print" id="dl-ctrl">
+    <button class="p on" data-v="it">IT</button>
+    <button class="p" data-v="en">EN</button>
+  </div>
+
   <div class="hw-header">
-    <div class="lang-float" id="dl-ctrl" style="position:absolute; top:20px; right:20px; display:flex; gap:4px;">
-       <button class="p on" data-v="it" style="padding:4px 8px; cursor:pointer;">IT</button>
-       <button class="p" data-v="en" style="padding:4px 8px; cursor:pointer;">EN</button>
-    </div>
-    <h1 id="title-text">Bass Study Session</h1>
+    <h1 id="title-text">Sessione di Studio Basso</h1>
     <p>
-      <span id="stud-text">Studente</span>: <input type="text" style="width:200px"> &nbsp;&nbsp;&nbsp; 
-      <span id="date-text">Data</span>: <input type="text" style="width:100px"> &nbsp;&nbsp;&nbsp; 
-      <span id="note-text">Note</span>: <input type="text" style="width:150px">
+      <span id="stud-text">Studente</span>: <input type="text" style="width:180px" id="inp-student">
+      &nbsp;&nbsp;
+      <span id="date-text">Data</span>: <input type="text" style="width:90px" id="inp-date">
+      &nbsp;&nbsp;
+      <span id="note-text">Note</span>: <input type="text" style="width:160px" id="inp-notes">
     </p>
-    <div style="display:flex; justify-content:center; align-items:center; gap: 15px; margin-top: 20px;">
-      <label style="font-size:14px; font-weight:bold;">
-        Strings: 
-        <select id="stringCtrl" style="padding:5px; border-radius:6px; border:1px solid #7c3aed;">
-          <option value="4">4 Strings</option>
-          <option value="5">5 Strings</option>
-          <option value="6">6 Strings</option>
+
+    <!-- toolbar row 1: settings -->
+    <div class="toolbar no-print">
+      <label id="lbl-strings">Corde:
+        <select id="stringCtrl">
+          <option value="4">4 corde</option>
+          <option value="5">5 corde</option>
+          <option value="6">6 corde</option>
         </select>
       </label>
-      <button id="backBtn" onclick="window.location.href='index.html'" style="padding:10px 20px; border:1px solid #7c3aed; color:#7c3aed; background:transparent; border-radius:8px; cursor:pointer; font-weight:bold;">← Torna al Manico</button>
-      <button id="printBtn" onclick="window.print()" style="padding:10px 20px; background:#7c3aed; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">🖨️ Stampa Ora</button>
+      <label id="lbl-grids">Griglie:
+        <input type="number" id="gridCount" min="1" max="12" value="5" style="width:54px;">
+      </label>
+      <button class="btn btn-outline" id="backBtn">← Torna al Manico</button>
+      <button class="btn btn-primary" id="printBtn">🖨️ Stampa Ora</button>
     </div>
   </div>
-  
-  <div style="max-width: 1000px; margin: 0 auto; width: 100%; text-align:right; font-size:10px; color:#999; margin-bottom: 20px;">Generated by <strong>Bassmate</strong></div>
-  
+
+  <!-- scale export panel -->
+  <div class="scale-panel no-print">
+    <h3 id="lbl-scale-title">🎵 Esporta Scala su Griglia</h3>
+    <div class="scale-row">
+      <label id="lbl-root">Tonica:
+        <select id="scaleRoot">
+          <option value="0">C</option><option value="1">C#/D♭</option><option value="2">D</option>
+          <option value="3">D#/E♭</option><option value="4">E</option><option value="5">F</option>
+          <option value="6">F#/G♭</option><option value="7">G</option><option value="8">G#/A♭</option>
+          <option value="9">A</option><option value="10">A#/B♭</option><option value="11">B</option>
+        </select>
+      </label>
+      <label id="lbl-scale">Scala:
+        <select id="scaleType">
+          <option value="major">Maggiore</option>
+          <option value="minor">Minore Naturale</option>
+          <option value="pent_maj">Pentatonica Maggiore</option>
+          <option value="pent_min">Pentatonica Minore</option>
+          <option value="blues">Blues</option>
+          <option value="dorian">Dorian</option>
+          <option value="mixolydian">Mixolydian</option>
+          <option value="harmonic_min">Minore Armonica</option>
+          <option value="melodic_min">Minore Melodica</option>
+        </select>
+      </label>
+      <label id="lbl-target">Su griglia #:
+        <input type="number" id="scaleTarget" min="1" max="12" value="1" style="width:50px;">
+      </label>
+      <button class="btn btn-green" id="exportScaleBtn" style="font-size:13px;">▶ Applica</button>
+      <button class="btn btn-outline" id="exportAllBtn" style="font-size:13px;" id="lbl-all">Applica a tutte</button>
+    </div>
+  </div>
+
+  <div class="brandline">Generated by <a href="https://bassmate.it" style="color:#7c3aed;text-decoration:none;font-weight:bold;">bassmate.it</a> by PiscoFactory</div>
+
   <div class="grid-container" id="gc"></div>
 
   <script>
-    const container = document.getElementById('gc');
-    const frets = 15;
-    let stringsCount = 4;
-    const markers = [3,5,7,9,12,15];
+    // ── constants ──
+    const TOTAL_FRETS = 15;
+    const MARKERS = [3,5,7,9,12,15];
+    const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const TUNINGS = {
+      4: [4, 9, 2, 7],      // E A D G  (semitones from C)
+      5: [11, 4, 9, 2, 7],  // B E A D G
+      6: [11, 4, 9, 2, 7, 0] // B E A D G C
+    };
+    const TUNING_NAMES = {
+      4: ['E','A','D','G'],
+      5: ['B','E','A','D','G'],
+      6: ['B','E','A','D','G','C']
+    };
+    const SCALE_INTERVALS = {
+      major:       [0,2,4,5,7,9,11],
+      minor:       [0,2,3,5,7,8,10],
+      pent_maj:    [0,2,4,7,9],
+      pent_min:    [0,3,5,7,10],
+      blues:       [0,3,5,6,7,10],
+      dorian:      [0,2,3,5,7,9,10],
+      mixolydian:  [0,2,4,5,7,9,10],
+      harmonic_min:[0,2,3,5,7,8,11],
+      melodic_min: [0,2,3,5,7,9,11],
+    };
 
+    // ── state ──
+    let stringsCount = 4;
+    let gridCount = 5;
+    // Per-grid state: { title, fretStart, dots: Set of "string,fret" }
+    let grids = [];
     let activeLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
 
-    function renderGrids() {
-      container.innerHTML = '';
-      for(let i=0; i<5; i++) {
-        const wrapper = document.createElement('div');
-        const svgn = 'http://www.w3.org/2000/svg';
-        const svg = document.createElementNS(svgn, 'svg');
-        svg.setAttribute('width', '100%');
-        svg.setAttribute('height', '120');
-        svg.style.border = '1pt solid #000';
-        svg.style.borderLeft = '5pt solid #000'; 
-        svg.style.display = 'block';
-        svg.style.background = '#fff';
-        
-        for(let f=1; f<=frets; f++) {
-          const line = document.createElementNS(svgn, 'line');
-          const x = f * (100 / frets);
-          line.setAttribute('x1', x + '%');
-          line.setAttribute('y1', '0');
-          line.setAttribute('x2', x + '%');
-          line.setAttribute('y2', '100%');
-          line.setAttribute('stroke', '#000');
-          line.setAttribute('stroke-width', '1');
-          svg.appendChild(line);
+    function makeGridState() {
+      return { title: '', fretStart: 1, dots: new Set() };
+    }
+
+    function ensureGrids(n) {
+      while (grids.length < n) grids.push(makeGridState());
+      grids.length = n;
+    }
+
+    // ── scale computation ──
+    // dots stored as "string,col" where col = 1..TOTAL_FRETS (grid column)
+    // physical fret = fretStart - 1 + col; open string = col 0, only when fretStart=1
+    function computeScaleDots(root, scaleType, fretStart) {
+      const intervals = SCALE_INTERVALS[scaleType];
+      const scaleNotes = new Set(intervals.map(i => (root + i) % 12));
+      const tuning = TUNINGS[stringsCount];
+      const dots = new Set();
+      for (let s = 0; s < stringsCount; s++) {
+        const openNote = tuning[s];
+        // open string (only visible when fretStart === 1)
+        if (fretStart === 1 && scaleNotes.has(openNote % 12)) {
+          dots.add(`${s},0`);
         }
-        
-        markers.forEach(pos => {
-          if(pos > frets) return;
-          const addDot = (yPercent) => {
-            const circle = document.createElementNS(svgn, 'circle');
-            const cx = (pos - 0.5) * (100 / frets);
-            circle.setAttribute('cx', cx + '%');
-            circle.setAttribute('cy', yPercent);
-            circle.setAttribute('r', '5');
-            circle.setAttribute('fill', '#e5e7eb');
-            svg.appendChild(circle);
-          };
-          if(pos === 12) { addDot('25%'); addDot('75%'); }
-          else { addDot('50%'); }
-        });
-        
-        for(let s=0; s<stringsCount; s++) {
-          const line = document.createElementNS(svgn, 'line');
-          const y = (s + 0.5) * (120 / stringsCount);
-          line.setAttribute('x1', '0');
-          line.setAttribute('y1', y);
-          line.setAttribute('x2', '100%');
-          line.setAttribute('y2', y);
-          line.setAttribute('stroke', '#000');
-          line.setAttribute('stroke-width', '1.5');
-          svg.appendChild(line);
+        // fretted notes: col 1..TOTAL_FRETS → physical fret = fretStart-1+col
+        for (let col = 1; col <= TOTAL_FRETS; col++) {
+          const physFret = fretStart - 1 + col;
+          const note = (openNote + physFret) % 12;
+          if (scaleNotes.has(note)) {
+            dots.add(`${s},${col}`);
+          }
         }
-        wrapper.appendChild(svg);
-        const nums = document.createElement('div');
-        nums.className = 'fret-nums';
-        for(let f=1; f<=frets; f++) {
-           const n = document.createElement('div'); n.className = 'fret-n'; n.innerText = f;
-           n.style.left = `calc((${f - 0.5}) * (100% / ${frets}))`;
-           nums.appendChild(n);
-        }
-        wrapper.appendChild(nums);
-        container.appendChild(wrapper);
       }
+      return dots;
     }
 
-    function setLang(l) {
-      activeLang = l;
-      localStorage.setItem('bass_lang', l);
-      document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
-      
-      const isIt = l === 'it';
-      document.getElementById('title-text').innerText = isIt ? 'Sessione di Studio Basso' : 'Bass Study Session';
-      document.getElementById('stud-text').innerText = isIt ? 'Studente' : 'Student';
-      document.getElementById('date-text').innerText = isIt ? 'Data' : 'Date';
-      document.getElementById('note-text').innerText = isIt ? 'Note' : 'Notes';
-      document.getElementById('backBtn').innerText = isIt ? '← Torna al Manico' : '← Back to App';
-      document.getElementById('printBtn').innerText = isIt ? '🖨️ Stampa Ora' : '🖨️ Print Now';
+    // ── SVG rendering ──
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // Layout constants (viewBox units)
+    const VW = 1000, VH = 120;
+    const OPEN_W = 50;  // width of open-string zone left of nut
+    const NUT_X = OPEN_W;
+    const FRET_W = VW - NUT_X; // remaining width for 15 frets
+
+    function fretX(col) { return NUT_X + col * (FRET_W / TOTAL_FRETS); }
+    function fretCx(col) { return NUT_X + (col - 0.5) * (FRET_W / TOTAL_FRETS); }
+    function stringY(s) { return ((stringsCount - 1 - s) + 0.5) * (VH / stringsCount); }
+
+    function buildSvg(gridState, idx) {
+      const { fretStart, dots } = gridState;
+      const svg = document.createElementNS(SVG_NS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', '120');
+      svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+      svg.setAttribute('preserveAspectRatio', 'none');
+      svg.style.cssText = 'border:1pt solid #000; display:block; background:#fff; flex:1;';
+
+      // open-string zone background (slightly off-white to distinguish)
+      if (fretStart === 1) {
+        const bg = document.createElementNS(SVG_NS, 'rect');
+        bg.setAttribute('x', 0); bg.setAttribute('y', 0);
+        bg.setAttribute('width', NUT_X); bg.setAttribute('height', VH);
+        bg.setAttribute('fill', '#f5f5f5');
+        svg.appendChild(bg);
+      }
+
+      // nut (thick vertical line)
+      const nut = document.createElementNS(SVG_NS, 'line');
+      nut.setAttribute('x1', NUT_X); nut.setAttribute('y1', 0);
+      nut.setAttribute('x2', NUT_X); nut.setAttribute('y2', VH);
+      nut.setAttribute('stroke', '#000'); nut.setAttribute('stroke-width', '5');
+      svg.appendChild(nut);
+
+      // fret lines
+      for (let f = 1; f <= TOTAL_FRETS; f++) {
+        const x = fretX(f);
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('x1', x); line.setAttribute('y1', 0);
+        line.setAttribute('x2', x); line.setAttribute('y2', VH);
+        line.setAttribute('stroke', '#000'); line.setAttribute('stroke-width', '1');
+        svg.appendChild(line);
+      }
+
+      // position markers
+      MARKERS.forEach(pos => {
+        if (pos > TOTAL_FRETS) return;
+        const cx = fretCx(pos);
+        const addMark = (cy) => {
+          const c = document.createElementNS(SVG_NS, 'circle');
+          c.setAttribute('cx', cx); c.setAttribute('cy', cy);
+          c.setAttribute('r', '5'); c.setAttribute('fill', '#d1d5db');
+          svg.appendChild(c);
+        };
+        if (pos === 12) { addMark(VH * 0.28); addMark(VH * 0.72); }
+        else addMark(VH * 0.5);
+      });
+
+      // string lines — s=0 is E (thickest), drawn at bottom
+      for (let s = 0; s < stringsCount; s++) {
+        const y = stringY(s);
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('x1', 0); line.setAttribute('y1', y);
+        line.setAttribute('x2', VW); line.setAttribute('y2', y);
+        line.setAttribute('stroke', '#000'); line.setAttribute('stroke-width', '1.5');
+        svg.appendChild(line);
+      }
+
+      // outer border
+      const border = document.createElementNS(SVG_NS, 'rect');
+      border.setAttribute('x', 0); border.setAttribute('y', 0);
+      border.setAttribute('width', VW); border.setAttribute('height', VH);
+      border.setAttribute('fill', 'none');
+      border.setAttribute('stroke', '#000'); border.setAttribute('stroke-width', '2');
+      svg.appendChild(border);
+
+      // scale dots
+      const tuning = TUNINGS[stringsCount];
+      const root = +document.getElementById('scaleRoot').value;
+
+      function drawDot(cx, cy, note) {
+        const isRoot = note === root;
+        const circle = document.createElementNS(SVG_NS, 'circle');
+        circle.setAttribute('cx', cx); circle.setAttribute('cy', cy);
+        circle.setAttribute('r', '13');
+        circle.setAttribute('fill', isRoot ? '#7c3aed' : '#1d4ed8');
+        circle.setAttribute('stroke', '#fff'); circle.setAttribute('stroke-width', '2');
+        svg.appendChild(circle);
+        const text = document.createElementNS(SVG_NS, 'text');
+        text.setAttribute('x', cx); text.setAttribute('y', cy);
+        text.setAttribute('dominant-baseline', 'central');
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#fff');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-family', 'sans-serif');
+        text.setAttribute('font-weight', 'bold');
+        text.textContent = NOTE_NAMES[note];
+        svg.appendChild(text);
+      }
+
+      dots.forEach(key => {
+        const [s, col] = key.split(',').map(Number);
+        const cy = stringY(s);
+        const physFret = col === 0 ? 0 : (fretStart - 1 + col);
+        const note = (tuning[s] + physFret) % 12;
+
+        if (col === 0) {
+          // open string: center in open-string zone
+          drawDot(NUT_X / 2, cy, note);
+        } else {
+          drawDot(fretCx(col), cy, note);
+        }
+      });
+
+      return svg;
     }
 
+    function buildFretNums(fretStart) {
+      const div = document.createElement('div');
+      div.className = 'fret-nums';
+      // OPEN_W/VW = 50/1000 = 5% reserved for open-string zone
+      const openPct = (OPEN_W / VW * 100).toFixed(2); // 5%
+      const fretZonePct = 100 - openPct;
+      for (let f = 1; f <= TOTAL_FRETS; f++) {
+        const n = document.createElement('div');
+        n.className = 'fret-n';
+        n.textContent = fretStart - 1 + f;
+        // center of column f within the fret zone
+        n.style.left = `calc(${openPct}% + (${f - 0.5}) * (${fretZonePct}% / ${TOTAL_FRETS}))`;
+        div.appendChild(n);
+      }
+      return div;
+    }
+
+    function buildStringLabels() {
+      const div = document.createElement('div');
+      div.className = 'string-labels';
+      // reverse: highest string (G/C) at top, lowest (E/B) at bottom
+      const names = [...TUNING_NAMES[stringsCount]].reverse();
+      names.forEach(name => {
+        const span = document.createElement('span');
+        span.className = 'string-label';
+        span.textContent = name;
+        div.appendChild(span);
+      });
+      return div;
+    }
+
+    // ── full render ──
+    function renderGrids() {
+      ensureGrids(gridCount);
+      const container = document.getElementById('gc');
+      container.innerHTML = '';
+
+      grids.forEach((gs, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'grid-wrapper';
+
+        // title row
+        const titleRow = document.createElement('div');
+        titleRow.className = 'grid-title-row';
+
+        const numSpan = document.createElement('span');
+        numSpan.style.cssText = 'font-size:12px;font-weight:bold;color:#7c3aed;min-width:20px;';
+        numSpan.textContent = (idx + 1) + '.';
+        titleRow.appendChild(numSpan);
+
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.className = 'grid-title-input';
+        titleInput.placeholder = activeLang === 'it' ? 'Titolo esercizio…' : 'Exercise title…';
+        titleInput.value = gs.title;
+        titleInput.addEventListener('input', e => { grids[idx].title = e.target.value; });
+        titleRow.appendChild(titleInput);
+
+        // fret position control
+        const fretCtrl = document.createElement('div');
+        fretCtrl.className = 'fret-pos-ctrl no-print';
+        const fretLabel = document.createElement('span');
+        fretLabel.textContent = activeLang === 'it' ? 'Da fret:' : 'From fret:';
+        const fretInput = document.createElement('input');
+        fretInput.type = 'number';
+        fretInput.min = 1; fretInput.max = 24;
+        fretInput.value = gs.fretStart;
+        fretInput.addEventListener('change', e => {
+          grids[idx].fretStart = Math.max(1, +e.target.value);
+          refreshGridSvg(idx);
+        });
+        fretCtrl.appendChild(fretLabel);
+        fretCtrl.appendChild(fretInput);
+        titleRow.appendChild(fretCtrl);
+
+        // clear button
+        const clearBtn = document.createElement('button');
+        clearBtn.className = 'grid-clear-btn no-print';
+        clearBtn.title = activeLang === 'it' ? 'Cancella note' : 'Clear notes';
+        clearBtn.textContent = '✕';
+        clearBtn.addEventListener('click', () => {
+          grids[idx].dots.clear();
+          refreshGridSvg(idx);
+        });
+        titleRow.appendChild(clearBtn);
+
+        wrapper.appendChild(titleRow);
+
+        // svg row with string labels
+        const svgRow = document.createElement('div');
+        svgRow.className = 'svg-row';
+        svgRow.appendChild(buildStringLabels());
+        const svgHolder = document.createElement('div');
+        svgHolder.style.cssText = 'flex:1; display:flex; flex-direction:column;';
+        svgHolder.dataset.idx = idx;
+        svgHolder.appendChild(buildSvg(gs, idx));
+        svgHolder.appendChild(buildFretNums(gs.fretStart));
+        svgRow.appendChild(svgHolder);
+        wrapper.appendChild(svgRow);
+
+        container.appendChild(wrapper);
+      });
+
+      // update scaleTarget max
+      document.getElementById('scaleTarget').max = gridCount;
+    }
+
+    function refreshGridSvg(idx) {
+      const holder = document.querySelector(`.svg-row [data-idx="${idx}"]`);
+      if (!holder) return;
+      holder.innerHTML = '';
+      holder.appendChild(buildSvg(grids[idx], idx));
+      holder.appendChild(buildFretNums(grids[idx].fretStart));
+    }
+
+    // ── scale export ──
+    function applyScaleTo(idx) {
+      if (idx < 0 || idx >= grids.length) return;
+      const root = +document.getElementById('scaleRoot').value;
+      const scaleType = document.getElementById('scaleType').value;
+      grids[idx].dots = computeScaleDots(root, scaleType, grids[idx].fretStart);
+      // auto-title
+      const rootName = NOTE_NAMES[root].replace('#', '♯');
+      const scaleLabel = document.getElementById('scaleType').selectedOptions[0].text;
+      if (!grids[idx].title) grids[idx].title = `${rootName} ${scaleLabel}`;
+      refreshGridSvg(idx);
+      // sync title input
+      const inputs = document.querySelectorAll('.grid-title-input');
+      if (inputs[idx]) inputs[idx].value = grids[idx].title;
+    }
+
+    document.getElementById('exportScaleBtn').addEventListener('click', () => {
+      const target = +document.getElementById('scaleTarget').value - 1;
+      applyScaleTo(target);
+    });
+
+    document.getElementById('exportAllBtn').addEventListener('click', () => {
+      grids.forEach((_, i) => applyScaleTo(i));
+    });
+
+    // ── controls ──
     document.getElementById('stringCtrl').addEventListener('change', e => {
       stringsCount = +e.target.value;
       renderGrids();
     });
 
+    document.getElementById('gridCount').addEventListener('change', e => {
+      gridCount = Math.max(1, Math.min(12, +e.target.value));
+      renderGrids();
+    });
+
+    document.getElementById('backBtn').addEventListener('click', () => window.location.href = 'index.html');
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    // ── i18n ──
+    const T = {
+      it: {
+        title: 'Sessione di Studio Basso', student: 'Studente', date: 'Data', notes: 'Note',
+        back: '← Torna al Manico', print: '🖨️ Stampa Ora',
+        strings: 'Corde:', grids: 'Griglie:', scaleTitle: '🎵 Esporta Scala su Griglia',
+        root: 'Tonica:', scale: 'Scala:', target: 'Su griglia #:', all: 'Applica a tutte',
+        fromFret: 'Da fret:', clearNotes: 'Cancella note', exTitle: 'Titolo esercizio…',
+        strOpts: ['4 corde','5 corde','6 corde'],
+        scales: {
+          major:'Maggiore', minor:'Minore Naturale', pent_maj:'Pentatonica Maggiore',
+          pent_min:'Pentatonica Minore', blues:'Blues', dorian:'Dorian',
+          mixolydian:'Mixolydian', harmonic_min:'Minore Armonica', melodic_min:'Minore Melodica'
+        }
+      },
+      en: {
+        title: 'Bass Study Session', student: 'Student', date: 'Date', notes: 'Notes',
+        back: '← Back to App', print: '🖨️ Print Now',
+        strings: 'Strings:', grids: 'Grids:', scaleTitle: '🎵 Export Scale to Grid',
+        root: 'Root:', scale: 'Scale:', target: 'To grid #:', all: 'Apply to all',
+        fromFret: 'From fret:', clearNotes: 'Clear notes', exTitle: 'Exercise title…',
+        strOpts: ['4 strings','5 strings','6 strings'],
+        scales: {
+          major:'Major', minor:'Natural Minor', pent_maj:'Major Pentatonic',
+          pent_min:'Minor Pentatonic', blues:'Blues', dorian:'Dorian',
+          mixolydian:'Mixolydian', harmonic_min:'Harmonic Minor', melodic_min:'Melodic Minor'
+        }
+      }
+    };
+
+    function setLang(l) {
+      activeLang = l;
+      localStorage.setItem('bass_lang', l);
+      document.querySelectorAll('#dl-ctrl [data-v]').forEach(b => b.classList.toggle('on', b.dataset.v === l));
+      const t = T[l];
+      document.getElementById('title-text').textContent = t.title;
+      document.getElementById('stud-text').textContent = t.student;
+      document.getElementById('date-text').textContent = t.date;
+      document.getElementById('note-text').textContent = t.notes;
+      document.getElementById('backBtn').textContent = t.back;
+      document.getElementById('printBtn').textContent = t.print;
+      document.getElementById('lbl-strings').childNodes[0].textContent = t.strings + ' ';
+      document.getElementById('lbl-grids').childNodes[0].textContent = t.grids + ' ';
+      document.getElementById('lbl-scale-title').textContent = t.scaleTitle;
+      document.getElementById('lbl-root').childNodes[0].textContent = t.root + ' ';
+      document.getElementById('lbl-scale').childNodes[0].textContent = t.scale + ' ';
+      document.getElementById('lbl-target').childNodes[0].textContent = t.target + ' ';
+      document.getElementById('exportAllBtn').textContent = t.all;
+      // string options
+      const sc = document.getElementById('stringCtrl');
+      [...sc.options].forEach((o, i) => { o.text = t.strOpts[i]; });
+      // scale options
+      const st = document.getElementById('scaleType');
+      [...st.options].forEach(o => { if (t.scales[o.value]) o.text = t.scales[o.value]; });
+      // re-render for placeholder text updates
+      renderGrids();
+    }
+
     document.getElementById('dl-ctrl').addEventListener('click', e => {
       const btn = e.target.closest('[data-v]');
-      if(!btn) return;
+      if (!btn) return;
       setLang(btn.dataset.v);
     });
 
+    // ── init ──
     setLang(activeLang);
-    renderGrids();
   </script>
 </body>
 </html>

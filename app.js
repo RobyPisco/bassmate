@@ -21,7 +21,7 @@ const I18N = {
     "solfege": "Note (Do, Re, Mi)", "notes": "Note (C, D, E)",
     quiz_btn: "🎯 Gioca Quiz", fav_def: "🔖 Preferiti", fav_save: "Salva Preferito",
     coffee: "Offrimi un caffè", reset_btn: "Reset Tastiera", ex_btn: "Esercizi Pratici",
-    grids_btn: "Stampa Manici Vuoti", help_btn: "Aiuto e Istruzioni", export_btn: "Esporta PDF (Manico Corrente)",
+    grids_btn: "Manici Vuoti", help_btn: "Aiuto e Istruzioni", export_btn: "Esporta PDF",
     f_quote: "\"Ho creato questo strumento per non perdermi sul manico... ora lo metto a disposizione per farvi perdere su questo sito! 🤘\"",
     f_created: "Creato da", f_donate: "Se ti ho salvato l'assolo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">offrimi una birra (o un caffè) ☕</a>",
     right: "Destro", lefty: "Mancino", hand: "Mano",
@@ -55,7 +55,19 @@ const I18N = {
     tuner_prompt: "Premi il pulsante per iniziare",
     tuner_error: "❌ Microfono non accessibile. Controlla i permessi.",
     tuner_listening: "🎵 Ascolto in corso...",
-    combo_break: "Combo Break!"
+    combo_break: "Combo Break!",
+    home_title: "Torna alla Home Page", studio: "Studio", nav_quiz: "Quiz",
+    kbd_hint: "Scorciatoie tastiera", snapshot_btn: "Snapshot manico",
+    grids_btn_title: "Manici vuoti da stampare", exercises_btn_title: "Esercizi pratici",
+    fav_del_title: "Elimina preferito", contact_title: "Contatti",
+    transp_dn_title: "Semitono giù", transp_up_title: "Semitono su",
+    fav_prompt: "Salva questo setup! Che nome gli diamo?", fav_default: "Mio Groove",
+    on: "ON", off: "OFF", dark: "Scuri", light: "Chiari",
+    tab_title: "Tablatura",
+    tab_subtitle: "Clicca sul manico per registrare le note",
+    undo: "Indietro",
+    clear: "Svuota",
+    copy: "Copia Tab"
   },
   en: {
     tuning: "Tuning", root_note: "Root Note", scale_chord: "Scale/Chord", labels: "Labels", settings: "View",
@@ -75,8 +87,8 @@ const I18N = {
     "Cromatica": "Chromatic", "Crom.": "Chrom.",
     "solfege": "Solfege (Do,Re)", "notes": "Notes (C,D,E)",
     quiz_btn: "🎯 Play Quiz", fav_def: "🔖 Favorites", fav_save: "Save Favorite",
-    coffee: "Buy me a coffee", reset_btn: "Reset Fretboard", ex_btn: "Practice Exercises",
-    grids_btn: "Print Blank Grids", help_btn: "Help & Guide", export_btn: "Export PDF (Current View)",
+    coffee: "Buy me a coffee", reset_btn: "Reset Fretboard", ex_btn: "Practical Exercises",
+    grids_btn: "Blank Grids", help_btn: "Help & Guide", export_btn: "Export PDF",
     f_quote: "\"I created this tool so I wouldn't get lost on the fretboard... now I'm sharing it so you can get lost on this site! 🤘\"",
     f_created: "Created by", f_donate: "If I saved your bass solo, <a href=\"donate.html\" style=\"color: var(--root-c); text-decoration: none;\">buy me a beer (or a coffee) ☕</a>",
     right: "Right", lefty: "Lefty", hand: "Hand",
@@ -98,7 +110,7 @@ const I18N = {
     tour_3_t: "🎸 Interactive Fretboard", tour_3_b: "Click any dot to hear the note! Use 'Labels' to toggle between degrees, notes, or finger positions.",
     tour_4_t: "🎯 Quiz Mode", tour_4_b: "Test your memory! The fretboard empties and you guess the highlighted fret's note.",
     tour_5_t: "🥁 Metronome", tour_5_b: "Practice in time. Set BPM and time signature, press Start. You can still play notes while it ticks!",
-    tour_6_t: "You're all set! 🤘", tour_6_b: "Happy Grooving! The full guide is always accessible from the \u2753 icon in the top right.",
+    tour_6_t: "You're all set! 🤘", tour_6_b: "Happy Grooving! The full guide is always accessible from the ❓ icon in the top right.",
     "Drop C (C-G-C-F)": "Drop C", "B Standard (4)": "B Standard (4-string)", "D Standard (4)": "D Standard (4-string)",
     "Drop C": "Drop C", "B Std (4)": "B Std (4)", "D Std (4)": "D Std (4)",
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
@@ -110,7 +122,20 @@ const I18N = {
     tuner_prompt: "Press the button to start",
     tuner_error: "❌ Microphone not accessible. Check permissions.",
     tuner_listening: "🎵 Listening...",
-    combo_break: "Combo Break!"
+    combo_break: "Combo Break!",
+    home_title: "Back to Home Page", studio: "Studio", nav_quiz: "Quiz",
+    kbd_hint: "Keyboard Shortcuts", snapshot_btn: "Snapshot fretboard",
+    grids_btn_title: "Blank Grids to Print", exercises_btn_title: "Practical Exercises",
+    fav_del_title: "Delete Favorite", contact_title: "Contact Me",
+    transp_dn_title: "Transpose Down", transp_up_title: "Transpose Up",
+    fav_prompt: "Save this setup! Give it a name:", fav_default: "My Groove",
+    on: "ON", off: "OFF", dark: "Dark", light: "Light",
+    help_btn: "Manual & Guide",
+    tab_title: "Transcription",
+    tab_subtitle: "Click the fretboard to record notes",
+    undo: "Undo",
+    clear: "Clear",
+    copy: "Copy Tab"
   }
 };
 function tl(key) { return I18N[S.lang] && I18N[S.lang][key] ? I18N[S.lang][key] : key; }
@@ -172,7 +197,23 @@ const MARKERS      = [3,5,7,9,12,15];
 const DOUBLE_MARKS = new Set([12]);
 
 const defaultLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
-const S = { tuning:'std-4', root:0, scale:'major', label:'deg', view:'full', hand:'right', boxStart:0, lang: defaultLang, audio: true, activeTab: 'studio' };
+document.documentElement.lang = defaultLang;
+const S = { 
+  tuning: localStorage.getItem('bass_tuning') || 'std-4', 
+  root:0, 
+  scale:'major', 
+  label: localStorage.getItem('bass_label') || 'deg', 
+  view: localStorage.getItem('bass_view') || 'full', 
+  hand: localStorage.getItem('bass_hand') || 'right', 
+  boxStart:0, 
+  lang: defaultLang, 
+  audio: localStorage.getItem('bass_audio') !== 'false', 
+  activeTab: 'studio',
+  playAlong: false,
+  paIdx: 0,
+  paDir: 1,
+  tabSequence: []
+};
 
 let quizActiveNote = null;
 let quizScore = 0;
@@ -193,11 +234,29 @@ let tunerAnalyser = null;
    AUDIO ENGINE
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
 let _audioCtx = null;
+let metroStartedByPA = false;
 function getAudioCtx() {
   if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   // Resume context if suspended (browser autoplay policy)
   if (_audioCtx.state === 'suspended') _audioCtx.resume();
   return _audioCtx;
+}
+
+function playBeep(freq, duration = 0.15) {
+  if (!S.audio) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) { console.error(e); }
 }
 
 function playNote(midi) {
@@ -352,6 +411,7 @@ function _metroScheduler() {
     }
 
     metro.nextNoteTime += step;
+    
     metro.subTick = (metro.subTick + 1) % metro.subdivision;
     if (metro.subTick === 0) {
       metro.currentBeat = (metro.currentBeat + 1) % metro.beats;
@@ -504,7 +564,7 @@ function showToast(msg, duration = 2500) {
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btn = document.getElementById('themeTogBtn');
-  if (btn) btn.textContent = theme === 'light' ? '☀️' : '🌙';
+  if (btn) btn.textContent = theme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
   localStorage.setItem('bass_theme', theme);
 }
 
@@ -522,7 +582,7 @@ function toggleTheme() {
   
   const themeBtn = document.getElementById('themeTogBtn');
   if (themeBtn) {
-    themeBtn.textContent = newTheme === 'light' ? '☀️ Light' : '🌙 Dark';
+    themeBtn.textContent = newTheme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
   }
 }
 
@@ -582,11 +642,13 @@ function initKeyboardShortcuts() {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     switch (e.key) {
       case 'ArrowRight':
-        S.root = (S.root + 1) % 12;
+      case 'ArrowDown':
+        S.root = (+S.root + 1) % 12;
         render();
         break;
       case 'ArrowLeft':
-        S.root = (S.root + 11) % 12;
+      case 'ArrowUp':
+        S.root = (+S.root + 11) % 12;
         render();
         break;
       case 'q': case 'Q': {
@@ -689,65 +751,71 @@ function updateQuizStatsDisplay() {
     ${stats.streak > 1 ? `<span>🔥 Streak: <strong>${stats.streak}gg</strong></span>` : ''}`;
 }
 
-/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
-   ONBOARDING TOUR (Simple Modal — no spotlight)
+/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═
+   DONATION POPUP (once per week, after 5 minutes)
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
-function startTour() {
-  if (document.getElementById('tourOverlay')) return;
-  if (!document.getElementById('fretboard')) return;
+function showDonatePopup() {
+  if (document.getElementById('donatePopup')) return;
+  const isIt = (localStorage.getItem('bass_lang') || 'it') === 'it';
 
-  const total = 7;
-  let step = 0;
-
-  // Overlay: fullscreen, above EVERYTHING, blocks all events
   const overlay = document.createElement('div');
-  overlay.id = 'tourOverlay';
-  overlay.style.cssText = [
-    'position:fixed', 'inset:0', 'z-index:999999',
-    'background:rgba(5,5,15,0.82)', 'backdrop-filter:blur(3px)',
-    'display:flex', 'align-items:center', 'justify-content:center',
-    'pointer-events:all'
-  ].join(';');
+  overlay.id = 'donatePopup';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(5,5,15,0.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;';
 
-  // Card: does NOT inherit overlay's stacking issues
   const card = document.createElement('div');
   card.style.cssText = [
-    'background:#131326', 'border:1px solid #7c3aed', 'border-radius:18px',
-    'padding:32px 28px', 'max-width:380px', 'width:90%',
-    'box-shadow:0 16px 60px rgba(0,0,0,0.7)',
-    'pointer-events:all', 'position:relative'
+    'background:#131326', 'border:1px solid rgba(245,158,11,0.5)', 'border-radius:20px',
+    'padding:32px 28px', 'max-width:360px', 'width:90%', 'text-align:center',
+    'box-shadow:0 0 40px rgba(245,158,11,0.2),0 20px 60px rgba(0,0,0,0.7)',
+    'animation:fadeInUp .35s ease'
   ].join(';');
 
-  function render() {
-    const isLast = step === total - 1;
-    card.innerHTML = `
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">${step + 1} / ${total}</div>
-      <div style="font-size:20px;font-weight:900;color:#7c3aed;margin-bottom:12px;line-height:1.3;">${tl('tour_' + step + '_t')}</div>
-      <div style="font-size:14px;color:#dcdcf5;opacity:.9;line-height:1.65;margin-bottom:24px;">${tl('tour_' + step + '_b')}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <button id="_tSkip" style="background:none;border:none;color:#6b7280;font-size:13px;cursor:pointer;padding:4px;">${tl('tour_skip')}</button>
-        <button id="_tNext" style="padding:10px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.5);">${isLast ? tl('tour_done') : tl('tour_next')}</button>
-      </div>
-    `;
-    card.querySelector('#_tSkip').onclick = () => { overlay.remove(); localStorage.setItem('bass_toured', '1'); };
-    card.querySelector('#_tNext').onclick = () => {
-      if (step >= total - 1) { overlay.remove(); localStorage.setItem('bass_toured', '1'); return; }
-      step++;
-      render();
-    };
-  }
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}';
+  document.head.appendChild(style);
 
-  render();
+  card.innerHTML = `
+    <div style="font-size:48px;margin-bottom:12px;animation:coffee-bounce 1.8s infinite ease-in-out;">☕</div>
+    <div style="font-size:20px;font-weight:900;color:#f59e0b;margin-bottom:10px;">
+      ${isIt ? 'Ti piace Bassmate?' : 'Enjoying Bassmate?'}
+    </div>
+    <div style="font-size:14px;color:#c4b5fd;line-height:1.6;margin-bottom:22px;opacity:.9;">
+      ${isIt
+        ? 'Bassmate è gratuito e senza pubblicità. Se ti è utile, offrimi un caffè — mi aiuta a continuare a svilupparlo! ☕'
+        : 'Bassmate is free and ad-free. If you find it useful, buy me a coffee — it helps me keep developing it! ☕'}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a href="donate.html" style="display:block;padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#000;font-weight:900;font-size:15px;text-decoration:none;box-shadow:0 4px 18px rgba(245,158,11,0.4);">
+        ☕ ${isIt ? 'Offrimi un caffè!' : 'Buy me a coffee!'}
+      </a>
+      <button id="_donateLater" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#6b7280;font-size:13px;padding:10px;cursor:pointer;">
+        ${isIt ? 'Magari un\'altra volta' : 'Maybe another time'}
+      </button>
+    </div>
+  `;
+
   overlay.appendChild(card);
   document.body.appendChild(overlay);
+
+  const dismiss = () => {
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity .3s';
+    setTimeout(() => overlay.remove(), 300);
+    localStorage.setItem('bass_donate_shown', Date.now().toString());
+  };
+
+  card.querySelector('#_donateLater').addEventListener('click', dismiss);
+  overlay.addEventListener('click', e => { if (e.target === overlay) dismiss(); });
 }
 
-function maybeStartTour() {
-  if (localStorage.getItem('bass_toured')) return;
-  setTimeout(startTour, 800);
+function maybeShowDonatePopup() {
+  const last = +localStorage.getItem('bass_donate_shown') || 0;
+  const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+  if (Date.now() - last < ONE_WEEK) return;
+  setTimeout(showDonatePopup, 5 * 60 * 1000); // 5 minutes
 }
 
-/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
+/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═
    ASYNC INIT AND INJECTIONS
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
 async function initApp() {
@@ -761,6 +829,8 @@ async function initApp() {
   
   try {
     await Promise.all(promises);
+    // IMPORTANTE: Traduciamo l'header e il footer dopo il caricamento
+    updateI18nLabels();
   } catch (err) {
     console.error("Component fetch failed.", err);
   }
@@ -834,7 +904,9 @@ async function initApp() {
       if(!el) return;
       el.addEventListener('change', e => {
         S[key] = e.target.value;
+        localStorage.setItem('bass_' + key, S[key]);
         if(key === 'view' && S.view === 'quiz') startQuiz();
+        if(key === 'pattern' && S.pattern !== 'all') { S.view = 'box'; syncSelect('viewCtrl', 'box'); }
         render();
       });
     }
@@ -940,7 +1012,7 @@ async function initApp() {
     
     if(favBtn) {
       favBtn.addEventListener('click', () => {
-        const name = prompt("Salva questo setup! Che nome gli diamo?", "Mio Groove");
+        const name = prompt(tl('fav_prompt'), tl('fav_default'));
         if(!name) return;
         syncURL();
         const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
@@ -1225,12 +1297,12 @@ async function initApp() {
     if (audioBtn) {
       audioBtn.addEventListener('click', () => {
         S.audio = !S.audio;
-        audioBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+        localStorage.setItem('bass_audio', S.audio);
+        audioBtn.textContent = S.audio ? '🔊 ' + tl('on') : '🔇 ' + tl('off');
         audioBtn.style.opacity = S.audio ? '1' : '0.5';
       });
     }
 
-    // SHARE BUTTON
     const shareBtn = document.getElementById('shareBtn');
     if (shareBtn) shareBtn.addEventListener('click', shareCurrentScale);
 
@@ -1244,8 +1316,8 @@ async function initApp() {
     // TRANSPOSE BUTTONS
     const transpDn = document.getElementById('transpDn');
     const transpUp = document.getElementById('transpUp');
-    if (transpDn) transpDn.addEventListener('click', () => { S.root = (S.root + 11) % 12; render(); });
-    if (transpUp) transpUp.addEventListener('click', () => { S.root = (S.root + 1) % 12; render(); });
+    if (transpDn) transpDn.addEventListener('click', () => { S.root = (+S.root + 11) % 12; render(); });
+    if (transpUp) transpUp.addEventListener('click', () => { S.root = (+S.root + 1) % 12; render(); });
 
     // THEME TOGGLE
     const themeBtn = document.getElementById('themeTogBtn');
@@ -1277,18 +1349,19 @@ async function initApp() {
     // Sincronizza pulsanti iniziali modale
     const audioTogBtn = document.getElementById('audioTogBtn');
     if (audioTogBtn) {
-      audioTogBtn.textContent = S.audio ? '🔊 ON' : '🔇 OFF';
+      audioTogBtn.textContent = S.audio ? '🔊 ' + tl('on') : '🔇 ' + tl('off');
       audioTogBtn.style.opacity = S.audio ? '1' : '0.5';
     }
     const themeTogBtn = document.getElementById('themeTogBtn');
     if (themeTogBtn) {
-      themeTogBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️ Light' : '🌙 Dark';
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      themeTogBtn.textContent = currentTheme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
     }
     
     if(S.view === 'quiz') switchTab('quiz');
     render();
     updateQuizStatsDisplay();
-    maybeStartTour();
+    maybeShowDonatePopup();
   } else {
     updateI18nLabels();
   }
@@ -1315,7 +1388,7 @@ function syncScalePills() {
 
 function switchTab(tabName) {
   S.activeTab = tabName;
-  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro');
+  document.body.classList.remove('tab-studio', 'tab-quiz', 'tab-tuner', 'tab-metro', 'tab-tab');
   document.body.classList.add('tab-' + tabName);
   
   // Update UI active state
@@ -1329,16 +1402,28 @@ function switchTab(tabName) {
   const musicControls = document.getElementById('studioMusicControls');
   if (musicControls) {
     const isMinimal = document.body.classList.contains('minimal-header');
-    musicControls.style.display = (tabName === 'studio' && !isMinimal) ? 'block' : 'none';
+    musicControls.style.display = (['studio', 'tab'].includes(tabName) && !isMinimal) ? 'block' : 'none';
   }
 
   // Auto-start/stop features based on Tab
   if (tabName === 'quiz') {
-    resetQuiz(); // mostra stato "pronto", NON avvia automaticamente
+    resetQuiz(); 
   } else if (isQuizRunning) {
     stopQuiz();
   }
+  
+  if (tabName === 'tuner') {
+    // maybe init tuner
+  } else if (tunerActive) {
+    // auto stop tuner? maybe not
+  }
 
+  // Handle Tab panel
+  const tabPanel = document.getElementById('tabPanel');
+  if (tabPanel) {
+    tabPanel.style.display = (tabName === 'tab') ? 'block' : 'none';
+    if (tabName === 'tab') renderASCIITab();
+  }
   if (tabName !== 'tuner') {
     if (tunerActive) stopTuner();
   }
@@ -1527,6 +1612,10 @@ function startQuiz() {
     overlay.className = 'quiz-cd-overlay' + (n === 0 ? ' go' : '');
     overlay.innerHTML = `<span class="quiz-cd-num">${n === 0 ? 'GO!' : n}</span>`;
     if (fbArea) fbArea.appendChild(overlay);
+    
+    // Play beep
+    if (n > 0) playBeep(440, 0.1);
+    else if (n === 0) playBeep(880, 0.3);
   }
 
   _showCdFrame(count);
@@ -1816,7 +1905,13 @@ function handleQuizGuessDeg(degIdx, btn) {
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═
    CORE LOGIC & RENDER
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
-function scaleNotes() { return SCALES[S.scale].iv.map(i=>(S.root+i)%12); }
+function scaleNotes() { return SCALES[S.scale].iv.map(i=>(+S.root+i)%12); }
+function getScaleSequence() {
+  const notes = scaleNotes();
+  if (notes.length <= 1) return notes;
+  return [...notes, ...[...notes].slice(1, -1).reverse()];
+}
+
 function getDeg(ni) {
   const d = ((ni-S.root)+12)%12;
   const i = SCALES[S.scale].iv.indexOf(d);
@@ -1896,7 +1991,35 @@ function render() {
   if(window.buildQuizBtns) window.buildQuizBtns();
 
   renderFretboard();
+  syncUIControls();
   syncURL();
+}
+
+function syncUIControls() {
+  const syncSelect = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+  syncSelect('tuningCtrl', S.tuning);
+  syncSelect('labelCtrl', S.label);
+  syncSelect('viewCtrl', S.view);
+  syncSelect('handCtrl', S.hand);
+
+  const rootButtons = document.querySelectorAll('#rootCtrl .p');
+  rootButtons.forEach(b => {
+    const v = parseInt(b.dataset.v);
+    if (!isNaN(v)) {
+      b.classList.toggle('on', v === parseInt(S.root));
+    }
+  });
+
+  const langButtons = document.querySelectorAll('#langCtrl [data-v]');
+  langButtons.forEach(b => b.classList.toggle('on', b.dataset.v === S.lang));
+  
+  const scaleTab = SCALES[S.scale];
+  if (scaleTab) {
+    const g = scaleTab.g;
+    document.querySelectorAll('.sg-tab').forEach(t => t.classList.toggle('on', t.dataset.g === g));
+    document.querySelectorAll('.sg-panel').forEach(p2 => p2.classList.toggle('show', p2.dataset.g === g));
+  }
+  syncScalePills();
 }
 
 function renderInfo() {
@@ -1996,9 +2119,14 @@ function renderFretboard() {
       
       // NORMALE
       const ni = (openNote+f)%12;
-      if (!sn.includes(ni)) continue;
+      const on = sn.includes(ni);
+      
+      if (!on) continue;
+      
       const isRoot = ni===S.root;
-      const d = mkEl('div','nd '+(isRoot?'rn':'sn'));
+      let cls = 'nd ' + (isRoot ? 'rn' : 'sn');
+      
+      const d = mkEl('div', cls);
       d.style.left = `calc(${f - fStart + 0.5} * 60px)`;
       
       const span = mkEl('span'); span.textContent = dotLabel(ni, f); d.appendChild(span);
@@ -2009,6 +2137,9 @@ function renderFretboard() {
         d.classList.add('playing');
         setTimeout(() => d.classList.remove('playing'), 300);
         playNote(midiNote);
+        if (S.activeTab === 'tab') {
+           addNoteToTab(si, f);
+        }
       };
       row.appendChild(d);
     }
@@ -2029,8 +2160,54 @@ function numRow(fStart,fEnd) {
 }
 
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
-   URL SYNC
+   TAB TRANSCRIPTION LOGIC
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
+function addNoteToTab(si, f) {
+  S.tabSequence.push({ si, f });
+  renderASCIITab();
+}
+
+function renderASCIITab() {
+  const display = document.getElementById('tabDisplay');
+  if (!display) return;
+  const t = TUNINGS[S.tuning];
+  if (!t) return;
+  
+  const numS = t.notes.length;
+  // Pad labels (e.g. "Mi " to align with "Sol")
+  const labels = t.notes.map(n => getNoteName(n));
+  const maxL = Math.max(...labels.map(l => l.length));
+  
+  const lines = labels.map(l => l.padEnd(maxL, ' ') + '|--').reverse(); 
+  
+  S.tabSequence.forEach(evt => {
+     const lineIdx = numS - 1 - evt.si;
+     for(let i=0; i<lines.length; i++) {
+        if (i === lineIdx) {
+            lines[i] += evt.f + '-';
+        } else {
+            lines[i] += '-'.repeat((evt.f+'').length) + '-';
+        }
+     }
+  });
+  
+  display.textContent = lines.join('\n');
+  display.scrollLeft = display.scrollWidth; // Auto scroll to end
+}
+
+// Bind Tab buttons
+setTimeout(() => {
+  const uBtn = document.getElementById('tabUndoBtn');
+  const cBtn = document.getElementById('tabClearBtn');
+  const cpBtn = document.getElementById('tabCopyBtn');
+  
+  if (uBtn) uBtn.onclick = () => { S.tabSequence.pop(); renderASCIITab(); };
+  if (cBtn) cBtn.onclick = () => { S.tabSequence = []; renderASCIITab(); };
+  if (cpBtn) cpBtn.onclick = () => {
+    const txt = document.getElementById('tabDisplay').textContent;
+    navigator.clipboard.writeText(txt).then(() => showToast("Tab copiata! 📋"));
+  };
+}, 100);
 function syncURL() {
   history.replaceState(null,'',`#r=${S.root}&s=${S.scale}&t=${S.tuning}&l=${S.label}&v=${S.view}&h=${S.hand}&b=${S.boxStart}&lang=${S.lang}`);
 }
@@ -2051,19 +2228,7 @@ function loadURL() {
   if (p.b!==undefined) S.boxStart = +p.b;
   if (p.lang && I18N[p.lang]) S.lang = p.lang;
   
-  const syncSelect = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
-  syncSelect('tuningCtrl', S.tuning);
-  syncSelect('labelCtrl', S.label);
-  syncSelect('viewCtrl', S.view);
-  syncSelect('handCtrl', S.hand);
-
-  document.querySelectorAll('#rootCtrl   [data-v]').forEach(b=>b.classList.toggle('on', +b.dataset.v===S.root));
-  document.querySelectorAll('#langCtrl   [data-v]').forEach(b=>b.classList.toggle('on', b.dataset.v===S.lang));
-  
-  const g = SCALES[S.scale].g;
-  document.querySelectorAll('.sg-tab').forEach(t=>t.classList.toggle('on',t.dataset.g===g));
-  document.querySelectorAll('.sg-panel').forEach(p2=>p2.classList.toggle('show',p2.dataset.g===g));
-  syncScalePills();
+  syncUIControls();
 }
 
 // Lancia l'app all'avvio

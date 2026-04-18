@@ -248,6 +248,27 @@
       </div>
     </div>
 
+    <!-- ================= TAB PANEL ================= -->
+    <div id="tabPanel" class="tab-transcription-panel">
+      <div class="tab-ui">
+        <div class="tab-header">
+           <h3 data-i18n="tab_title">Trascrizione Tab</h3>
+           <p style="font-size: 13px; color: var(--muted);" data-i18n="tab_subtitle">Clicca sul manico per registrare le note</p>
+        </div>
+        <div class="tab-display-wrapper">
+          <pre id="tabDisplay" class="tab-ascii-box">G|---
+D|---
+A|---
+E|---</pre>
+        </div>
+        <div class="tab-controls">
+           <button id="tabUndoBtn" class="p">🔙 <span data-i18n="undo">Undo</span></button>
+           <button id="tabClearBtn" class="p">🗑️ <span data-i18n="clear">Clear</span></button>
+           <button id="tabCopyBtn" class="p">📋 <span data-i18n="copy">Copy</span></button>
+        </div>
+      </div>
+    </div>
+
 
     <div class="legend" id="fbLegend">
       <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>

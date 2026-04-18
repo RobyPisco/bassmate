@@ -2,25 +2,42 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Aiuto e Istruzioni | Bassmate</title>
+  <title>Guida | Bassmate</title>
   <link rel="stylesheet" href="style.css?v=1.1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080810">
   <style>
-    .help-container { max-width: 800px; margin: 40px auto; padding: 30px; background: var(--surface); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; position: relative; }
-    .help-title { text-align: center; color: var(--accent); margin-bottom: 30px; font-weight: 900; font-size: 28px; }
-    .help-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .help-section h3 { color: var(--note-c); font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .help-section p { color: var(--text); line-height: 1.6; font-size: 14px; margin-bottom: 10px; opacity: 0.9; }
-    .help-section ul { margin-left: 20px; margin-bottom: 10px; }
-    .help-section li { color: var(--text); font-size: 14px; margin-bottom: 8px; opacity: 0.8; line-height: 1.5; }
-    .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--s2); color: var(--text); border: 1px solid var(--border); text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s; margin-top: 10px; font-size:14px; }
-    .back-btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
-    
-    .lang-float {
-       position: absolute; top: 16px; right: 16px;
-       display: flex; gap: 4px;
+    .help-container {
+      max-width: 820px; margin: 32px auto; padding: 32px;
+      background: var(--surface); backdrop-filter: blur(10px);
+      border-radius: 14px; border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      font-family: 'Inter', sans-serif;
     }
+    .help-title { text-align: center; color: var(--accent); margin-bottom: 6px; font-weight: 900; font-size: 26px; }
+    .help-version { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 28px; }
+
+    /* TOC */
+    .toc { background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.25); border-radius: 10px; padding: 16px 20px; margin-bottom: 28px; }
+    .toc h4 { margin: 0 0 10px; font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+    .toc ol { margin: 0; padding-left: 20px; }
+    .toc li { margin-bottom: 5px; }
+    .toc a { color: var(--accent); font-size: 13px; text-decoration: none; opacity: .85; }
+    .toc a:hover { opacity: 1; text-decoration: underline; }
+
+    .help-section { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.06); scroll-margin-top: 20px; }
+    .help-section:last-of-type { border-bottom: none; }
+    .help-section h3 { color: var(--note-c); font-size: 17px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+    .help-section p { color: var(--text); line-height: 1.65; font-size: 14px; margin-bottom: 10px; opacity: .9; }
+    .help-section ul, .help-section ol { margin: 0 0 10px 20px; }
+    .help-section li { color: var(--text); font-size: 14px; margin-bottom: 7px; opacity: .85; line-height: 1.55; }
+
+    kbd { display: inline-block; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 4px; padding: 1px 6px; font-size: 12px; font-family: monospace; color: var(--text); }
+
+    .badge { display: inline-block; background: rgba(124,58,237,.2); color: #a78bfa; border-radius: 4px; padding: 1px 7px; font-size: 11px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; background: var(--s2); color: var(--text); border: 1px solid var(--border); text-decoration: none; border-radius: 8px; font-weight: bold; transition: .2s; font-size: 14px; }
+    .back-btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
   </style>
 </head>
 <body>
@@ -29,205 +46,322 @@
     <div class="main">
       <div class="help-container">
 
-        <!-- ITALIAN -->
-        <div id="text-it" style="display:block;">
-          <h1 class="help-title">📖 Guida all'uso di Bassmate</h1>
-          
-          <div class="help-section">
-            <h3>🎵 Esplorazione del Manico</h3>
-            <p>L'app permette di visualizzare in tempo reale tantissime scale e arpeggi su manici a 4, 5 e 6 corde in diverse accordature (Drop D, Eb...).</p>
+        <!-- ══ ITALIAN ══ -->
+        <div id="text-it">
+          <h1 class="help-title">📖 Guida a Bassmate</h1>
+          <p class="help-version">Versione 2.0 — Aprile 2026 · <a href="https://bassmate.it" style="color:var(--accent);">bassmate.it</a></p>
+
+          <div class="toc">
+            <h4>Indice</h4>
+            <ol>
+              <li><a href="#it-studio">🎸 Studio — Il Manico Interattivo</a></li>
+              <li><a href="#it-quiz">🎯 Quiz Mode</a></li>
+              <li><a href="#it-tuner">🎙️ Accordatore</a></li>
+              <li><a href="#it-metro">🥁 Metronomo</a></li>
+              <li><a href="#it-tab">📝 Trascrizione Tab</a></li>
+              <li><a href="#it-grids">📋 Manici da Stampare</a></li>
+              <li><a href="#it-exercises">📚 Esercizi</a></li>
+              <li><a href="#it-export">📸 Snapshot &amp; Stampa</a></li>
+              <li><a href="#it-favs">❤️ Preferiti &amp; Condivisione</a></li>
+              <li><a href="#it-settings">⚙️ Impostazioni</a></li>
+              <li><a href="#it-kbd">⌨️ Scorciatoie Tastiera</a></li>
+            </ol>
+          </div>
+
+          <div class="help-section" id="it-studio">
+            <h3>🎸 Studio — Il Manico Interattivo</h3>
+            <p>Il cuore di Bassmate. Visualizza scale, accordi, arpeggi e modi su un manico completamente interattivo.</p>
             <ul>
-              <li><strong>Nota Radice:</strong> Seleziona la fondamentale dai pulsanti C, D, E... o Do, Re... o usa le frecce <strong>◀ / ▶</strong> per trasporre di un semitono.</li>
-              <li><strong>Scala/Accordo:</strong> Naviga fra i tab (Base, Modi, Arpeggi e Altro) per esplorare infinite combinazioni.</li>
-              <li><strong>Mano:</strong> Passa da "Destro" a "Mancino" nelle Impostazioni se suoni specularmente.</li>
+              <li><strong>Nota radice:</strong> clicca uno dei pulsanti <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd>… o usa le frecce <kbd>◀</kbd> <kbd>▶</kbd> per trasporre di un semitono.</li>
+              <li><strong>Scala / Accordo:</strong> naviga fra i tab <em>Base, Modi, Arpeggi, Altro</em> per selezionare la formula. Il manico si aggiorna istantaneamente.</li>
+              <li><strong>Numero di corde:</strong> scegli tra 4, 5 o 6 corde dal selettore in cima.</li>
+              <li><strong>Accordatura:</strong> Standard, Drop D, Eb, Drop Db, DADGAD e altre varianti disponibili nel selettore.</li>
+              <li><strong>Etichette:</strong> scegli cosa mostrare su ogni nota — <em>Gradi</em> (1 b3 5…), <em>Note</em> (C D E…), <em>Solfeggio</em> (Do Re Mi…) o <em>Dita</em> per i box.</li>
+              <li><strong>Mancino:</strong> attiva la modalità specchio per chi suona con la mano destra sul manico.</li>
+              <li><strong>Visualizzazione:</strong> selettore "Tutte / Solo zona" per filtrare le note per posizione sul manico.</li>
+              <li><strong>Suono:</strong> clicca qualsiasi nota sul manico per sentirla riprodotta dal sintetizzatore interno.</li>
+              <li><strong>Reset Fretboard:</strong> pulsante rapido per azzerare il manico senza toccare le impostazioni.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🎙️ Accordatore (Tuner)</h3>
-            <p>Usa il microfono del tuo dispositivo per accordare il basso con precisione cromatica.</p>
-            <ul>
-                <li>Clicca su <strong>🎙️ Tuner</strong> nella barra inferiore.</li>
-                <li>Premi "Avvia Tuner" e dai il permesso per il microfono.</li>
-                <li>La lancetta indicherà se la nota è crescente o calante. Diventerà verde quando sarai perfettamente intonato.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>🏷️ Etichette e Nomenclatura</h3>
-            <p>Usa il menù <strong>Etichette</strong> nelle Opzioni per scegliere cosa leggere sul manico:</p>
-            <ul>
-              <li><strong>Gradi:</strong> (es: 1, 3, b7) ideali per capire gli intervalli.</li>
-              <li><strong>Note:</strong> Nomenclatura standard anglosassone (C, D, E).</li>
-              <li><strong>Note (Solfeggio):</strong> (Do, Re, Mi) per l'approccio classico.</li>
-              <li><strong>Dita:</strong> (Box 5fr) suggerimenti per la diteggiatura nei box.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>📱 Navigazione Mobile e Tab</h3>
-            <p>Bassmate è ottimizzato per smartphone grazie alla barra dei tab inferiore:</p>
-            <ul>
-              <li><strong>Studio:</strong> Il manico interattivo principale.</li>
-              <li><strong>Quiz:</strong> La modalità sfida per memorizzare le note.</li>
-              <li><strong>Tuner:</strong> Accordatore cromatico in tempo reale.</li>
-              <li><strong>Metro:</strong> Pannello rapido del metronomo.</li>
-              <li><strong>Opzioni:</strong> Pannello per gestire temi, lingua e impostazioni di visualizzazione.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>⚙️ Impostazioni e Personalizzazione</h3>
-            <p>Nel pannello <strong>Opzioni</strong> puoi gestire l'estetica dell'app:</p>
-            <ul>
-              <li><strong>Tema:</strong> Passa da 🌙 Dark a ☀️ Light mode a seconda della luce ambientale.</li>
-              <li><strong>Lingua:</strong> Traduzione dinamica di tutta l'app tra Italiano e Inglese.</li>
-              <li><strong>Motore Audio:</strong> Attiva o disattiva il suono sintetizzato delle note.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>❤️ Preferiti e Condivisione</h3>
-            <ul>
-              <li><strong>Salva:</strong> Clicca il cuore <strong>❤️</strong> per salvare il setup corrente (root, scala, tuning).</li>
-              <li><strong>Richiama:</strong> Usa il menù <strong>🔖 Preferiti</strong> per caricare i tuoi setup salvati istantaneamente.</li>
-              <li><strong>Condividi:</strong> L'icona <strong>🔗</strong> copia negli appunti un link diretto alla scala che stai visualizzando.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
+          <div class="help-section" id="it-quiz">
             <h3>🎯 Quiz Mode</h3>
-            <p>Metti alla prova la memoria: clicca il bottone viola "▶️ Start" nel pannello Quiz. Indovina la nota evidenziata sul manico usando i pulsanti in basso. Accumula combo per scalare la classifica delle tue statistiche!</p>
-          </div>
-          
-          <div class="help-section">
-            <h3>📸 Foto e 🖨️ Stampa</h3>
+            <p>Metti alla prova la memoria delle note sul manico. Tre modalità di difficoltà, timer configurabile, sistema di combo e statistiche persistenti.</p>
             <ul>
-              <li><strong>📸 Snapshot:</strong> Scatta una "foto" del manico in alta risoluzione (PNG) ideale per condividerla sui social o salvarla in galleria.</li>
-              <li><strong>🖨️ Stampa PDF:</strong> Genera una stampa professionale del manico corrente ottimizzata per fogli A4 in orizzontale.</li>
-              <li><strong>📋 Manici Vuoti:</strong> Uno strumento dedicato agli insegnanti per stampare diagrammi bianchi da compilare a mano.</li>
+              <li><strong>Avvio:</strong> clicca <kbd>▶ Start</kbd> nel pannello Quiz. Un countdown di 3 secondi precede la prima domanda.</li>
+              <li><strong>Domanda:</strong> una nota sul manico si illumina — indovina usando i pulsanti in basso (C, D, E… o Do, Re, Mi…).</li>
+              <li><strong>Modalità:</strong> <em>Note</em> (indovina il nome della nota) o <em>Grado</em> (indovina l'intervallo).</li>
+              <li><strong>Difficoltà:</strong> Facile, Normale, Difficile — cambia la velocità e la zona del manico coinvolta.</li>
+              <li><strong>Timer:</strong> imposta 30s, 60s, 90s o 120s. Alla scadenza vedi il punteggio finale.</li>
+              <li><strong>Combo:</strong> risposte consecutive corrette moltiplicano il punteggio. Errore = combo reset.</li>
+              <li><strong>Statistiche:</strong> punteggio record, sessioni totali, nota più debole — salvati localmente.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🎹 Scorciatoie da Tastiera (PC)</h3>
-            <p>Se usi Bassmate da computer, puoi usare questi tasti rapidi:</p>
+          <div class="help-section" id="it-tuner">
+            <h3>🎙️ Accordatore Cromatico</h3>
+            <p>Accordatore professionale in tempo reale tramite microfono.</p>
             <ul>
-              <li><strong>Frecce ← / →:</strong> Cambia la nota radice.</li>
-              <li><strong>Q:</strong> Attiva/Disattiva la modalità Quiz.</li>
-              <li><strong>M:</strong> Apre/Chiude il Metronomo.</li>
-              <li><strong>R:</strong> Reset totale della tastiera.</li>
-              <li><strong>?:</strong> Mostra il riepilogo delle scorciatoie.</li>
+              <li>Clicca il tab <strong>Tuner</strong> nella barra di navigazione.</li>
+              <li>Premi <kbd>Avvia Tuner</kbd> e concedi il permesso al microfono quando richiesto.</li>
+              <li>Avvicina il basso al microfono e suona una corda aperta.</li>
+              <li>La lancetta indica se la nota è calante (flat) o crescente (sharp). Diventa verde quando sei perfettamente intonato.</li>
+              <li>Mostra la nota rilevata, la frequenza in Hz e i cents di scostamento.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🥁 Metronomo Integrato</h3>
-            <p>Studia le scale a tempo. Regola BPM (30-240) e battuta (2/4, 3/4, 4/4, 6/8). Il primo beat è evidenziato visualmente in oro per aiutarti a tenere il "Battere".</p>
+          <div class="help-section" id="it-metro">
+            <h3>🥁 Metronomo</h3>
+            <p>Metronomo integrato per studiare le scale a tempo preciso.</p>
+            <ul>
+              <li><strong>BPM:</strong> regola da 30 a 240 BPM con slider o input diretto.</li>
+              <li><strong>Battuta:</strong> scegli tra 2/4, 3/4, 4/4, 6/8.</li>
+              <li><strong>Accento:</strong> il primo beat è evidenziato in oro per trovare facilmente il "battere".</li>
+              <li><strong>Flash:</strong> attiva il flash visivo sincronizzato con il beat per chi suona in luoghi rumorosi.</li>
+              <li><strong>Timer sessione:</strong> imposta un countdown per la sessione di studio (es. 10 minuti).</li>
+              <li><strong>Suono:</strong> puoi continuare a cliccare le note sul manico mentre il metronomo batte.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-tab">
+            <h3>📝 Trascrizione Tab (ASCII)</h3>
+            <p>Registra le tue idee musicali mentre suoni — genera tab ASCII in tempo reale.</p>
+            <ul>
+              <li>Attiva il tab <strong>Transcription</strong> dalla barra di navigazione.</li>
+              <li>Clicca le note sul manico: vengono aggiunte automaticamente alla tablatura.</li>
+              <li>Usa <kbd>Copia Tab</kbd> per copiare il risultato e incollarlo ovunque (chat, email, documenti).</li>
+              <li>Usa <kbd>Cancella</kbd> per svuotare la trascrizione e ricominciare.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-grids">
+            <h3>📋 Manici Vuoti da Stampare</h3>
+            <p>Strumento per insegnanti e studenti: genera fogli di lavoro con manici da compilare.</p>
+            <ul>
+              <li>Clicca l'icona <strong>📋</strong> nell'header per aprire la pagina Grids.</li>
+              <li><strong>Corde:</strong> scegli 4, 5 o 6 corde.</li>
+              <li><strong>Numero griglie:</strong> da 1 a 12 manici per foglio.</li>
+              <li><strong>Titolo per griglia:</strong> ogni manico ha un campo titolo editabile (es. "Scala di Do maggiore").</li>
+              <li><strong>Posizione fret:</strong> imposta da quale tasto parte ogni griglia (es. "da fret 5").</li>
+              <li><strong>Esporta Scala:</strong> scegli tonica + tipo di scala e applica le note direttamente su una griglia o su tutte. Le note vengono disegnate come cerchi colorati con il nome (viola = tonica).</li>
+              <li><strong>Scale disponibili:</strong> Maggiore, Minore Naturale, Pentatonica Maj/Min, Blues, Dorian, Mixolydian, Minore Armonica, Minore Melodica.</li>
+              <li>Clicca <kbd>🖨️ Stampa Ora</kbd> — i controlli spariscono e rimane solo il foglio pulito.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-exercises">
+            <h3>📚 Esercizi Pratici</h3>
+            <p>Raccolta di esercizi guidati per lo studio del basso.</p>
+            <ul>
+              <li>Clicca l'icona <strong>📚</strong> nell'header per aprire la pagina Esercizi.</li>
+              <li>Sfoglia gli esercizi divisi per categoria e difficoltà.</li>
+              <li>Ogni esercizio include diagramma, descrizione e suggerimenti pratici.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-export">
+            <h3>📸 Snapshot &amp; 🖨️ Stampa</h3>
+            <ul>
+              <li><strong>📸 Snapshot:</strong> esporta il manico corrente come immagine PNG ad alta risoluzione — ideale per social, messaggi o appunti digitali.</li>
+              <li><strong>🖨️ Stampa PDF:</strong> genera una stampa professionale del manico in formato A4 orizzontale, ottimizzata per la carta.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-favs">
+            <h3>❤️ Preferiti &amp; Condivisione</h3>
+            <ul>
+              <li><strong>Salva preferito:</strong> clicca <kbd>❤️</kbd> per salvare il setup corrente (nota radice, scala, accordatura). Puoi salvarne quanti vuoi.</li>
+              <li><strong>Richiama preferito:</strong> usa il menù preferiti (icona segnalibro) per caricare un preset salvato in un click.</li>
+              <li><strong>Elimina preferito:</strong> seleziona un preferito e clicca l'icona cestino <kbd>🗑️</kbd> che appare nell'header.</li>
+              <li><strong>Condividi link:</strong> clicca <kbd>🔗</kbd> — viene copiato negli appunti un URL con tutta la configurazione corrente (radice, scala, accordatura, etichette, mano). Incollalo e condividilo: chiunque aprirà esattamente la stessa visualizzazione.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-settings">
+            <h3>⚙️ Impostazioni</h3>
+            <ul>
+              <li><strong>Tema 🌙 / ☀️:</strong> passa da Dark a Light mode. La preferenza viene salvata automaticamente.</li>
+              <li><strong>Audio 🔊 / 🔇:</strong> attiva o disattiva la riproduzione sonora delle note.</li>
+              <li><strong>Lingua:</strong> pulsanti <kbd>IT</kbd> / <kbd>EN</kbd> nell'header per cambiare lingua in tempo reale.</li>
+              <li><strong>Mancino:</strong> selettore "Right / Left" nel pannello Studio — specchia l'intero manico.</li>
+              <li><strong>Accordatura:</strong> Standard 4/5/6 corde, Drop D, Eb, Drop Db, DADGAD.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="it-kbd">
+            <h3>⌨️ Scorciatoie Tastiera (Desktop)</h3>
+            <ul>
+              <li><kbd>←</kbd> / <kbd>→</kbd> — cambia nota radice (semitono su/giù)</li>
+              <li><kbd>Q</kbd> — avvia / ferma Quiz</li>
+              <li><kbd>M</kbd> — apri / chiudi Metronomo</li>
+              <li><kbd>R</kbd> — reset fretboard</li>
+              <li><kbd>?</kbd> — mostra pannello scorciatoie</li>
+            </ul>
+          </div>
+
+          <div style="text-align:center; margin-top: 10px;">
+            <a href="index.html" class="back-btn">⬅️ Torna alla Tastiera</a>
           </div>
         </div>
 
-        <!-- ENGLISH -->
+        <!-- ══ ENGLISH ══ -->
         <div id="text-en" style="display:none;">
           <h1 class="help-title">📖 Bassmate User Guide</h1>
-          
-          <div class="help-section">
-            <h3>🎵 Fretboard Exploration</h3>
-            <p>The app allows you to visualize countless scales and arpeggios in real-time on 4, 5, and 6-string basses in various tunings (Drop D, Eb...).</p>
+          <p class="help-version">Version 2.0 — April 2026 · <a href="https://bassmate.it" style="color:var(--accent);">bassmate.it</a></p>
+
+          <div class="toc">
+            <h4>Contents</h4>
+            <ol>
+              <li><a href="#en-studio">🎸 Studio — Interactive Fretboard</a></li>
+              <li><a href="#en-quiz">🎯 Quiz Mode</a></li>
+              <li><a href="#en-tuner">🎙️ Chromatic Tuner</a></li>
+              <li><a href="#en-metro">🥁 Metronome</a></li>
+              <li><a href="#en-tab">📝 Tab Transcription</a></li>
+              <li><a href="#en-grids">📋 Printable Fretboard Sheets</a></li>
+              <li><a href="#en-exercises">📚 Practice Exercises</a></li>
+              <li><a href="#en-export">📸 Snapshot &amp; Print</a></li>
+              <li><a href="#en-favs">❤️ Favorites &amp; Sharing</a></li>
+              <li><a href="#en-settings">⚙️ Settings</a></li>
+              <li><a href="#en-kbd">⌨️ Keyboard Shortcuts</a></li>
+            </ol>
+          </div>
+
+          <div class="help-section" id="en-studio">
+            <h3>🎸 Studio — Interactive Fretboard</h3>
+            <p>The core of Bassmate. Visualize scales, chords, arpeggios and modes on a fully interactive fretboard.</p>
             <ul>
-              <li><strong>Root Note:</strong> Select the root using the C, D, E... buttons or use the <strong>◀ / ▶</strong> arrows to transpose by semitones.</li>
-              <li><strong>Scale/Chord:</strong> Navigate the tabs (Basic, Modes, Arps, Others) to explore endless combinations.</li>
-              <li><strong>Hand:</strong> Switch from "Right" to "Lefty" in the Options panel if you play a mirrored bass.</li>
+              <li><strong>Root note:</strong> click any of the <kbd>C</kbd> <kbd>D</kbd> <kbd>E</kbd>… buttons or use the <kbd>◀</kbd> <kbd>▶</kbd> arrows to transpose by semitone.</li>
+              <li><strong>Scale / Chord:</strong> navigate the tabs <em>Basic, Modes, Arpeggios, Other</em> to select a formula. The fretboard updates instantly.</li>
+              <li><strong>String count:</strong> choose 4, 5 or 6 strings from the top selector.</li>
+              <li><strong>Tuning:</strong> Standard, Drop D, Eb, Drop Db, DADGAD and more available from the tuning selector.</li>
+              <li><strong>Labels:</strong> choose what to display on each note dot — <em>Degrees</em> (1 b3 5…), <em>Notes</em> (C D E…), <em>Solfege</em> (Do Re Mi…) or <em>Fingers</em> for box positions.</li>
+              <li><strong>Lefty mode:</strong> mirror the entire fretboard for left-handed players.</li>
+              <li><strong>View filter:</strong> "All / Zone only" selector to show notes only in a specific position.</li>
+              <li><strong>Sound:</strong> click any dot on the fretboard to hear it played by the built-in synthesizer.</li>
+              <li><strong>Reset Fretboard:</strong> quick button to clear the fretboard without changing settings.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🎙️ Chromatic Tuner</h3>
-            <p>Use your device's microphone to tune your bass with chromatic precision.</p>
-            <ul>
-                <li>Click <strong>🎙️ Tuner</strong> in the bottom tab bar.</li>
-                <li>Press "Start Tuner" and grant microphone permission.</li>
-                <li>The needle indicates if the note is sharp or flat. It turns green when perfectly in tune.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>🏷️ Labels and Nomenclature</h3>
-            <p>Use the <strong>Labels</strong> dropdown in Options to choose what to display on the fretboard:</p>
-            <ul>
-              <li><strong>Degrees:</strong> (e.g., 1, 3, b7) ideal for interval theory.</li>
-              <li><strong>Notes:</strong> Standard English nomenclature (C, D, E).</li>
-              <li><strong>Solfege:</strong> (Do, Re, Mi) used in classical and academic contexts.</li>
-              <li><strong>Fingers:</strong> (5fr Box) fingering suggestions for scale boxes.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>📱 Mobile Navigation & Tabs</h3>
-            <p>Bassmate is mobile-optimized with a convenient bottom navigation bar:</p>
-            <ul>
-              <li><strong>Studio:</strong> The main interactive fretboard.</li>
-              <li><strong>Quiz:</strong> Challenge mode to improve note recognition.</li>
-              <li><strong>Tuner:</strong> Real-time chromatic tuner.</li>
-              <li><strong>Metro:</strong> Quick metronome access.</li>
-              <li><strong>Options:</strong> Settings panel for themes, language, and display.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>⚙️ Settings & Customization</h3>
-            <p>In the <strong>Options</strong> panel, you can customize the experience:</p>
-            <ul>
-              <li><strong>Theme:</strong> Toggle between 🌙 Dark and ☀️ Light mode for better visibility.</li>
-              <li><strong>Language:</strong> Seamlessly switch between Italian and English.</li>
-              <li><strong>Audio Engine:</strong> Turn note playback sound on or off.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
-            <h3>❤️ Favorites & Sharing</h3>
-            <ul>
-              <li><strong>Save:</strong> Click the heart <strong>❤️</strong> to save your current setup (root, scale, tuning).</li>
-              <li><strong>Recall:</strong> Use the <strong>🔖 Favorites</strong> menu to load your saved presets instantly.</li>
-              <li><strong>Share:</strong> The <strong>🔗</strong> icon copies a direct link to your current scale to the clipboard.</li>
-            </ul>
-          </div>
-
-          <div class="help-section">
+          <div class="help-section" id="en-quiz">
             <h3>🎯 Quiz Mode</h3>
-            <p>Test your memory: click "▶️ Start" in the Quiz panel. Guess the highlighted note on the fretboard using the buttons below. Build combos to beat your high scores!</p>
-          </div>
-          
-          <div class="help-section">
-            <h3>📸 Photos & 🖨️ Printing</h3>
+            <p>Test your fretboard note memory. Three difficulty levels, configurable timer, combo multiplier system and persistent stats.</p>
             <ul>
-              <li><strong>📸 Snapshot:</strong> Export a high-resolution PNG "photo" of the fretboard, perfect for social media sharing.</li>
-              <li><strong>🖨️ PDF Print:</strong> Generate a professional print-ready document of the current fretboard (horizontal A4).</li>
-              <li><strong>📋 Blank Grids:</strong> "Teacher Mode" for printing empty diagrams to be filled manually.</li>
+              <li><strong>Start:</strong> click <kbd>▶ Start</kbd> in the Quiz panel. A 3-second countdown precedes the first question.</li>
+              <li><strong>Question:</strong> a note on the fretboard lights up — guess it using the buttons below (C, D, E… or Do, Re, Mi…).</li>
+              <li><strong>Mode:</strong> <em>Note</em> (guess the note name) or <em>Degree</em> (guess the interval).</li>
+              <li><strong>Difficulty:</strong> Easy, Normal, Hard — affects speed and the fretboard zone used.</li>
+              <li><strong>Timer:</strong> set 30s, 60s, 90s or 120s. When it runs out, your final score is shown.</li>
+              <li><strong>Combo:</strong> consecutive correct answers multiply your score. A mistake resets the combo.</li>
+              <li><strong>Stats:</strong> high score, total sessions, weakest note — saved locally on your device.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🎹 Keyboard Shortcuts (Desktop)</h3>
-            <p>If using a computer, boost your productivity with these shortcuts:</p>
+          <div class="help-section" id="en-tuner">
+            <h3>🎙️ Chromatic Tuner</h3>
+            <p>Professional real-time tuner via microphone.</p>
             <ul>
-              <li><strong>Arrow ← / →:</strong> Change root note.</li>
-              <li><strong>Q:</strong> Toggle Quiz mode.</li>
-              <li><strong>M:</strong> Open/Close Metronome.</li>
-              <li><strong>R:</strong> Reset the entire fretboard.</li>
-              <li><strong>?:</strong> Show shortcut summary.</li>
+              <li>Click the <strong>Tuner</strong> tab in the navigation bar.</li>
+              <li>Press <kbd>Start Tuner</kbd> and grant microphone permission when prompted.</li>
+              <li>Hold your bass near the microphone and pluck an open string.</li>
+              <li>The needle shows whether the note is flat or sharp. It turns green when perfectly in tune.</li>
+              <li>Displays detected note, frequency in Hz and cents deviation.</li>
             </ul>
           </div>
 
-          <div class="help-section">
-            <h3>🥁 Integrated Metronome</h3>
-            <p>Practice in time. Set BPM (30-240) and time signatures (2/4, 3/4, 4/4, 6/8). The first beat is visually highlighted in gold to find the "One" easily.</p>
+          <div class="help-section" id="en-metro">
+            <h3>🥁 Metronome</h3>
+            <p>Built-in metronome to practice scales in time.</p>
+            <ul>
+              <li><strong>BPM:</strong> set from 30 to 240 BPM with slider or direct input.</li>
+              <li><strong>Time signature:</strong> choose between 2/4, 3/4, 4/4, 6/8.</li>
+              <li><strong>Downbeat accent:</strong> beat 1 is highlighted in gold to help you find "the one".</li>
+              <li><strong>Flash:</strong> enable a visual flash synced to the beat — useful in noisy environments.</li>
+              <li><strong>Session timer:</strong> set a countdown for your practice session (e.g. 10 minutes).</li>
+              <li><strong>Sound:</strong> you can continue clicking fretboard notes while the metronome ticks.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-tab">
+            <h3>📝 Tab Transcription (ASCII)</h3>
+            <p>Record your musical ideas while playing — generates ASCII tablature in real time.</p>
+            <ul>
+              <li>Switch to the <strong>Transcription</strong> tab in the navigation bar.</li>
+              <li>Click notes on the fretboard: they are automatically added to the tab.</li>
+              <li>Use <kbd>Copy Tab</kbd> to copy the result and paste it anywhere (chat, email, documents).</li>
+              <li>Use <kbd>Clear</kbd> to erase the transcription and start fresh.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-grids">
+            <h3>📋 Printable Fretboard Sheets</h3>
+            <p>Tool for teachers and students: generate worksheets with blank or pre-filled fretboard diagrams.</p>
+            <ul>
+              <li>Click the <strong>📋</strong> icon in the header to open the Grids page.</li>
+              <li><strong>Strings:</strong> choose 4, 5 or 6 strings.</li>
+              <li><strong>Grid count:</strong> from 1 to 12 fretboards per sheet.</li>
+              <li><strong>Grid title:</strong> each fretboard has an editable title field (e.g. "C Major Scale").</li>
+              <li><strong>Fret position:</strong> set which fret each grid starts from (e.g. "from fret 5").</li>
+              <li><strong>Export Scale:</strong> choose a root + scale type and apply the notes to one grid or all. Notes are drawn as colored circles with name (purple = root).</li>
+              <li><strong>Available scales:</strong> Major, Natural Minor, Major/Minor Pentatonic, Blues, Dorian, Mixolydian, Harmonic Minor, Melodic Minor.</li>
+              <li>Click <kbd>🖨️ Print Now</kbd> — controls hide and only the clean sheet remains.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-exercises">
+            <h3>📚 Practice Exercises</h3>
+            <p>Curated exercise library for bass study.</p>
+            <ul>
+              <li>Click the <strong>📚</strong> icon in the header to open the Exercises page.</li>
+              <li>Browse exercises sorted by category and difficulty.</li>
+              <li>Each exercise includes a diagram, description and practical tips.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-export">
+            <h3>📸 Snapshot &amp; 🖨️ Print</h3>
+            <ul>
+              <li><strong>📸 Snapshot:</strong> export the current fretboard as a high-resolution PNG — great for social media, messages or digital notes.</li>
+              <li><strong>🖨️ Print PDF:</strong> generate a professional A4 landscape print of the current fretboard, optimized for paper.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-favs">
+            <h3>❤️ Favorites &amp; Sharing</h3>
+            <ul>
+              <li><strong>Save favorite:</strong> click <kbd>❤️</kbd> to save the current setup (root note, scale, tuning). Save as many as you like.</li>
+              <li><strong>Load favorite:</strong> use the favorites menu (bookmark icon) to load a saved preset in one click.</li>
+              <li><strong>Delete favorite:</strong> select a favorite and click the trash icon <kbd>🗑️</kbd> that appears in the header.</li>
+              <li><strong>Share link:</strong> click <kbd>🔗</kbd> — a URL encoding your full configuration (root, scale, tuning, labels, hand) is copied to clipboard. Paste it and share: anyone who opens it sees exactly the same view.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-settings">
+            <h3>⚙️ Settings</h3>
+            <ul>
+              <li><strong>Theme 🌙 / ☀️:</strong> toggle Dark / Light mode. Your preference is saved automatically.</li>
+              <li><strong>Audio 🔊 / 🔇:</strong> enable or disable note playback sound.</li>
+              <li><strong>Language:</strong> <kbd>IT</kbd> / <kbd>EN</kbd> buttons in the header — switches the entire UI in real time.</li>
+              <li><strong>Lefty:</strong> "Right / Left" selector in the Studio panel — mirrors the entire fretboard.</li>
+              <li><strong>Tuning:</strong> Standard 4/5/6 string, Drop D, Eb, Drop Db, DADGAD.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="en-kbd">
+            <h3>⌨️ Keyboard Shortcuts (Desktop)</h3>
+            <ul>
+              <li><kbd>←</kbd> / <kbd>→</kbd> — change root note (semitone down/up)</li>
+              <li><kbd>Q</kbd> — start / stop Quiz</li>
+              <li><kbd>M</kbd> — open / close Metronome</li>
+              <li><kbd>R</kbd> — reset fretboard</li>
+              <li><kbd>?</kbd> — show shortcuts panel</li>
+            </ul>
+          </div>
+
+          <div style="text-align:center; margin-top: 10px;">
+            <a href="index.html" class="back-btn">⬅️ Back to Fretboard</a>
           </div>
         </div>
 
-        <div style="text-align: center;">
-          <a href="index.html" class="back-btn" data-i18n="back_btn">⬅️ Torna alla Tastiera</a>
-        </div>
       </div>
     </div>
     <div id="footer-placeholder"></div>

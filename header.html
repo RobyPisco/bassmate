@@ -1,7 +1,7 @@
 <header class="top-dashboard">
   <!-- Minimal Top Bar -->
   <div class="td-row-main td-nav-bar">
-    <a href="index.html" class="sb-logo" title="Torna alla Home Page" style="text-decoration:none; color:inherit;">
+    <a href="index.html" class="sb-logo" data-i18n-title="home_title" title="Torna alla Home Page" style="text-decoration:none; color:inherit;">
       <div class="logo-icon">𝄢</div>
       <div class="logo-text">Bassmate<small>PiscoFactory</small></div>
     </a>
@@ -10,11 +10,11 @@
     <nav class="header-tab-row" aria-label="Navigazione principale">
       <button class="tab-btn active" data-tab="studio">
         <span class="tab-icon">🎸</span>
-        <span class="tab-label">Studio</span>
+        <span class="tab-label" data-i18n="studio">Studio</span>
       </button>
       <button class="tab-btn" data-tab="quiz">
         <span class="tab-icon">🎯</span>
-        <span class="tab-label">Quiz</span>
+        <span class="tab-label" data-i18n="nav_quiz">Quiz</span>
       </button>
       <button class="tab-btn" data-tab="tuner">
         <span class="tab-icon">🎙️</span>
@@ -23,6 +23,10 @@
       <button class="tab-btn" data-tab="metro">
         <span class="tab-icon">🥁</span>
         <span class="tab-label" data-i18n="nav_metro">Metro</span>
+      </button>
+      <button class="tab-btn" data-tab="tab">
+        <span class="tab-icon">📝</span>
+        <span class="tab-label" data-i18n="tab_title">Tab</span>
       </button>
     </nav>
 
@@ -38,18 +42,19 @@
 
     <!-- Icone destra -->
     <div class="td-icons">
-      <button class="icon-btn export-btn-sm" id="kbdHintBtn" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
+      <button class="icon-btn export-btn-sm" id="kbdHintBtn" data-i18n-title="kbd_hint" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
       <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi">🔗</button>
-      <button class="icon-btn export-btn-sm" id="snapshotBtn" title="Esporta immagine fretboard">📸</button>
+      <button class="icon-btn export-btn-sm" id="snapshotBtn" data-i18n-title="snapshot_btn" title="Esporta immagine fretboard">📸</button>
       <button class="icon-btn export-btn-sm" id="exportBtn" data-i18n-title="export_btn" title="Stampa / Esporta PDF">🖨️</button>
-      <a href="grids.html" class="icon-btn export-btn-sm" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
-      <a href="exercises.html" class="icon-btn export-btn-sm" title="Esercizi pratici" style="text-decoration:none;">📚</a>
+      <a href="grids.html" class="icon-btn export-btn-sm" data-i18n-title="grids_btn_title" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
+      <a href="exercises.html" class="icon-btn export-btn-sm" data-i18n-title="exercises_btn_title" title="Esercizi pratici" style="text-decoration:none;">📚</a>
       <select id="favCtrl" class="sel-wrap" style="display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
       <button class="icon-btn export-btn-sm" id="favBtn" data-i18n-title="fav_save" title="Salva Preferito">❤️</button>
-      <button class="icon-btn export-btn-sm" id="favDelBtn" title="Elimina preferito selezionato" style="display:none; color:#ef4444; border-color:rgba(239,68,68,0.4);">🗑️</button>
-      <a href="contact.html" class="icon-btn export-btn-sm" title="Contatti" style="text-decoration:none;">📧</a>
+      <button class="icon-btn export-btn-sm" id="favDelBtn" data-i18n-title="fav_del_title" title="Elimina preferito selezionato" style="display:none; color:#ef4444; border-color:rgba(239,68,68,0.4);">🗑️</button>
+      <a href="contact.html" class="icon-btn export-btn-sm" data-i18n-title="contact_title" title="Contatti" style="text-decoration:none;">📧</a>
+      <a href="help.html" class="icon-btn export-btn-sm" data-i18n-title="help_btn" title="Guida e Manuale" style="text-decoration:none;">❓</a>
       <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè" style="text-decoration:none;">☕</a>
     </div>
   </div>
@@ -58,22 +63,22 @@
   <div class="music-controls" id="studioMusicControls">
     <!-- Riga 1: Note + Display opts + Azioni -->
     <div class="ctrl-row" id="displayOptsRow">
-      <button class="p mini-btn transp-btn" id="transpDn" title="Semitono giù">&#9664;</button>
+      <button class="p mini-btn transp-btn" id="transpDn" data-i18n-title="transp_dn_title" title="Semitono giù">&#9664;</button>
       <div class="hz-grid root-scroll" id="rootCtrl"></div>
-      <button class="p mini-btn transp-btn" id="transpUp" title="Semitono su">&#9654;</button>
+      <button class="p mini-btn transp-btn" id="transpUp" data-i18n-title="transp_up_title" title="Semitono su">&#9654;</button>
       <div class="opts-divider"></div>
-      <select id="tuningCtrl" class="opt-sel" title="Accordatura"></select>
-      <select id="labelCtrl" class="opt-sel" title="Etichette">
+      <select id="tuningCtrl" class="opt-sel" data-i18n-title="tuning" title="Accordatura"></select>
+      <select id="labelCtrl" class="opt-sel" data-i18n-title="labels" title="Etichette">
         <option value="deg" data-i18n="degrees">Gradi</option>
         <option value="note" data-i18n="notes">Note (C,D,E)</option>
         <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
         <option value="finger" data-i18n="finger">Dita (Box)</option>
       </select>
-      <select id="viewCtrl" class="opt-sel" title="Vista">
+      <select id="viewCtrl" class="opt-sel" data-i18n-title="settings" title="Vista">
         <option value="full" data-i18n="all">Tutto</option>
         <option value="box" data-i18n="box">Box 5fr</option>
       </select>
-      <select id="handCtrl" class="opt-sel" title="Mano">
+      <select id="handCtrl" class="opt-sel" data-i18n-title="hand" title="Mano">
         <option value="right" data-i18n="right">Destro</option>
         <option value="left" data-i18n="lefty">Mancino</option>
       </select>
