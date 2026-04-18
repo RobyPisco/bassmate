@@ -196,6 +196,7 @@ body.minimal-header .top-dashboard {
   scrollbar-width: none; /* Firefox */
   flex: 1;
 }
+.ctrl-row .root-scroll { flex: 0 0 auto; }
 .root-scroll::-webkit-scrollbar, .scales-scroll::-webkit-scrollbar { display: none; }
 
 .mini-btn {
