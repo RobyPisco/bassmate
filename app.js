@@ -49,7 +49,7 @@ const I18N = {
     settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
     language: "Lingua", theme: "Tema", audio_engine: "Motore Audio",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Suddividi", metro_trainer: "Speed Up",
-    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash",
+    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash", metro_groove: "Groove",
     contact_link: "Contatti", contact_btn: "Scrivimi un'email",
     tuner_start: "Avvia Tuner", tuner_stop: "Ferma Tuner",
     tuner_prompt: "Premi il pulsante per iniziare",
@@ -116,7 +116,7 @@ const I18N = {
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
     language: "Language", theme: "Theme", audio_engine: "Audio Engine",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Subdivide", metro_trainer: "Speed Up",
-    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash",
+    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash", metro_groove: "Groove",
     contact_link: "Contact Me", contact_btn: "Send me an email",
     tuner_start: "Start Tuner", tuner_stop: "Stop Tuner",
     tuner_prompt: "Press the button to start",
@@ -309,11 +309,23 @@ function playNote(midi) {
   } catch(e) { console.warn('Audio error:', e); }
 }
 
-/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
+/* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═
    METRONOME ENGINE (Lookahead Scheduler)
    Uses Web Audio clock for sample-accurate timing.
    No setInterval drift.
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
+
+// Groove presets — 16-step grid (1 bar 4/4, sixteenth resolution)
+// Cell: 'A'=accent, 'N'=normal, 'G'=ghost/sub, null=silent
+const GROOVES = {
+  none:    { name: 'Click',       steps: null },
+  rock:    { name: 'Rock 4/4',    steps: ['A',null,'N',null, 'N',null,'N',null, 'N',null,'N',null, 'N',null,'N',null] },
+  funk:    { name: 'Funk 16th',   steps: ['A','G','N','G',  'N','G','N','G',  'N','G','N','G',  'N','G','N','A'] },
+  jazz:    { name: 'Jazz swing',  steps: ['A',null,null,'N', null,null,'N',null, 'N',null,null,'N', null,null,'N',null], swing: 0.67 },
+  bossa:   { name: 'Bossa Nova',  steps: ['A',null,'N',null, 'N',null,null,'N', 'N',null,'N',null, null,'N','N',null] },
+  shuffle: { name: 'Shuffle',     steps: ['A',null,null,'N', null,null,'A',null, null,'N',null,null, 'A',null,null,'N'], swing: 0.67 }
+};
+
 const metro = {
   running: false,
   bpm: 80,
@@ -332,6 +344,7 @@ const metro = {
   totalBeats: 0,        // contatore battiti totali per auto-incremento
   // Opzioni Pro
   soundSet: 'digital',  // digital, wood, drum
+  groove: 'none',       // groove preset key (see GROOVES)
   flashEnabled: true,
   timerEnabled: false,
   timerMin: 5,
@@ -383,13 +396,29 @@ function _metroClick(time, isAccent, isSub = false) {
 
 function _metroScheduler() {
   const ctx = getAudioCtx();
-  const step = (60.0 / metro.bpm) / metro.subdivision;
+  const groove = GROOVES[metro.groove] || GROOVES.none;
+  // Groove forces sixteenth subdivision internally; metro.subdivision kept for UI when no groove
+  const activeSub = groove.steps ? 4 : metro.subdivision;
+  const step = (60.0 / metro.bpm) / activeSub;
 
   while (metro.nextNoteTime < ctx.currentTime + metro.scheduleAhead) {
     const isMainBeat = (metro.subTick === 0);
-    const isAccent = isMainBeat && (metro.currentBeat === 0);
-    
-    _metroClick(metro.nextNoteTime, isAccent, !isMainBeat);
+
+    if (groove.steps) {
+      const stepIdx = (metro.currentBeat * 4 + metro.subTick) % groove.steps.length;
+      const cell = groove.steps[stepIdx];
+      // isSub=true always in groove mode → suppresses queue push inside _metroClick
+      // We manage the queue manually below
+      if (cell !== null) {
+        _metroClick(metro.nextNoteTime, cell === 'A', true);
+      }
+      if (isMainBeat) {
+        metro.queue.push({ time: metro.nextNoteTime, beat: metro.currentBeat });
+      }
+    } else {
+      const isAccent = isMainBeat && (metro.currentBeat === 0);
+      _metroClick(metro.nextNoteTime, isAccent, !isMainBeat);
+    }
 
     // Speed Trainer
     if (isMainBeat && metro.autoIncr) {
@@ -410,9 +439,14 @@ function _metroScheduler() {
       }
     }
 
+    // Swing: delay odd sixteenth steps within a pair
+    if (groove.steps && groove.swing && metro.subTick % 2 === 1) {
+      metro.nextNoteTime += (60.0 / metro.bpm / 4) * (groove.swing - 0.5);
+    }
+
     metro.nextNoteTime += step;
-    
-    metro.subTick = (metro.subTick + 1) % metro.subdivision;
+
+    metro.subTick = (metro.subTick + 1) % activeSub;
     if (metro.subTick === 0) {
       metro.currentBeat = (metro.currentBeat + 1) % metro.beats;
     }
@@ -502,6 +536,17 @@ function _setMetroBpm(bpm) {
   const termEl = document.getElementById('metroBpmTerm');
   if (numEl) numEl.textContent = metro.bpm;
   if (termEl) termEl.textContent = _getBpmTerm(metro.bpm);
+}
+
+function _updateGrooveUI() {
+  const hasGroove = metro.groove !== 'none';
+  const subContainer = document.getElementById('metroSubdivs');
+  if (subContainer) subContainer.classList.toggle('locked', hasGroove);
+  const playBtn = document.getElementById('metroStartBtn');
+  const groove = GROOVES[metro.groove];
+  if (playBtn) {
+    playBtn.dataset.grooveLabel = hasGroove && groove ? ` · ${groove.name}` : '';
+  }
 }
 
 function _metroToggle() {
@@ -1264,6 +1309,24 @@ async function initApp() {
       if (fTog) fTog.checked = metro.flashEnabled; 
     }
     
+    // GROOVE SELECT
+    const metroGrooveCtrl = document.getElementById('metroGrooveCtrl');
+    if (metroGrooveCtrl) {
+      metroGrooveCtrl.addEventListener('change', e => {
+        metro.groove = e.target.value;
+        metro.subTick = 0;
+        localStorage.setItem('metro_groove', metro.groove);
+        _updateGrooveUI();
+        showToast(metro.groove === 'none' ? 'Click classico 🥁' : `Groove: ${GROOVES[metro.groove].name} 🎵`);
+      });
+    }
+    const savedGroove = localStorage.getItem('metro_groove');
+    if (savedGroove && GROOVES[savedGroove]) {
+      metro.groove = savedGroove;
+      if (metroGrooveCtrl) metroGrooveCtrl.value = savedGroove;
+    }
+    _updateGrooveUI();
+
     // Inizializza termine musicale
     _setMetroBpm(metro.bpm);
 

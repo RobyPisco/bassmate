@@ -746,6 +746,7 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 .metro-t-subs { display: flex; align-items: center; gap: 15px; width: 100%; justify-content: center; }
 .metro-t-subs .metro-subs { display: flex; gap: 8px; }
 .metro-t-subs .p { width: 36px; height: 36px; border-radius: 50%; padding: 0; display: grid; place-items: center; font-size: 12px; }
+.metro-subs.locked { opacity: .4; pointer-events: none; }
 
 /* Footer Actions */
 .metro-t-footer { display: flex; align-items: center; gap: 18px; margin-top: 20px; }
