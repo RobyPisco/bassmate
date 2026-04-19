@@ -42,19 +42,19 @@
 
     <!-- Icone destra -->
     <div class="td-icons">
-      <button class="icon-btn export-btn-sm" id="kbdHintBtn" data-i18n-title="kbd_hint" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
+      <button class="icon-btn export-btn-sm desktop-only" id="kbdHintBtn" data-i18n-title="kbd_hint" title="Scorciatoie tastiera" onclick="toggleKbdPanel()">⌨️</button>
       <button class="icon-btn export-btn-sm" id="shareBtn" data-i18n-title="share_btn" title="Condividi">🔗</button>
-      <button class="icon-btn export-btn-sm" id="snapshotBtn" data-i18n-title="snapshot_btn" title="Esporta immagine fretboard">📸</button>
-      <button class="icon-btn export-btn-sm" id="exportBtn" data-i18n-title="export_btn" title="Stampa / Esporta PDF">🖨️</button>
-      <a href="chords.html" class="icon-btn export-btn-sm" title="Chord Library" style="text-decoration:none;">🎼</a>
-      <a href="grids.html" class="icon-btn export-btn-sm" data-i18n-title="grids_btn_title" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
-      <a href="exercises.html" class="icon-btn export-btn-sm" data-i18n-title="exercises_btn_title" title="Esercizi pratici" style="text-decoration:none;">📚</a>
+      <button class="icon-btn export-btn-sm desktop-only" id="snapshotBtn" data-i18n-title="snapshot_btn" title="Esporta immagine fretboard">📸</button>
+      <button class="icon-btn export-btn-sm desktop-only" id="exportBtn" data-i18n-title="export_btn" title="Stampa / Esporta PDF">🖨️</button>
+      <a href="chords.html" class="icon-btn export-btn-sm desktop-only" title="Chord Library" style="text-decoration:none;">🎼</a>
+      <a href="grids.html" class="icon-btn export-btn-sm desktop-only" data-i18n-title="grids_btn_title" title="Manici vuoti da stampare" style="text-decoration:none;">📋</a>
+      <a href="exercises.html" class="icon-btn export-btn-sm desktop-only" data-i18n-title="exercises_btn_title" title="Esercizi pratici" style="text-decoration:none;">📚</a>
       <select id="favCtrl" class="sel-wrap" style="display:none; padding:4px; font-size:12px; background:var(--surface); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-weight:bold;">
         <option value="" data-i18n="fav_def">🔖 Preferiti</option>
       </select>
       <button class="icon-btn export-btn-sm" id="favBtn" data-i18n-title="fav_save" title="Salva Preferito">❤️</button>
       <button class="icon-btn export-btn-sm" id="favDelBtn" data-i18n-title="fav_del_title" title="Elimina preferito selezionato" style="display:none; color:#ef4444; border-color:rgba(239,68,68,0.4);">🗑️</button>
-      <a href="contact.html" class="icon-btn export-btn-sm" data-i18n-title="contact_title" title="Contatti" style="text-decoration:none;">📧</a>
+      <a href="contact.html" class="icon-btn export-btn-sm desktop-only" data-i18n-title="contact_title" title="Contatti" style="text-decoration:none;">📧</a>
       <a href="help.html" class="icon-btn export-btn-sm" data-i18n-title="help_btn" title="Guida e Manuale" style="text-decoration:none;">❓</a>
       <a href="donate.html" class="icon-btn donate-btn-sm" data-i18n-title="coffee" title="Offrimi un caffè" style="text-decoration:none;">☕</a>
     </div>
@@ -67,25 +67,27 @@
       <button class="p mini-btn transp-btn" id="transpDn" data-i18n-title="transp_dn_title" title="Semitono giù">&#9664;</button>
       <div class="hz-grid root-scroll" id="rootCtrl"></div>
       <button class="p mini-btn transp-btn" id="transpUp" data-i18n-title="transp_up_title" title="Semitono su">&#9654;</button>
-      <div class="opts-divider"></div>
-      <select id="tuningCtrl" class="opt-sel" data-i18n-title="tuning" title="Accordatura"></select>
-      <select id="labelCtrl" class="opt-sel" data-i18n-title="labels" title="Etichette">
-        <option value="deg" data-i18n="degrees">Gradi</option>
-        <option value="note" data-i18n="notes">Note (C,D,E)</option>
-        <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
-        <option value="finger" data-i18n="finger">Dita (Box)</option>
-      </select>
-      <select id="viewCtrl" class="opt-sel" data-i18n-title="settings" title="Vista">
-        <option value="full" data-i18n="all">Tutto</option>
-        <option value="box" data-i18n="box">Box 5fr</option>
-      </select>
-      <select id="handCtrl" class="opt-sel" data-i18n-title="hand" title="Mano">
-        <option value="right" data-i18n="right">Destro</option>
-        <option value="left" data-i18n="lefty">Mancino</option>
-      </select>
-      <div class="opts-divider"></div>
-      <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metro</span></button>
-      <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄 <span data-i18n="reset_btn">Reset</span></button>
+      <div class="ctrl-opts-scroll">
+        <div class="opts-divider"></div>
+        <select id="tuningCtrl" class="opt-sel" data-i18n-title="tuning" title="Accordatura"></select>
+        <select id="labelCtrl" class="opt-sel" data-i18n-title="labels" title="Etichette">
+          <option value="deg" data-i18n="degrees">Gradi</option>
+          <option value="note" data-i18n="notes">Note (C,D,E)</option>
+          <option value="solfege" data-i18n="solfege">Note (Do,Re,Mi)</option>
+          <option value="finger" data-i18n="finger">Dita (Box)</option>
+        </select>
+        <select id="viewCtrl" class="opt-sel" data-i18n-title="settings" title="Vista">
+          <option value="full" data-i18n="all">Tutto</option>
+          <option value="box" data-i18n="box">Box 5fr</option>
+        </select>
+        <select id="handCtrl" class="opt-sel" data-i18n-title="hand" title="Mano">
+          <option value="right" data-i18n="right">Destro</option>
+          <option value="left" data-i18n="lefty">Mancino</option>
+        </select>
+        <div class="opts-divider"></div>
+        <button class="p header-action-btn metro-prominent" id="metroTogBtn" data-i18n-title="metro_btn" title="Metronomo">🥁 <span data-i18n="metro_btn_lbl">Metro</span></button>
+        <button class="p header-action-btn" id="resetBtn" data-i18n-title="reset_btn" title="Reset Tastiera">🔄 <span data-i18n="reset_btn">Reset</span></button>
+      </div>
     </div>
 
     <!-- Riga 2: Scale selector -->

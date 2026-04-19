@@ -561,10 +561,15 @@ function showToast(msg, duration = 2500) {
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
    THEME TOGGLE (Dark / Light)
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
+function setTogBtnLabel(el, emoji, label) {
+  if (!el) return;
+  el.innerHTML = emoji + '<span class="btn-lbl"> ' + label + '</span>';
+}
+
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btn = document.getElementById('themeTogBtn');
-  if (btn) btn.textContent = theme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
+  if (btn) setTogBtnLabel(btn, theme === 'light' ? '☀️' : '🌙', tl(theme === 'light' ? 'light' : 'dark'));
   localStorage.setItem('bass_theme', theme);
 }
 
@@ -581,9 +586,7 @@ function toggleTheme() {
   localStorage.setItem('bass_theme', newTheme);
   
   const themeBtn = document.getElementById('themeTogBtn');
-  if (themeBtn) {
-    themeBtn.textContent = newTheme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
-  }
+  if (themeBtn) setTogBtnLabel(themeBtn, newTheme === 'light' ? '☀️' : '🌙', tl(newTheme === 'light' ? 'light' : 'dark'));
 }
 
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
@@ -1298,7 +1301,7 @@ async function initApp() {
       audioBtn.addEventListener('click', () => {
         S.audio = !S.audio;
         localStorage.setItem('bass_audio', S.audio);
-        audioBtn.textContent = S.audio ? '🔊 ' + tl('on') : '🔇 ' + tl('off');
+        setTogBtnLabel(audioBtn, S.audio ? '🔊' : '🔇', tl(S.audio ? 'on' : 'off'));
         audioBtn.style.opacity = S.audio ? '1' : '0.5';
       });
     }
@@ -1349,13 +1352,13 @@ async function initApp() {
     // Sincronizza pulsanti iniziali modale
     const audioTogBtn = document.getElementById('audioTogBtn');
     if (audioTogBtn) {
-      audioTogBtn.textContent = S.audio ? '🔊 ' + tl('on') : '🔇 ' + tl('off');
+      setTogBtnLabel(audioTogBtn, S.audio ? '🔊' : '🔇', tl(S.audio ? 'on' : 'off'));
       audioTogBtn.style.opacity = S.audio ? '1' : '0.5';
     }
     const themeTogBtn = document.getElementById('themeTogBtn');
     if (themeTogBtn) {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-      themeTogBtn.textContent = currentTheme === 'light' ? '☀️ ' + tl('light') : '🌙 ' + tl('dark');
+      setTogBtnLabel(themeTogBtn, currentTheme === 'light' ? '☀️' : '🌙', tl(currentTheme === 'light' ? 'light' : 'dark'));
     }
     
     if(S.view === 'quiz') switchTab('quiz');

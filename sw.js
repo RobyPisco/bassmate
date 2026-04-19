@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bassmate-v53';
+const CACHE_NAME = 'bassmate-v54';
 const URLS_TO_CACHE = [
   './',
   './index.html',

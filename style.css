@@ -1295,3 +1295,135 @@ body.tab-metro .metro-panel { display: block !important; border-bottom: none; }
   0% { transform: scale(1); }
   100% { transform: scale(1.4); opacity: 0; }
 }
+
+/* ══════════════════════════════
+   CTRL-OPTS-SCROLL: transparent on desktop, scrollable row on mobile
+══════════════════════════════ */
+.ctrl-opts-scroll { display: contents; }
+
+/* ══════════════════════════════
+   BOTTOM TAB BAR (mobile only)
+══════════════════════════════ */
+.bottom-tab-bar { display: none; }
+
+/* ══════════════════════════════
+   MOBILE ≤ 768px
+══════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Bottom fixed nav bar ── */
+  .bottom-tab-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bottom-tab-bar .tab-btn {
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 2px;
+    border-radius: 0;
+    border: none;
+    height: 56px;
+    min-width: 0;
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: none;
+    justify-content: center;
+    background: transparent;
+    box-shadow: none;
+    color: var(--muted);
+  }
+  .bottom-tab-bar .tab-btn .tab-icon { font-size: 22px; line-height: 1.2; display: block; }
+  .bottom-tab-bar .tab-btn .tab-label { font-size: 10px; line-height: 1; }
+  .bottom-tab-bar .tab-btn.active { background: transparent; box-shadow: none; color: var(--accent); }
+  .bottom-tab-bar .tab-btn.active .tab-label { color: var(--accent); font-weight: 700; }
+  [data-theme="light"] .bottom-tab-bar { background: rgba(255,255,255,0.95); }
+
+  /* ── App needs space for fixed bottom bar ── */
+  .app { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+
+  /* ── Hide header tabs (bottom bar takes over) ── */
+  .header-tab-row { display: none !important; }
+
+  /* ── Hide desktop-only header icons ── */
+  .desktop-only { display: none !important; }
+
+  /* ── Compact header bar ── */
+  .td-nav-bar { padding: 8px 12px; gap: 6px; }
+  .td-icons { width: auto; padding-top: 0; border-top: none; gap: 4px; }
+  .header-settings { gap: 4px; }
+  .lang-ctrl .p { padding: 3px 5px; font-size: 10px; }
+
+  /* ── Theme/Audio: icon-only on mobile ── */
+  .btn-lbl { display: none; }
+
+  /* ── Ctrl-row: grid so ◀ notes ▶ stay on one line ── */
+  .ctrl-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 4px;
+    padding: 0 8px 4px;
+    align-items: center;
+  }
+  #transpDn   { grid-column: 1; grid-row: 1; }
+  #rootCtrl   { grid-column: 2; grid-row: 1; overflow-x: auto; scrollbar-width: none; }
+  #rootCtrl::-webkit-scrollbar { display: none; }
+  #transpUp   { grid-column: 3; grid-row: 1; }
+  .ctrl-opts-scroll {
+    grid-column: 1 / -1; grid-row: 2;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 2px;
+  }
+  .ctrl-opts-scroll::-webkit-scrollbar { display: none; }
+  .ctrl-opts-scroll .opts-divider { flex-shrink: 0; }
+
+  /* ── Scales row: vertical stack so pills are visible ── */
+  .scroller-row.scales-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+  .sg-tabs {
+    width: auto !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+  }
+  .sg-tabs::-webkit-scrollbar { display: none; }
+  .sg-tab { flex: 0 0 auto !important; }
+  .panels-hz.scales-scroll {
+    flex: none;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .panels-hz.scales-scroll::-webkit-scrollbar { display: none; }
+
+  /* ── Scale pills: horizontal scroll instead of wrap ── */
+  .sg-panel { flex-wrap: nowrap; }
+  .sg-panel .p { flex-shrink: 0; }
+
+  /* ── Fretboard: left-align, compact padding ── */
+  .fb-area { justify-content: flex-start; padding: 12px 0 8px; }
+
+  /* ── Section padding ── */
+  .scale-info { padding: 12px 16px; }
+  .pos-bar { padding: 8px 16px; }
+  .legend { padding: 8px 16px 12px; }
+}
