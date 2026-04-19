@@ -84,117 +84,147 @@
 
     <!-- ================= METRONOME PANEL ================= -->
     <div id="metroPanel" class="metro-panel">
-      <div class="metro-ui-tack">
-        
-        <!-- Header: Beats Visualization -->
-        <div class="metro-t-header">
-           <div class="metro-beats" id="metroBeatDots"></div>
+      <div class="metro-desk-grid">
+
+        <!-- ── LEFT COL: Timing controls ── -->
+        <div class="metro-dc metro-dc-left">
+          <div class="metro-ctrl-grp">
+            <span class="row-label-sm" data-i18n="metro_sig">Battuta</span>
+            <select id="metroTimeSig" class="metro-select">
+              <option value="2">2/4</option>
+              <option value="3">3/4</option>
+              <option value="4" selected>4/4</option>
+              <option value="5">5/4</option>
+              <option value="6">6/8</option>
+              <option value="7">7/8</option>
+            </select>
+          </div>
+          <div class="metro-ctrl-grp">
+            <span class="row-label-sm" data-i18n="metro_sub">Suddividi</span>
+            <div class="metro-subs" id="metroSubdivs">
+              <button class="p on" data-v="1">1</button>
+              <button class="p" data-v="2">2</button>
+              <button class="p" data-v="3">3</button>
+              <button class="p" data-v="4">4</button>
+            </div>
+          </div>
+          <div class="metro-ctrl-grp">
+            <div class="metro-toggle-row">
+              <span class="row-label-sm" data-i18n="metro_trainer">Speed Up</span>
+              <label class="metro-s-btn trainer-s" style="width:34px;height:34px;font-size:14px;">
+                <input type="checkbox" id="metroTrainerTog" style="display:none">
+                <span id="metroTrainerIcon">📈</span>
+              </label>
+            </div>
+            <div class="metro-incr-row">
+              <span class="unit">+</span>
+              <input type="number" id="metroIncrBpm" value="1" min="1" max="10" class="sm-input-num" style="width:44px!important;">
+              <span class="unit">BPM /</span>
+              <input type="number" id="metroIncrBars" value="2" min="1" max="32" class="sm-input-num" style="width:44px!important;">
+              <span class="unit">bars</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Body: BPM Disk -->
-        <div class="metro-t-body">
-           <button class="metro-h-btn" id="metroBpmDn" aria-label="BPM Down">−</button>
-           <div class="metro-bpm-hero" id="metroTapArea">
+        <!-- ── CENTER COL: BPM disk + actions ── -->
+        <div class="metro-ui-tack">
+
+          <!-- Beat dots -->
+          <div class="metro-t-header">
+            <div class="metro-beats" id="metroBeatDots"></div>
+          </div>
+
+          <!-- BPM Disk -->
+          <div class="metro-t-body">
+            <button class="metro-h-btn" id="metroBpmDn" aria-label="BPM Down">−</button>
+            <div class="metro-bpm-hero" id="metroTapArea">
               <div class="hero-inner">
                 <span class="hero-term" id="metroBpmTerm">Moderato</span>
                 <span class="hero-val" id="metroBpmNum">80</span>
                 <span class="hero-unit">BPM</span>
               </div>
-           </div>
-           <button class="metro-h-btn" id="metroBpmUp" aria-label="BPM Up">+</button>
-        </div>
+            </div>
+            <button class="metro-h-btn" id="metroBpmUp" aria-label="BPM Up">+</button>
+          </div>
 
-        <!-- Timer & Progress -->
-        <div class="metro-t-timer">
-           <div class="t-times">
-             <span id="metroTimerElapsed">00:00</span>
-             <span id="metroTimerTotal">05:00</span>
-           </div>
-           <div class="t-progress-track">
+          <!-- Play + Half/Double -->
+          <div class="metro-action-row">
+            <button id="metroBpmHalf" class="metro-halfdbl-btn" title="BPM ÷ 2">÷2</button>
+            <button id="metroStartBtn" class="metro-t-play">▶</button>
+            <button id="metroBpmDouble" class="metro-halfdbl-btn" title="BPM × 2">×2</button>
+          </div>
+
+          <!-- Timer & Progress -->
+          <div class="metro-t-timer">
+            <div class="t-times">
+              <span id="metroTimerElapsed">00:00</span>
+              <span id="metroTimerTotal">05:00</span>
+            </div>
+            <div class="t-progress-track">
               <div id="metroProgressFill" class="t-progress-fill"></div>
-           </div>
+            </div>
+          </div>
+
+          <!-- Step Grid (pattern visualizer) -->
+          <div class="metro-step-wrap">
+            <span class="row-label-sm" id="metroStepLabel">Pattern</span>
+            <div class="metro-step-grid" id="metroStepGrid"></div>
+          </div>
+
+          <!-- Small action buttons -->
+          <div class="metro-t-footer">
+            <button id="metroFlashBtnUI" class="metro-s-btn on">✨</button>
+            <button id="metroSoundCycleBtn" class="metro-s-btn">🔊</button>
+            <!-- Mobile only: toggle side columns -->
+            <button id="metroAdvBtn" class="metro-s-btn metro-mobile-only" data-i18n-title="metro_adv" title="Opzioni">⚙️</button>
+          </div>
+
+        </div><!-- /metro-ui-tack -->
+
+        <!-- ── RIGHT COL: Groove / Volume / Timer ── -->
+        <div class="metro-dc metro-dc-right">
+          <div class="metro-ctrl-grp">
+            <span class="row-label-sm" data-i18n="metro_groove">Groove</span>
+            <select id="metroGrooveCtrl" class="metro-select">
+              <option value="none">Click</option>
+              <option value="rock">Rock 4/4</option>
+              <option value="funk">Funk 16th</option>
+              <option value="jazz">Jazz swing</option>
+              <option value="bossa">Bossa Nova</option>
+              <option value="shuffle">Shuffle</option>
+            </select>
+          </div>
+          <div class="metro-ctrl-grp">
+            <span class="row-label-sm" data-i18n="metro_volume">Volume</span>
+            <input type="range" id="metroVolumeCtrl" class="metro-vol-slider" min="0" max="100" value="80">
+          </div>
+          <div class="metro-ctrl-grp">
+            <div class="metro-toggle-row">
+              <span class="row-label-sm" data-i18n="metro_timer">Timer</span>
+              <input type="checkbox" id="metroTimerTog" class="adv-check">
+            </div>
+            <div class="metro-incr-row" style="margin-top:6px;">
+              <input type="number" id="metroTimerMin" value="5" min="1" max="99" class="sm-input-num" style="width:44px!important;">
+              <span class="unit">min</span>
+            </div>
+          </div>
+          <div class="metro-ctrl-grp">
+            <div class="metro-toggle-row">
+              <span class="row-label-sm" data-i18n="metro_flash">Flash</span>
+              <button id="metroFlashTogRight" class="metro-s-btn on" style="width:34px;height:34px;font-size:14px;">✨</button>
+            </div>
+          </div>
+        </div><!-- /metro-dc-right -->
+
+        <!-- Hidden compat -->
+        <div class="hide">
+          <select id="metroSoundSet"><option value="digital">Digital</option><option value="wood">Wood</option><option value="drum">Drum</option></select>
+          <input type="checkbox" id="metroFlashTog" checked>
+          <div id="metroAdvanced"></div>
         </div>
 
-        <!-- Subdivisions -->
-        <div class="metro-t-subs">
-           <span class="row-label-sm" data-i18n="metro_sub">Suddividi</span>
-           <div class="metro-subs" id="metroSubdivs">
-              <button class="p on" data-v="1">1</button>
-              <button class="p" data-v="2">2</button>
-              <button class="p" data-v="3">3</button>
-              <button class="p" data-v="4">4</button>
-           </div>
-        </div>
-
-        <!-- Footer: Action Bar -->
-        <div class="metro-t-footer">
-           <button id="metroAdvBtn" class="metro-s-btn" data-i18n-title="metro_adv">⚙️</button>
-           <button id="metroSoundCycleBtn" class="metro-s-btn">🔊</button>
-           
-           <button id="metroStartBtn" class="metro-t-play">▶</button>
-           
-           <button id="metroFlashBtnUI" class="metro-s-btn">✨</button>
-           <label class="metro-s-btn trainer-s">
-              <input type="checkbox" id="metroTrainerTog" style="display:none">
-              <span id="metroTrainerIcon">📈</span>
-           </label>
-        </div>
-
-        <!-- Advanced Panel (Hidden by default) -->
-        <div id="metroAdvanced" class="metro-advanced hide">
-           <div class="adv-row">
-              <span class="row-label-sm" data-i18n="metro_sig">Battuta</span>
-              <div class="adv-controls">
-                 <select id="metroTimeSig" class="sm-select" style="min-width:70px;">
-                   <option value="2">2/4</option>
-                   <option value="3">3/4</option>
-                   <option value="4" selected>4/4</option>
-                   <option value="5">5/4</option>
-                   <option value="6">6/8</option>
-                   <option value="7">7/8</option>
-                 </select>
-              </div>
-           </div>
-           <div class="adv-row">
-              <span class="row-label-sm" data-i18n="metro_timer">Timer Sessione</span>
-              <div class="adv-controls">
-                 <input type="number" id="metroTimerMin" value="5" min="1" max="99" class="sm-input-num">
-                 <span class="unit">min</span>
-                 <input type="checkbox" id="metroTimerTog" class="adv-check">
-              </div>
-           </div>
-           <div class="adv-row">
-              <span class="row-label-sm" data-i18n="metro_incr">Incrementi</span>
-              <div class="adv-controls">
-                 <span class="unit">+</span>
-                 <input type="number" id="metroIncrBpm" value="1" min="1" max="10" class="sm-input-num">
-                 <span class="unit">BPM ogni</span>
-                 <input type="number" id="metroIncrBars" value="2" min="1" max="32" class="sm-input-num">
-                 <span class="unit">misure</span>
-              </div>
-           </div>
-           <div class="adv-row">
-              <span class="row-label-sm" data-i18n="metro_groove">Groove</span>
-              <div class="adv-controls">
-                 <select id="metroGrooveCtrl" class="sm-select" style="min-width:110px;">
-                   <option value="none">Click</option>
-                   <option value="rock">Rock 4/4</option>
-                   <option value="funk">Funk 16th</option>
-                   <option value="jazz">Jazz swing</option>
-                   <option value="bossa">Bossa Nova</option>
-                   <option value="shuffle">Shuffle</option>
-                 </select>
-              </div>
-           </div>
-           <!-- Hidden inputs to sync with UI buttons -->
-           <div class="hide">
-              <select id="metroSoundSet"><option value="digital">Digital</option><option value="wood">Wood</option><option value="drum">Drum</option></select>
-              <input type="checkbox" id="metroFlashTog" checked>
-           </div>
-        </div>
-
-      </div>
-    </div>
+      </div><!-- /metro-desk-grid -->
+    </div><!-- /metroPanel -->
 
     <div class="fb-area">
       <div class="fb-layout" id="fretboard"></div>

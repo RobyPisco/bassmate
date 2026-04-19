@@ -49,7 +49,7 @@ const I18N = {
     settings_title: "Impostazioni", sm_general: "Generale", sm_display: "Visualizzazione", nav_settings: "Opzioni",
     language: "Lingua", theme: "Tema", audio_engine: "Motore Audio",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Suddividi", metro_trainer: "Speed Up",
-    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash", metro_groove: "Groove",
+    metro_adv: "Configura", metro_timer: "Timer Sessione", metro_incr: "Incrementi", metro_sound: "Suono", metro_flash: "Flash", metro_groove: "Groove", metro_volume: "Volume",
     contact_link: "Contatti", contact_btn: "Scrivimi un'email",
     tuner_start: "Avvia Tuner", tuner_stop: "Ferma Tuner",
     tuner_prompt: "Premi il pulsante per iniziare",
@@ -116,7 +116,7 @@ const I18N = {
     settings_title: "Settings", sm_general: "General", sm_display: "Display", nav_settings: "Options",
     language: "Language", theme: "Theme", audio_engine: "Audio Engine",
     nav_tuner: "Tuner", nav_metro: "Metro", metro_sub: "Subdivide", metro_trainer: "Speed Up",
-    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash", metro_groove: "Groove",
+    metro_adv: "Configure", metro_timer: "Session Timer", metro_incr: "Increments", metro_sound: "Sound", metro_flash: "Flash", metro_groove: "Groove", metro_volume: "Volume",
     contact_link: "Contact Me", contact_btn: "Send me an email",
     tuner_start: "Start Tuner", tuner_stop: "Stop Tuner",
     tuner_prompt: "Press the button to start",
@@ -345,6 +345,7 @@ const metro = {
   // Opzioni Pro
   soundSet: 'digital',  // digital, wood, drum
   groove: 'none',       // groove preset key (see GROOVES)
+  volume: 0.8,          // 0.0–1.0
   flashEnabled: true,
   timerEnabled: false,
   timerMin: 5,
@@ -358,12 +359,13 @@ function _metroClick(time, isAccent, isSub = false) {
   const osc  = ctx.createOscillator();
   const gain = ctx.createGain();
 
+  const vol = metro.volume ?? 0.8;
   if (metro.soundSet === 'wood') {
     osc.type = 'sine';
     let freq = isAccent ? 1600 : (isSub ? 800 : 1200);
     osc.frequency.setValueAtTime(freq, time);
     gain.gain.setValueAtTime(0.001, time);
-    gain.gain.linearRampToValueAtTime(isAccent ? 0.6 : 0.3, time + 0.002);
+    gain.gain.linearRampToValueAtTime((isAccent ? 0.6 : 0.3) * vol, time + 0.002);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
   } else if (metro.soundSet === 'drum') {
     osc.type = 'sine';
@@ -372,7 +374,7 @@ function _metroClick(time, isAccent, isSub = false) {
     osc.frequency.setValueAtTime(freqStart, time);
     osc.frequency.exponentialRampToValueAtTime(freqEnd, time + 0.08);
     gain.gain.setValueAtTime(0.001, time);
-    gain.gain.linearRampToValueAtTime(isAccent ? 0.8 : 0.5, time + 0.002);
+    gain.gain.linearRampToValueAtTime((isAccent ? 0.8 : 0.5) * vol, time + 0.002);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
   } else {
     // Digital (Default)
@@ -380,7 +382,7 @@ function _metroClick(time, isAccent, isSub = false) {
     let freq = isAccent ? 1050 : (isSub ? 440 : 630);
     osc.frequency.setValueAtTime(freq, time);
     gain.gain.setValueAtTime(0.001, time);
-    gain.gain.linearRampToValueAtTime(isAccent ? 0.55 : (isSub ? 0.15 : 0.28), time + 0.003);
+    gain.gain.linearRampToValueAtTime((isAccent ? 0.55 : (isSub ? 0.15 : 0.28)) * vol, time + 0.003);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
   }
 
@@ -538,15 +540,41 @@ function _setMetroBpm(bpm) {
   if (termEl) termEl.textContent = _getBpmTerm(metro.bpm);
 }
 
+function _initStepGrid() {
+  const grid = document.getElementById('metroStepGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  for (let i = 0; i < 16; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i % 4 === 0 ? ' step-beat' : '');
+    dot.dataset.i = i;
+    grid.appendChild(dot);
+  }
+}
+
+function _drawStepGrid() {
+  const grid = document.getElementById('metroStepGrid');
+  if (!grid) return;
+  const groove = GROOVES[metro.groove];
+  const dots = grid.querySelectorAll('.step-dot');
+  dots.forEach((dot, i) => {
+    dot.classList.remove('step-accent', 'step-normal', 'step-ghost');
+    if (groove && groove.steps) {
+      const cell = groove.steps[i];
+      if (cell === 'A') dot.classList.add('step-accent');
+      else if (cell === 'N') dot.classList.add('step-normal');
+      else if (cell === 'G') dot.classList.add('step-ghost');
+    }
+  });
+  const label = document.getElementById('metroStepLabel');
+  if (label) label.textContent = groove && groove.steps ? groove.name : 'Pattern';
+}
+
 function _updateGrooveUI() {
   const hasGroove = metro.groove !== 'none';
   const subContainer = document.getElementById('metroSubdivs');
   if (subContainer) subContainer.classList.toggle('locked', hasGroove);
-  const playBtn = document.getElementById('metroStartBtn');
-  const groove = GROOVES[metro.groove];
-  if (playBtn) {
-    playBtn.dataset.grooveLabel = hasGroove && groove ? ` · ${groove.name}` : '';
-  }
+  _drawStepGrid();
 }
 
 function _metroToggle() {
@@ -1235,15 +1263,6 @@ async function initApp() {
       });
     }
 
-    // ADVANCED TOGGLE
-    const metroAdvBtn = document.getElementById('metroAdvBtn');
-    if (metroAdvBtn) {
-      metroAdvBtn.addEventListener('click', () => {
-        const adv = document.getElementById('metroAdvanced');
-        if (adv) adv.classList.toggle('hide');
-      });
-    }
-
     // TIMER INPUT
     const tMin = document.getElementById('metroTimerMin');
     if (tMin) tMin.addEventListener('change', e => { metro.timerMin = +e.target.value; localStorage.setItem('metro_timer_min', metro.timerMin); });
@@ -1277,6 +1296,8 @@ async function initApp() {
       metroFlashBtnUI.addEventListener('click', () => {
         metro.flashEnabled = !metro.flashEnabled;
         metroFlashBtnUI.classList.toggle('on', metro.flashEnabled);
+        const fTogRight = document.getElementById('metroFlashTogRight');
+        if (fTogRight) fTogRight.classList.toggle('on', metro.flashEnabled);
         const fTog = document.getElementById('metroFlashTog');
         if (fTog) fTog.checked = metro.flashEnabled;
         localStorage.setItem('metro_flash', metro.flashEnabled);
@@ -1301,12 +1322,14 @@ async function initApp() {
       if (sSet) sSet.value = savedSound; 
     }
     const savedFlash = localStorage.getItem('metro_flash');
-    if (savedFlash !== null) { 
-      metro.flashEnabled = (savedFlash === 'true'); 
+    if (savedFlash !== null) {
+      metro.flashEnabled = (savedFlash === 'true');
       const fTogUI = document.getElementById('metroFlashBtnUI');
       if (fTogUI) fTogUI.classList.toggle('on', metro.flashEnabled);
+      const fTogRight = document.getElementById('metroFlashTogRight');
+      if (fTogRight) fTogRight.classList.toggle('on', metro.flashEnabled);
       const fTog = document.getElementById('metroFlashTog');
-      if (fTog) fTog.checked = metro.flashEnabled; 
+      if (fTog) fTog.checked = metro.flashEnabled;
     }
     
     // GROOVE SELECT
@@ -1325,7 +1348,56 @@ async function initApp() {
       metro.groove = savedGroove;
       if (metroGrooveCtrl) metroGrooveCtrl.value = savedGroove;
     }
+    _initStepGrid();
     _updateGrooveUI();
+
+    // VOLUME
+    const metroVolumeCtrl = document.getElementById('metroVolumeCtrl');
+    if (metroVolumeCtrl) {
+      const savedVol = localStorage.getItem('metro_volume');
+      if (savedVol !== null) { metro.volume = +savedVol / 100; metroVolumeCtrl.value = savedVol; }
+      metroVolumeCtrl.addEventListener('input', e => {
+        metro.volume = +e.target.value / 100;
+        localStorage.setItem('metro_volume', e.target.value);
+      });
+    }
+
+    // HALF / DOUBLE BPM
+    const metroBpmHalf = document.getElementById('metroBpmHalf');
+    const metroBpmDouble = document.getElementById('metroBpmDouble');
+    if (metroBpmHalf) metroBpmHalf.addEventListener('click', () => _setMetroBpm(Math.round(metro.bpm / 2)));
+    if (metroBpmDouble) metroBpmDouble.addEventListener('click', () => _setMetroBpm(metro.bpm * 2));
+
+    // FLASH right-col button sync
+    const metroFlashTogRight = document.getElementById('metroFlashTogRight');
+    if (metroFlashTogRight) {
+      metroFlashTogRight.addEventListener('click', () => {
+        metro.flashEnabled = !metro.flashEnabled;
+        metroFlashTogRight.classList.toggle('on', metro.flashEnabled);
+        const fTogUI = document.getElementById('metroFlashBtnUI');
+        if (fTogUI) fTogUI.classList.toggle('on', metro.flashEnabled);
+        const fTog = document.getElementById('metroFlashTog');
+        if (fTog) fTog.checked = metro.flashEnabled;
+        localStorage.setItem('metro_flash', metro.flashEnabled);
+      });
+    }
+
+    // SPACEBAR = Play/Stop
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' && !e.target.matches('input, textarea, select')) {
+        e.preventDefault();
+        _metroToggle();
+      }
+    });
+
+    // ⚙️ mobile: toggle side columns
+    const metroAdvBtn = document.getElementById('metroAdvBtn');
+    if (metroAdvBtn) {
+      metroAdvBtn.addEventListener('click', () => {
+        const grid = document.querySelector('.metro-desk-grid');
+        if (grid) grid.classList.toggle('mobile-adv-open');
+      });
+    }
 
     // Inizializza termine musicale
     _setMetroBpm(metro.bpm);
