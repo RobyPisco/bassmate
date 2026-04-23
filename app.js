@@ -326,6 +326,17 @@ const GROOVES = {
   shuffle: { name: 'Shuffle',     steps: ['A',null,null,'N', null,null,'A',null, null,'N',null,null, 'A',null,null,'N'], swing: 0.67 }
 };
 
+// Drum backing track patterns — 16 steps (4/4 at sixteenth resolution)
+// Values: 0=silent, 1=hit, 2=accent
+const DRUM_PATTERNS = {
+  none:    { kick:[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], hihat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  rock:    { kick:[2,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0], snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], hihat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0] },
+  funk:    { kick:[2,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0], snare:[0,0,0,0,2,0,0,1,0,0,0,0,2,0,0,0], hihat:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], hh_vol:[0.7,0.3,0.5,0.3,0.5,0.3,0.5,0.3,0.7,0.3,0.5,0.3,0.5,0.3,0.5,0.8] },
+  jazz:    { kick:[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0], hihat:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], ride:[2,0,1,1,0,1,2,0,1,0,1,1,0,1,2,0] },
+  bossa:   { kick:[2,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0], snare:[0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,0], hihat:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], rimshot:true },
+  shuffle: { kick:[2,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0], snare:[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0], hihat:[1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1] }
+};
+
 const metro = {
   running: false,
   bpm: 80,
@@ -346,6 +357,8 @@ const metro = {
   soundSet: 'digital',  // digital, wood, drum
   groove: 'none',       // groove preset key (see GROOVES)
   volume: 0.8,          // 0.0–1.0
+  drumsEnabled: false,
+  drumVolume: 0.7,
   flashEnabled: true,
   timerEnabled: false,
   timerMin: 5,
@@ -396,6 +409,105 @@ function _metroClick(time, isAccent, isSub = false) {
   }
 }
 
+function _drumKick(time, accent) {
+  const ctx = getAudioCtx();
+  const vol = metro.drumVolume * (accent ? 1.0 : 0.75);
+  const osc = ctx.createOscillator();
+  const g   = ctx.createGain();
+  osc.connect(g); g.connect(ctx.destination);
+  osc.frequency.setValueAtTime(140, time);
+  osc.frequency.exponentialRampToValueAtTime(42, time + 0.07);
+  g.gain.setValueAtTime(vol * 1.1, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + 0.38);
+  osc.start(time); osc.stop(time + 0.38);
+  // transient noise click
+  const bufN = Math.floor(ctx.sampleRate * 0.035);
+  const buf  = ctx.createBuffer(1, bufN, ctx.sampleRate);
+  const d    = buf.getChannelData(0);
+  for (let i = 0; i < bufN; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / bufN);
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const ng  = ctx.createGain();
+  ng.gain.setValueAtTime(vol * 0.45, time);
+  ng.gain.exponentialRampToValueAtTime(0.001, time + 0.035);
+  src.connect(ng); ng.connect(ctx.destination);
+  src.start(time); src.stop(time + 0.035);
+}
+
+function _drumSnare(time, accent, rimshot) {
+  const ctx = getAudioCtx();
+  const vol = metro.drumVolume * (accent ? 1.0 : 0.65);
+  const dur = rimshot ? 0.055 : 0.19;
+  // tone
+  const osc = ctx.createOscillator();
+  const og  = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = rimshot ? 380 : 195;
+  osc.connect(og); og.connect(ctx.destination);
+  og.gain.setValueAtTime(vol * (rimshot ? 0.55 : 0.75), time);
+  og.gain.exponentialRampToValueAtTime(0.001, time + dur);
+  osc.start(time); osc.stop(time + dur);
+  // noise
+  const bufN = Math.floor(ctx.sampleRate * dur);
+  const buf  = ctx.createBuffer(1, bufN, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufN; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const flt = ctx.createBiquadFilter(); flt.type = 'highpass'; flt.frequency.value = rimshot ? 2500 : 1400;
+  const ng  = ctx.createGain();
+  ng.gain.setValueAtTime(vol * 0.55, time);
+  ng.gain.exponentialRampToValueAtTime(0.001, time + dur);
+  src.connect(flt); flt.connect(ng); ng.connect(ctx.destination);
+  src.start(time); src.stop(time + dur);
+}
+
+function _drumHihat(time, vol) {
+  const ctx  = getAudioCtx();
+  const dur  = 0.042;
+  const bufN = Math.floor(ctx.sampleRate * dur);
+  const buf  = ctx.createBuffer(1, bufN, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufN; i++) data[i] = Math.random() * 2 - 1;
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const flt = ctx.createBiquadFilter(); flt.type = 'highpass'; flt.frequency.value = 7500;
+  const g   = ctx.createGain();
+  g.gain.setValueAtTime(metro.drumVolume * vol * 0.38, time);
+  g.gain.exponentialRampToValueAtTime(0.001, time + dur);
+  src.connect(flt); flt.connect(g); g.connect(ctx.destination);
+  src.start(time); src.stop(time + dur);
+}
+
+function _drumRide(time, accent) {
+  const ctx = getAudioCtx();
+  const vol = metro.drumVolume * (accent ? 0.55 : 0.38);
+  [1046, 1567, 2637].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const g   = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = freq;
+    osc.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(vol * (0.3 - i * 0.07), time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
+    osc.start(time); osc.stop(time + 0.45);
+  });
+}
+
+function _drumScheduleStep(si, time, dp) {
+  const rimshot = !!dp.rimshot;
+  if (dp.kick  && dp.kick[si])  _drumKick(time,  dp.kick[si]  === 2);
+  if (dp.snare && dp.snare[si]) _drumSnare(time, dp.snare[si] === 2, rimshot);
+  if (dp.hihat && dp.hihat[si]) _drumHihat(time, dp.hh_vol ? dp.hh_vol[si] : (dp.hihat[si] === 2 ? 1.0 : 0.6));
+  if (dp.ride  && dp.ride[si])  _drumRide(time,  dp.ride[si]  === 2);
+}
+
+function _syncDrumsUI() {
+  const on = metro.drumsEnabled;
+  const btn1 = document.getElementById('metroDrumsBtn');
+  const btn2 = document.getElementById('metroDrumsBtnRight');
+  if (btn1) btn1.classList.toggle('on', on);
+  if (btn2) btn2.classList.toggle('on', on);
+  const volWrap = document.getElementById('metroDrumVolWrap');
+  if (volWrap) volWrap.style.display = on ? '' : 'none';
+}
+
 function _metroScheduler() {
   const ctx = getAudioCtx();
   const groove = GROOVES[metro.groove] || GROOVES.none;
@@ -420,6 +532,18 @@ function _metroScheduler() {
     } else {
       const isAccent = isMainBeat && (metro.currentBeat === 0);
       _metroClick(metro.nextNoteTime, isAccent, !isMainBeat);
+    }
+
+    // Drum backing track
+    if (metro.drumsEnabled) {
+      const dp = DRUM_PATTERNS[metro.groove] || DRUM_PATTERNS.none;
+      // Always work in 16-step sixteenth grid
+      const drumSub = 4;
+      const drumTick = (metro.currentBeat * drumSub + metro.subTick) % 16;
+      // When no groove (activeSub may be < 4), only fire on integer sixteenth positions
+      if (activeSub >= 4 || metro.subTick === 0) {
+        _drumScheduleStep(drumTick, metro.nextNoteTime, dp);
+      }
     }
 
     // Speed Trainer
@@ -1305,6 +1429,30 @@ async function initApp() {
       });
     }
 
+    // DRUMS TOGGLE
+    function _toggleDrums() {
+      metro.drumsEnabled = !metro.drumsEnabled;
+      localStorage.setItem('metro_drums', metro.drumsEnabled);
+      _syncDrumsUI();
+      showToast(metro.drumsEnabled ? '🥁 Drums ON' : '🥁 Drums OFF');
+    }
+    const metroDrumsBtn = document.getElementById('metroDrumsBtn');
+    const metroDrumsBtnRight = document.getElementById('metroDrumsBtnRight');
+    if (metroDrumsBtn) metroDrumsBtn.addEventListener('click', _toggleDrums);
+    if (metroDrumsBtnRight) metroDrumsBtnRight.addEventListener('click', _toggleDrums);
+
+    const metroDrumVolCtrl = document.getElementById('metroDrumVolCtrl');
+    if (metroDrumVolCtrl) {
+      const savedDrumVol = localStorage.getItem('metro_drum_volume');
+      if (savedDrumVol !== null) { metro.drumVolume = +savedDrumVol / 100; metroDrumVolCtrl.value = savedDrumVol; }
+      metroDrumVolCtrl.addEventListener('input', e => {
+        metro.drumVolume = +e.target.value / 100;
+        localStorage.setItem('metro_drum_volume', e.target.value);
+      });
+    }
+    const savedDrums = localStorage.getItem('metro_drums');
+    if (savedDrums !== null) { metro.drumsEnabled = savedDrums === 'true'; _syncDrumsUI(); }
+
     // TRAINER UI ICON SYNC
     const mTrainerTog = document.getElementById('metroTrainerTog');
     const mTrainerIcon = document.getElementById('metroTrainerIcon');
@@ -1333,20 +1481,26 @@ async function initApp() {
     }
     
     // GROOVE SELECT
-    const metroGrooveCtrl = document.getElementById('metroGrooveCtrl');
-    if (metroGrooveCtrl) {
-      metroGrooveCtrl.addEventListener('change', e => {
-        metro.groove = e.target.value;
-        metro.subTick = 0;
-        localStorage.setItem('metro_groove', metro.groove);
-        _updateGrooveUI();
-        showToast(metro.groove === 'none' ? 'Click classico 🥁' : `Groove: ${GROOVES[metro.groove].name} 🎵`);
-      });
+    function _setGroove(val) {
+      metro.groove = val;
+      metro.subTick = 0;
+      localStorage.setItem('metro_groove', val);
+      _updateGrooveUI();
+      const metroGrooveCtrl = document.getElementById('metroGrooveCtrl');
+      const metroGrooveCtrlInline = document.getElementById('metroGrooveCtrlInline');
+      if (metroGrooveCtrl) metroGrooveCtrl.value = val;
+      if (metroGrooveCtrlInline) metroGrooveCtrlInline.value = val;
+      showToast(val === 'none' ? 'Click classico 🥁' : `Groove: ${GROOVES[val].name} 🎵`);
     }
+    const metroGrooveCtrl = document.getElementById('metroGrooveCtrl');
+    const metroGrooveCtrlInline = document.getElementById('metroGrooveCtrlInline');
+    if (metroGrooveCtrl) metroGrooveCtrl.addEventListener('change', e => _setGroove(e.target.value));
+    if (metroGrooveCtrlInline) metroGrooveCtrlInline.addEventListener('change', e => _setGroove(e.target.value));
     const savedGroove = localStorage.getItem('metro_groove');
     if (savedGroove && GROOVES[savedGroove]) {
       metro.groove = savedGroove;
       if (metroGrooveCtrl) metroGrooveCtrl.value = savedGroove;
+      if (metroGrooveCtrlInline) metroGrooveCtrlInline.value = savedGroove;
     }
     _initStepGrid();
     _updateGrooveUI();
@@ -2195,6 +2349,13 @@ function renderFretboard() {
   const fStart = isBox ? S.boxStart : 0;
   const fEnd   = isBox ? S.boxStart+BOX-1 : FRETS;
 
+  const numCols = fEnd - fStart + 1;
+  const vw = document.documentElement.clientWidth;
+  const rawFw = Math.floor((vw - 72 - 56) / numCols);
+  const fw = vw >= 900 ? Math.max(60, Math.min(90, rawFw)) : 60;
+  const ds = Math.round(fw * 0.567);
+  const fh = Math.round(fw * 0.767);
+
   const pb = document.getElementById('posBar');
   if (isBox) {
     pb.classList.remove('hide');
@@ -2204,6 +2365,9 @@ function renderFretboard() {
   }
 
   fb.innerHTML = '';
+  fb.style.setProperty('--fw', fw + 'px');
+  fb.style.setProperty('--ds', ds + 'px');
+  fb.style.setProperty('--fh', fh + 'px');
 
   const lcol = mkEl('div','fb-labels');
   t.notes.forEach(stringOpenNote => {
@@ -2220,7 +2384,7 @@ function renderFretboard() {
 
   for (let f=fStart; f<=fEnd; f++) {
     if (f===0) continue;
-    const w = mkEl('div','fb-wire'); w.style.left = `calc(${f - fStart + 1} * 60px)`;
+    const w = mkEl('div','fb-wire'); w.style.left = `calc(${f - fStart + 1} * ${fw}px)`;
     neck.appendChild(w);
   }
 
@@ -2228,11 +2392,11 @@ function renderFretboard() {
     if (pos<fStart||pos>fEnd) return;
     if (DOUBLE_MARKS.has(pos)) {
       [-13,13].forEach(off=>{
-        const m=mkEl('div','fb-dot'); m.style.left=`calc(${pos - fStart + 0.5} * 60px + ${off}px)`;
+        const m=mkEl('div','fb-dot'); m.style.left=`calc(${pos - fStart + 0.5} * ${fw}px + ${off}px)`;
         neck.appendChild(m);
       });
     } else {
-      const m=mkEl('div','fb-dot'); m.style.left=`calc(${pos - fStart + 0.5} * 60px)`;
+      const m=mkEl('div','fb-dot'); m.style.left=`calc(${pos - fStart + 0.5} * ${fw}px)`;
       neck.appendChild(m);
     }
   });
@@ -2248,7 +2412,7 @@ function renderFretboard() {
       if(quizActiveNote) {
          if(si === quizActiveNote.s && f === quizActiveNote.f) {
             const d = mkEl('div','nd q-dot');
-            d.style.left = `calc(${f - fStart + 0.5} * 60px)`;
+            d.style.left = `calc(${f - fStart + 0.5} * ${fw}px)`;
             const span = mkEl('span'); span.textContent = '?'; d.appendChild(span);
             row.appendChild(d);
          }
@@ -2265,8 +2429,8 @@ function renderFretboard() {
       let cls = 'nd ' + (isRoot ? 'rn' : 'sn');
       
       const d = mkEl('div', cls);
-      d.style.left = `calc(${f - fStart + 0.5} * 60px)`;
-      
+      d.style.left = `calc(${f - fStart + 0.5} * ${fw}px)`;
+
       const span = mkEl('span'); span.textContent = dotLabel(ni, f); d.appendChild(span);
       d.title = `${getNoteName(ni)} · ${getDeg(ni)} · fret ${f}`;
       
@@ -2368,6 +2532,12 @@ function loadURL() {
   
   syncUIControls();
 }
+
+let _fbResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_fbResizeTimer);
+  _fbResizeTimer = setTimeout(renderFretboard, 150);
+});
 
 // Lancia l'app all'avvio
 initApp();

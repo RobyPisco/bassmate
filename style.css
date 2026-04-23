@@ -301,7 +301,7 @@ body.minimal-header .top-dashboard {
 .fb-main.lefty .fb-n { transform: scaleX(-1); }
 .fb-main.lefty .nd span { transform: scaleX(-1); }
 
-.fb-nums { display: flex; height: 20px; opacity: 0.8; margin-left:60px;}
+.fb-nums { display: flex; height: 20px; opacity: 0.8; margin-left: var(--fw, 60px); }
 .fb-n { width: var(--fw, 60px); text-align: center; font-size: 10.5px; font-family: 'Space Mono', monospace; color: var(--muted); line-height: 20px; }
 .fb-n.z { color: transparent; width:0; overflow:hidden;} /* Hide zero offset if unneeded */
 
@@ -1300,12 +1300,22 @@ body.tab-studio .metro-panel.show .hero-term,
 body.tab-studio .metro-panel.show .hero-unit { display: none; }
 body.tab-studio .metro-panel.show .metro-h-btn { width: 28px; height: 28px; font-size: 14px; }
 body.tab-studio .metro-panel.show .metro-t-timer,
-body.tab-studio .metro-panel.show .metro-step-wrap,
-body.tab-studio .metro-panel.show .metro-action-row { display: none; }
+body.tab-studio .metro-panel.show .metro-step-wrap { display: none; }
+body.tab-studio .metro-panel.show .metro-halfdbl-btn { display: none; }
+body.tab-studio .metro-panel.show .metro-action-row { display: flex; gap: 0; }
 body.tab-studio .metro-panel.show .metro-t-subs .row-label-sm { display: none; }
 body.tab-studio .metro-panel.show .metro-t-subs .metro-subs .p { width: 26px; height: 26px; font-size: 10px; }
 body.tab-studio .metro-panel.show .metro-t-play { width: 36px; height: 36px; font-size: 16px; }
 body.tab-studio .metro-panel.show .metro-s-btn { display: none; }
+body.tab-studio .metro-panel.show #metroDrumsBtn { display: flex; }
+body.tab-studio .metro-panel.show .metro-t-footer { display: flex; flex-direction: row; align-items: center; gap: 8px; margin: 0; }
+.metro-groove-inline { display: none; }
+body.tab-studio .metro-panel.show .metro-groove-inline {
+  display: block; font-size: 11px; font-family: 'Space Mono', monospace;
+  padding: 4px 8px; border-radius: 8px; cursor: pointer;
+  background: var(--s3); border: 1px solid var(--border); color: var(--text);
+  height: 32px;
+}
 body.tab-studio .metro-panel.show .metro-advanced { display: none !important; }
 
 body.tab-quiz .main > *:not(.fb-area):not(.quiz-panel) { display: none !important; }

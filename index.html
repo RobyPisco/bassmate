@@ -175,6 +175,15 @@
           <div class="metro-t-footer">
             <button id="metroFlashBtnUI" class="metro-s-btn on">✨</button>
             <button id="metroSoundCycleBtn" class="metro-s-btn">🔊</button>
+            <select id="metroGrooveCtrlInline" class="metro-groove-inline">
+              <option value="none">🎵 Click</option>
+              <option value="rock">🤘 Rock</option>
+              <option value="funk">🎸 Funk</option>
+              <option value="jazz">🎷 Jazz</option>
+              <option value="bossa">🌴 Bossa</option>
+              <option value="shuffle">🔀 Shuffle</option>
+            </select>
+            <button id="metroDrumsBtn" class="metro-s-btn" title="Drum backing track">🥁</button>
             <!-- Mobile only: toggle side columns -->
             <button id="metroAdvBtn" class="metro-s-btn metro-mobile-only" data-i18n-title="metro_adv" title="Opzioni">⚙️</button>
           </div>
@@ -212,6 +221,15 @@
             <div class="metro-toggle-row">
               <span class="row-label-sm" data-i18n="metro_flash">Flash</span>
               <button id="metroFlashTogRight" class="metro-s-btn on" style="width:34px;height:34px;font-size:14px;">✨</button>
+            </div>
+          </div>
+          <div class="metro-ctrl-grp">
+            <div class="metro-toggle-row">
+              <span class="row-label-sm">Drums</span>
+              <button id="metroDrumsBtnRight" class="metro-s-btn" style="width:34px;height:34px;font-size:14px;">🥁</button>
+            </div>
+            <div id="metroDrumVolWrap" style="display:none; margin-top:6px;">
+              <input type="range" id="metroDrumVolCtrl" class="metro-vol-slider" min="0" max="100" value="70">
             </div>
           </div>
         </div><!-- /metro-dc-right -->
