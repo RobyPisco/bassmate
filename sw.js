@@ -19,12 +19,15 @@ const URLS_TO_CACHE = [
 ];
 
 self.addEventListener('install', event => {
-  // Eseguito all'installazione dell'app: memorizza nella cache tutto.
-  self.skipWaiting(); // Attiva subito il nuovo SW senza aspettare la chiusura dei tab
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(URLS_TO_CACHE))
   );
+  // Non chiamiamo skipWaiting() qui: sarà la pagina a decidere quando attivare
+});
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {

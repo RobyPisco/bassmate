@@ -77,9 +77,9 @@
     <div class="scale-info" id="scaleInfo"></div>
 
     <div class="pos-bar hide" id="posBar">
-      <button class="pos-nav" id="posL">◀</button>
+      <button class="pos-nav" id="posL" aria-label="Posizione precedente">◀</button>
       <span class="pos-txt" id="posTxt"></span>
-      <button class="pos-nav" id="posR">▶</button>
+      <button class="pos-nav" id="posR" aria-label="Posizione successiva">▶</button>
     </div>
 
     <!-- ================= METRONOME PANEL ================= -->
@@ -149,9 +149,9 @@
 
           <!-- Play + Half/Double -->
           <div class="metro-action-row">
-            <button id="metroBpmHalf" class="metro-halfdbl-btn" title="BPM ÷ 2">÷2</button>
-            <button id="metroStartBtn" class="metro-t-play">▶</button>
-            <button id="metroBpmDouble" class="metro-halfdbl-btn" title="BPM × 2">×2</button>
+            <button id="metroBpmHalf" class="metro-halfdbl-btn" title="BPM ÷ 2" aria-label="Dimezza BPM">÷2</button>
+            <button id="metroStartBtn" class="metro-t-play" aria-label="Avvia metronomo">▶</button>
+            <button id="metroBpmDouble" class="metro-halfdbl-btn" title="BPM × 2" aria-label="Raddoppia BPM">×2</button>
           </div>
 
           <!-- Timer & Progress -->
@@ -173,8 +173,8 @@
 
           <!-- Small action buttons -->
           <div class="metro-t-footer">
-            <button id="metroFlashBtnUI" class="metro-s-btn on">✨</button>
-            <button id="metroSoundCycleBtn" class="metro-s-btn">🔊</button>
+            <button id="metroFlashBtnUI" class="metro-s-btn on" aria-label="Flash visivo" aria-pressed="true">✨</button>
+            <button id="metroSoundCycleBtn" class="metro-s-btn" aria-label="Cambia suono metronomo">🔊</button>
             <select id="metroGrooveCtrlInline" class="metro-groove-inline">
               <option value="none">🎵 Click</option>
               <option value="rock">🤘 Rock</option>
@@ -183,9 +183,9 @@
               <option value="bossa">🌴 Bossa</option>
               <option value="shuffle">🔀 Shuffle</option>
             </select>
-            <button id="metroDrumsBtn" class="metro-s-btn" title="Drum backing track">🥁</button>
+            <button id="metroDrumsBtn" class="metro-s-btn" title="Drum backing track" aria-label="Drum backing track" aria-pressed="false">🥁</button>
             <!-- Mobile only: toggle side columns -->
-            <button id="metroAdvBtn" class="metro-s-btn metro-mobile-only" data-i18n-title="metro_adv" title="Opzioni">⚙️</button>
+            <button id="metroAdvBtn" class="metro-s-btn metro-mobile-only" data-i18n-title="metro_adv" title="Opzioni avanzati metronomo" aria-label="Opzioni avanzati metronomo">⚙️</button>
           </div>
 
         </div><!-- /metro-ui-tack -->
@@ -220,13 +220,13 @@
           <div class="metro-ctrl-grp">
             <div class="metro-toggle-row">
               <span class="row-label-sm" data-i18n="metro_flash">Flash</span>
-              <button id="metroFlashTogRight" class="metro-s-btn on" style="width:34px;height:34px;font-size:14px;">✨</button>
+              <button id="metroFlashTogRight" class="metro-s-btn on" style="width:34px;height:34px;font-size:14px;" aria-label="Flash visivo" aria-pressed="true">✨</button>
             </div>
           </div>
           <div class="metro-ctrl-grp">
             <div class="metro-toggle-row">
               <span class="row-label-sm">Drums</span>
-              <button id="metroDrumsBtnRight" class="metro-s-btn" style="width:34px;height:34px;font-size:14px;">🥁</button>
+              <button id="metroDrumsBtnRight" class="metro-s-btn" style="width:34px;height:34px;font-size:14px;" aria-label="Drum backing track" aria-pressed="false">🥁</button>
             </div>
             <div id="metroDrumVolWrap" style="display:none; margin-top:6px;">
               <input type="range" id="metroDrumVolCtrl" class="metro-vol-slider" min="0" max="100" value="70">

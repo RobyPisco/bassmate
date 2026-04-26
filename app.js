@@ -502,8 +502,8 @@ function _syncDrumsUI() {
   const on = metro.drumsEnabled;
   const btn1 = document.getElementById('metroDrumsBtn');
   const btn2 = document.getElementById('metroDrumsBtnRight');
-  if (btn1) btn1.classList.toggle('on', on);
-  if (btn2) btn2.classList.toggle('on', on);
+  if (btn1) { btn1.classList.toggle('on', on); btn1.setAttribute('aria-pressed', String(on)); }
+  if (btn2) { btn2.classList.toggle('on', on); btn2.setAttribute('aria-pressed', String(on)); }
   const volWrap = document.getElementById('metroDrumVolWrap');
   if (volWrap) volWrap.style.display = on ? '' : 'none';
 }
@@ -713,7 +713,7 @@ function _metroToggle() {
     document.querySelectorAll('.metro-beat-dot').forEach(d => d.classList.remove('lit'));
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.remove('running'); btn.innerHTML = `▶`; }
+    if (btn) { btn.classList.remove('running'); btn.innerHTML = `▶`; btn.setAttribute('aria-label', 'Avvia metronomo'); }
     if (togBtn) togBtn.classList.remove('metroTogBtn-active');
   } else {
     // START
@@ -732,7 +732,7 @@ function _metroToggle() {
     requestAnimationFrame(_metroDraw);
     const btn = document.getElementById('metroStartBtn');
     const togBtn = document.getElementById('metroTogBtn');
-    if (btn) { btn.classList.add('running'); btn.innerHTML = `⏸`; }
+    if (btn) { btn.classList.add('running'); btn.innerHTML = `⏸`; btn.setAttribute('aria-label', 'Pausa metronomo'); }
     if (togBtn) togBtn.classList.add('metroTogBtn-active');
   }
 }
@@ -851,11 +851,9 @@ function initKeyboardShortcuts() {
         S.root = (+S.root + 11) % 12;
         render();
         break;
-      case 'q': case 'Q': {
-        const qBtn = document.getElementById('quizTogBtn');
-        if (qBtn) qBtn.click();
+      case 'q': case 'Q':
+        switchTab('quiz');
         break;
-      }
       case 'm': case 'M': {
         const mBtn = document.getElementById('metroTogBtn');
         if (mBtn) mBtn.click();
@@ -975,7 +973,7 @@ function showDonatePopup() {
   document.head.appendChild(style);
 
   card.innerHTML = `
-    <div style="font-size:48px;margin-bottom:12px;animation:coffee-bounce 1.8s infinite ease-in-out;">☕</div>
+    <div style="font-size:48px;margin-bottom:12px;animation:coffee-bounce 1.8s 4 ease-in-out;">☕</div>
     <div style="font-size:20px;font-weight:900;color:#f59e0b;margin-bottom:10px;">
       ${isIt ? 'Ti piace Bassmate?' : 'Enjoying Bassmate?'}
     </div>
@@ -996,12 +994,12 @@ function showDonatePopup() {
 
   overlay.appendChild(card);
   document.body.appendChild(overlay);
+  localStorage.setItem('bass_donate_shown', Date.now().toString()); // salvato alla visualizzazione, non solo alla dismiss
 
   const dismiss = () => {
     overlay.style.opacity = '0';
     overlay.style.transition = 'opacity .3s';
     setTimeout(() => overlay.remove(), 300);
-    localStorage.setItem('bass_donate_shown', Date.now().toString());
   };
 
   card.querySelector('#_donateLater').addEventListener('click', dismiss);
@@ -1033,14 +1031,6 @@ async function initApp() {
     updateI18nLabels();
   } catch (err) {
     console.error("Component fetch failed.", err);
-  }
-
-  // OVERFLOW MENU TOGGLE
-  const overflowBtn = document.getElementById('overflowBtn');
-  const overflowMenu = document.getElementById('overflowMenu');
-  if (overflowBtn && overflowMenu) {
-    overflowBtn.addEventListener('click', e => { e.stopPropagation(); overflowMenu.classList.toggle('open'); });
-    document.addEventListener('click', () => overflowMenu.classList.remove('open'));
   }
 
   // MINIMAL HEADER LOGIC
@@ -1199,9 +1189,13 @@ async function initApp() {
     // FAVORITES SYSTEM
     const favBtn = document.getElementById('favBtn');
     const favCtrl = document.getElementById('favCtrl');
-    
+
+    function getFavs() {
+      try { return JSON.parse(localStorage.getItem('bass_favs') || '[]'); } catch(e) { return []; }
+    }
+
     function updateFavDropdown() {
-      const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
+      const favs = getFavs();
       if(favs.length === 0) { if(favCtrl) favCtrl.style.display = 'none'; return; }
       if(favCtrl) {
           favCtrl.style.display = 'inline-block';
@@ -1215,7 +1209,7 @@ async function initApp() {
         const name = prompt(tl('fav_prompt'), tl('fav_default'));
         if(!name) return;
         syncURL();
-        const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
+        const favs = getFavs();
         favs.push({name, hash: location.hash});
         localStorage.setItem('bass_favs', JSON.stringify(favs));
         updateFavDropdown();
@@ -1227,7 +1221,7 @@ async function initApp() {
         const val = e.target.value;
         if(favDelBtn) favDelBtn.style.display = val !== '' ? 'flex' : 'none';
         if(val === '') return;
-        const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
+        const favs = getFavs();
         if(favs[val]) {
            location.hash = favs[val].hash;
            loadURL();
@@ -1241,7 +1235,7 @@ async function initApp() {
         favDelBtn.addEventListener('click', () => {
           const idx = parseInt(favCtrl.value, 10);
           if(isNaN(idx) || idx < 0) return;
-          const favs = JSON.parse(localStorage.getItem('bass_favs') || '[]');
+          const favs = getFavs();
           favs.splice(idx, 1);
           localStorage.setItem('bass_favs', JSON.stringify(favs));
           favCtrl.value = '';
@@ -1252,23 +1246,6 @@ async function initApp() {
       updateFavDropdown();
     }
     
-    // QUIZ BTN TOGGLE
-    const qTog = document.getElementById('quizTogBtn');
-    if(qTog) {
-      qTog.addEventListener('click', () => {
-        if(S.view === 'quiz') {
-          S.view = document.getElementById('viewCtrl').value || 'full';
-          document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='none');
-          stopQuiz(); // Stop if navigating away
-        } else {
-          S.view = 'quiz';
-          document.querySelectorAll('.quiz-time-opt').forEach(el=>el.style.display='inline-flex');
-          resetQuiz(); // Reset to clean state when opening
-        }
-        render();
-      });
-    }
-
     // QUIZ CONTROLS
     const qsBtn = document.getElementById('quizStartBtn');
     const qstBtn = document.getElementById('quizStopBtn');
@@ -1420,8 +1397,9 @@ async function initApp() {
       metroFlashBtnUI.addEventListener('click', () => {
         metro.flashEnabled = !metro.flashEnabled;
         metroFlashBtnUI.classList.toggle('on', metro.flashEnabled);
+        metroFlashBtnUI.setAttribute('aria-pressed', String(metro.flashEnabled));
         const fTogRight = document.getElementById('metroFlashTogRight');
-        if (fTogRight) fTogRight.classList.toggle('on', metro.flashEnabled);
+        if (fTogRight) { fTogRight.classList.toggle('on', metro.flashEnabled); fTogRight.setAttribute('aria-pressed', String(metro.flashEnabled)); }
         const fTog = document.getElementById('metroFlashTog');
         if (fTog) fTog.checked = metro.flashEnabled;
         localStorage.setItem('metro_flash', metro.flashEnabled);
@@ -1660,18 +1638,35 @@ async function initApp() {
   
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(reg => {
+      // SW già in attesa (es. aggiornamento avvenuto mentre si era offline)
+      if (reg.waiting && navigator.serviceWorker.controller) _showSwUpdateBanner(reg.waiting);
       reg.addEventListener('updatefound', () => {
         const newSW = reg.installing;
         if (!newSW) return;
         newSW.addEventListener('statechange', () => {
-          // Nuovo SW attivato: ricarica per applicare l'aggiornamento
-          if (newSW.state === 'activated' && navigator.serviceWorker.controller) {
-            window.location.reload();
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            _showSwUpdateBanner(newSW);
           }
         });
       });
     }).catch(err => console.log('No PWA support.', err));
+    // Ricarica solo quando il nuovo SW prende effettivamente il controllo
+    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
   }
+}
+
+function _showSwUpdateBanner(sw) {
+  if (document.getElementById('_sw-update')) return;
+  const isIt = S.lang === 'it';
+  const banner = document.createElement('div');
+  banner.id = '_sw-update';
+  banner.innerHTML =
+    `<span>${isIt ? 'Nuova versione disponibile' : 'New version available'}</span>` +
+    `<button id="_sw-reload">${isIt ? 'Aggiorna' : 'Update'}</button>` +
+    `<button id="_sw-dismiss" aria-label="Chiudi">✕</button>`;
+  document.body.appendChild(banner);
+  document.getElementById('_sw-reload').onclick = () => sw.postMessage({ type: 'SKIP_WAITING' });
+  document.getElementById('_sw-dismiss').onclick = () => banner.remove();
 }
 
 function syncScalePills() {
@@ -1749,17 +1744,18 @@ function autoCorrelate(buf, sampleRate) {
 
   // Find first peak after initial dip
   let d = 0;
-  while(d < SIZE && corr[d] > corr[d+1]) d++;  // go downhill
+  while(d < SIZE - 1 && corr[d] > corr[d+1]) d++;  // go downhill (SIZE-1 prevents out-of-bounds)
   let maxVal = -Infinity, maxPos = -1;
   for(let i = d; i < SIZE; i++) {
     if(corr[i] > maxVal) { maxVal = corr[i]; maxPos = i; }
   }
   if(maxPos === -1 || corr[maxPos] < corr[0] * 0.5) return -1; // weak correlation
 
-  // Sub-sample interpolation for accuracy
-  const x0 = corr[maxPos - 1], x1 = corr[maxPos], x2 = corr[maxPos + 1] || 0;
+  // Sub-sample interpolation for accuracy — clamp maxPos to [1, SIZE-2] for valid neighbors
+  const safePos = Math.max(1, Math.min(maxPos, SIZE - 2));
+  const x0 = corr[safePos - 1], x1 = corr[safePos], x2 = corr[safePos + 1];
   const shift = (x2 - x0) / (2 * (2 * x1 - x2 - x0)) || 0;
-  return sampleRate / (maxPos + shift);
+  return sampleRate / (safePos + shift);
 }
 
 function freqToNoteInfo(freq) {
@@ -2498,18 +2494,15 @@ function renderASCIITab() {
 }
 
 // Bind Tab buttons
-setTimeout(() => {
-  const uBtn = document.getElementById('tabUndoBtn');
-  const cBtn = document.getElementById('tabClearBtn');
-  const cpBtn = document.getElementById('tabCopyBtn');
-  
-  if (uBtn) uBtn.onclick = () => { S.tabSequence.pop(); renderASCIITab(); };
-  if (cBtn) cBtn.onclick = () => { S.tabSequence = []; renderASCIITab(); };
-  if (cpBtn) cpBtn.onclick = () => {
-    const txt = document.getElementById('tabDisplay').textContent;
-    navigator.clipboard.writeText(txt).then(() => showToast("Tab copiata! 📋"));
-  };
-}, 100);
+const uBtn = document.getElementById('tabUndoBtn');
+const cBtn = document.getElementById('tabClearBtn');
+const cpBtn = document.getElementById('tabCopyBtn');
+if (uBtn) uBtn.onclick = () => { S.tabSequence.pop(); renderASCIITab(); };
+if (cBtn) cBtn.onclick = () => { S.tabSequence = []; renderASCIITab(); };
+if (cpBtn) cpBtn.onclick = () => {
+  const txt = document.getElementById('tabDisplay').textContent;
+  navigator.clipboard.writeText(txt).then(() => showToast("Tab copiata! 📋"));
+};
 function syncURL() {
   history.replaceState(null,'',`#r=${S.root}&s=${S.scale}&t=${S.tuning}&l=${S.label}&v=${S.view}&h=${S.hand}&b=${S.boxStart}&lang=${S.lang}`);
 }

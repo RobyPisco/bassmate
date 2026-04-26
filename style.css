@@ -169,7 +169,7 @@ body.minimal-header .top-dashboard {
   color: #f59e0b;
   font-size: 16px !important;
   width: 34px !important; height: 34px !important;
-  animation: coffee-bounce 1.8s infinite ease-in-out;
+  animation: coffee-bounce 1.8s 4 ease-in-out;
   position: relative;
 }
 @keyframes coffee-bounce {
@@ -433,17 +433,6 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
   .si-sub { font-size: 10px; }
   
   body.minimal-header .top-dashboard { gap: 4px; }
-}
-
-/* DONATION GLOW */
-@keyframes donate-pulse {
-  0% { box-shadow: 0 0 0px rgba(255,179,0,0); transform: scale(1); }
-  50% { box-shadow: 0 0 15px rgba(255,179,0,0.6); transform: scale(1.05); border-color: #ffb300; }
-  100% { box-shadow: 0 0 0px rgba(255,179,0,0); transform: scale(1); }
-}
-.donate-btn-sm {
-  animation: donate-pulse 2s infinite ease-in-out;
-  border: 1px solid rgba(255,179,0,0.3) !important;
 }
 
 /* TAB TRANSCRIPTION */
@@ -877,6 +866,30 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 #_toast.toast-show {
   opacity: 1; transform: translateX(-50%) translateY(0);
 }
+
+/* ══════════════════════════════
+   SW UPDATE BANNER
+══════════════════════════════ */
+#_sw-update {
+  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+  background: var(--s2); border: 1px solid var(--accent);
+  color: var(--text); padding: 10px 14px; border-radius: 12px;
+  font-size: 13px; font-weight: 600; z-index: 9998;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  display: flex; align-items: center; gap: 10px; white-space: nowrap;
+  animation: toastIn .3s cubic-bezier(0.4,0,0.2,1);
+}
+#_sw-reload {
+  background: var(--accent); color: #000; border: none;
+  padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; font-weight: 700;
+}
+#_sw-reload:hover { opacity: 0.85; }
+#_sw-dismiss {
+  background: transparent; color: var(--text-dim); border: none;
+  padding: 2px 6px; cursor: pointer; font-size: 13px;
+}
+#_sw-dismiss:hover { color: var(--text); }
 
 /* ══════════════════════════════
    KEYBOARD SHORTCUTS PANEL
