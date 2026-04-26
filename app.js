@@ -1603,6 +1603,8 @@ async function initApp() {
     if (snapBtn) snapBtn.addEventListener('click', exportFretboardImage);
 
     // KEYBOARD SHORTCUTS
+    const kbdHintBtn = document.getElementById('kbdHintBtn');
+    if (kbdHintBtn) kbdHintBtn.addEventListener('click', toggleKbdPanel);
     initKeyboardShortcuts();
 
     // TRANSPOSE BUTTONS
