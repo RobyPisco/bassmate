@@ -68,6 +68,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
 
+/* Keyboard focus ring — overrides the many outline:none rules for keyboard-only navigation */
+:focus-visible { outline: 2px solid var(--accent) !important; outline-offset: 2px; border-radius: 3px; }
+
 /* ── APP SHELL ── */
 .app { display: flex; flex-direction: column; min-height: 100vh; background: radial-gradient(circle at top center, #1a1a3a, var(--bg) 60%); }
 .hide { display: none !important; }
@@ -907,13 +910,16 @@ footer { padding: 20px 28px; text-align: center; border-top: 1px solid var(--bor
 .kbd-list {
   display: grid; grid-template-columns: auto 1fr;
   gap: 8px 16px; font-size: 13px;
+  list-style: none; padding: 0; margin: 0;
 }
+.kbd-list li { display: contents; }
 .kbd-key {
   background: var(--s3); border: 1px solid var(--border); border-radius: 6px;
   padding: 2px 8px; font-family: 'Space Mono', monospace; font-size: 12px;
   color: var(--note-c); white-space: nowrap; text-align: center;
+  font-style: normal;
 }
-.kbd-list span:not(.kbd-key) { color: var(--text); opacity: .85; align-self: center; }
+.kbd-list li span { color: var(--text); opacity: .85; align-self: center; }
 .kbd-close {
   position: absolute; top: 10px; right: 12px;
   background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px;

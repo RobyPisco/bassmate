@@ -196,7 +196,7 @@ const BOX   = 5;
 const MARKERS      = [3,5,7,9,12,15];
 const DOUBLE_MARKS = new Set([12]);
 
-const defaultLang = localStorage.getItem('bass_lang') || (navigator.language.startsWith('it') ? 'it' : 'en');
+const defaultLang = localStorage.getItem('bass_lang') || (navigator.language.slice(0, 2) === 'it' ? 'it' : 'en');
 document.documentElement.lang = defaultLang;
 const S = { 
   tuning: localStorage.getItem('bass_tuning') || 'std-4', 
@@ -742,6 +742,16 @@ function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.classNam
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
    TOAST NOTIFICATION
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
+function _copyFallback(txt, successMsg) {
+  const ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast(successMsg); } catch(e) { /* silent */ }
+  ta.remove();
+}
+
 function showToast(msg, duration = 2500) {
   let t = document.getElementById('_toast');
   if (!t) {
@@ -799,9 +809,9 @@ function shareCurrentScale() {
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(url)
       .then(() => showToast(tl('share_copied')))
-      .catch(() => prompt(tl('share_fail'), url));
+      .catch(() => _copyFallback(url, tl('share_copied')));
   } else {
-    prompt(tl('share_fail'), url);
+    _copyFallback(url, tl('share_copied'));
   }
 }
 
@@ -879,14 +889,14 @@ function toggleKbdPanel() {
     panel.className = 'kbd-panel';
     panel.innerHTML = `
       <h3 class="kbd-title" id="kbdTitle">${tl('kbd_title')}</h3>
-      <div class="kbd-list">
-        <span class="kbd-key">← / →</span><span>${tl('kbd_root_lr_desc')}</span>
-        <span class="kbd-key">Q</span><span>${tl('kbd_quiz_desc')}</span>
-        <span class="kbd-key">M</span><span>${tl('kbd_metro_desc')}</span>
-        <span class="kbd-key">R</span><span>${tl('kbd_reset_desc')}</span>
-        <span class="kbd-key">?</span><span>${tl('kbd_help_desc')}</span>
-      </div>
-      <button class="kbd-close" onclick="document.getElementById('kbdPanel').remove()">✖</button>
+      <ul class="kbd-list">
+        <li><kbd class="kbd-key">← / →</kbd><span>${tl('kbd_root_lr_desc')}</span></li>
+        <li><kbd class="kbd-key">Q</kbd><span>${tl('kbd_quiz_desc')}</span></li>
+        <li><kbd class="kbd-key">M</kbd><span>${tl('kbd_metro_desc')}</span></li>
+        <li><kbd class="kbd-key">R</kbd><span>${tl('kbd_reset_desc')}</span></li>
+        <li><kbd class="kbd-key">?</kbd><span>${tl('kbd_help_desc')}</span></li>
+      </ul>
+      <button class="kbd-close" aria-label="Chiudi" onclick="document.getElementById('kbdPanel').remove()">✖</button>
     `;
     document.body.appendChild(panel);
     setTimeout(() => panel.classList.add('kbd-show'), 10);
@@ -2501,7 +2511,13 @@ if (uBtn) uBtn.onclick = () => { S.tabSequence.pop(); renderASCIITab(); };
 if (cBtn) cBtn.onclick = () => { S.tabSequence = []; renderASCIITab(); };
 if (cpBtn) cpBtn.onclick = () => {
   const txt = document.getElementById('tabDisplay').textContent;
-  navigator.clipboard.writeText(txt).then(() => showToast("Tab copiata! 📋"));
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt)
+      .then(() => showToast("Tab copiata! 📋"))
+      .catch(() => _copyFallback(txt, "Tab copiata! 📋"));
+  } else {
+    _copyFallback(txt, "Tab copiata! 📋");
+  }
 };
 function syncURL() {
   history.replaceState(null,'',`#r=${S.root}&s=${S.scale}&t=${S.tuning}&l=${S.label}&v=${S.view}&h=${S.hand}&b=${S.boxStart}&lang=${S.lang}`);
