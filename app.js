@@ -742,6 +742,18 @@ function mkEl(tag,cls) { const d=document.createElement(tag); if(cls) d.classNam
 /* ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ 
    TOAST NOTIFICATION
 ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═ ═  */
+let _fbScrollHinted = false;
+function _hintFbScroll() {
+  if (_fbScrollHinted || window.innerWidth > 768) return;
+  const fb = document.querySelector('.fb-area');
+  if (!fb || fb.scrollWidth <= fb.clientWidth + 4) return;
+  _fbScrollHinted = true;
+  setTimeout(() => {
+    fb.scrollTo({ left: 24, behavior: 'smooth' });
+    setTimeout(() => fb.scrollTo({ left: 0, behavior: 'smooth' }), 520);
+  }, 1200);
+}
+
 function _copyFallback(txt, successMsg) {
   const ta = document.createElement('textarea');
   ta.value = txt;
@@ -1640,6 +1652,7 @@ async function initApp() {
     
     if(S.view === 'quiz') switchTab('quiz');
     render();
+    _hintFbScroll();
     updateQuizStatsDisplay();
     maybeShowDonatePopup();
   } else {
