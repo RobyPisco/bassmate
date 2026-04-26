@@ -34,31 +34,41 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    "@type": ["SoftwareApplication", "WebApplication"],
     "name": "Bassmate",
     "operatingSystem": "Any",
     "applicationCategory": "MusicApplication",
+    "applicationSubCategory": "Bass Guitar",
+    "browserRequirements": "Requires a modern browser with JavaScript enabled",
+    "inLanguage": ["it", "en"],
+    "availableLanguage": ["Italian", "English"],
     "offers": {
       "@type": "Offer",
       "price": "0",
       "priceCurrency": "EUR"
     },
     "url": "https://bassmate.it/",
-    "description": "Free interactive bass guitar fretboard explorer. Generate scales, arpeggios, alternate tunings, play audio, and practice with built-in metronome and quiz mode.",
+    "sameAs": "https://github.com/RobyPisco/bassmate",
+    "description": "Free interactive bass guitar fretboard explorer. Practice scales, arpeggios and alternate tunings with audio playback, built-in metronome, chromatic tuner, drum backing tracks and quiz mode. Works offline as a PWA.",
     "author": {
       "@type": "Person",
-      "name": "PiscoFactory"
+      "name": "Roberto Pisconti",
+      "url": "https://github.com/RobyPisco"
     },
-    "screenshot": "https://bassmate.it/icon.svg",
     "featureList": [
-      "Interactive bass fretboard",
-      "Scale and arpeggio generator",
-      "Audio playback",
-      "Metronome with BPM trainer",
+      "Interactive bass guitar fretboard",
+      "Scale and arpeggio generator with 20+ scale types",
+      "Alternate tunings — Standard, Drop D, Drop A, Open tunings",
+      "4, 5 and 6 string bass support",
+      "Audio playback of scales and arpeggios",
       "Chromatic tuner",
-      "Quiz mode",
-      "Alternate tunings",
-      "PWA offline support"
+      "Metronome with groove presets — Rock, Funk, Jazz, Bossa, Shuffle",
+      "Drum backing tracks",
+      "Fretboard quiz mode",
+      "Chord library with PDF export",
+      "Blank fretboard grids for teachers",
+      "Offline-first PWA — installable on mobile",
+      "Italian and English interface"
     ]
   }
   </script>
