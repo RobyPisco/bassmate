@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Bassmate — Buy Me a Coffee</title>
+  <meta name="description" content="Bassmate is free and open source. If it helped your bass practice, consider supporting development with a small donation.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://bassmate.it/donate.html">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#080810">
+  <link rel="apple-touch-icon" href="icon.svg">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=1.1">
+  
+  <style>
+    .donate-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 60px auto;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+    .emoji-hero { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 28px; font-weight: 900; margin-bottom: 16px; color: var(--text); letter-spacing:-0.5px;}
+    p { color: var(--muted); line-height: 1.6; margin-bottom: 30px; font-size: 15px; text-align: left;}
+    .paypal-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--root-c); color: #000;
+      padding: 16px 28px; border-radius: 12px;
+      font-size: 16px; font-weight: 700; font-family: 'Space Mono', monospace;
+      text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px var(--root-g);
+      margin-bottom: 30px;
+    }
+    .paypal-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--root-g); }
+    .paypal-btn:active { transform: translateY(2px); }
+    
+    .back-link {
+      display: inline-block; color: var(--accent); font-weight: 600; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #fff; text-decoration: underline; }
+    
+    .lang-float {
+       position: absolute; top: 16px; right: 16px;
+       display: flex; gap: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="app" style="justify-content: center; align-items:flex-start;">
+  <div class="donate-container">
+    
+    <div class="emoji-hero">🎸 ☕</div>
+    
+    <div id="text-it" style="display:block;">
+      <h1>Bassmate è nato per un motivo semplice...</h1>
+      <p>Mi perdevo continuamente sul manico! Facevo una fatica tremenda a ricordarmi dove fossero le note (sì, maledetta Minore Armonica!) e volevo uno strumento che mi aiutasse a imparare senza troppe frustrazioni. Così, ho deciso di costruirmelo da solo.</p>
+      <p>Spero che questa app aiuti anche te a decifrare le corde e a divertirti di più con il tuo basso, proprio come ha aiutato me. Se questo progetto ti sta semplificando la vita — e le dita! — offrimi un caffè o una birra: ogni piccolo supporto mi aiuta a mantenere Bassmate attivo e a renderlo sempre migliore per tutti noi che abbiamo voglia di imparare!</p>
+    </div>
+
+    <!-- EN CONTENT -->
+    <div id="text-en" style="display:none;">
+      <h1>Bassmate was born for a very simple reason...</h1>
+      <p>I kept getting lost on the fretboard! I was struggling incredibly to remember where the heck the notes were (looking at you, Harmonic Minor!) and I wanted a tool that would help me learn without the frustration. So, I decided to build it myself.</p>
+      <p>I hope this app helps you decode the strings and have more fun with your bass as much as it helped me. If this project is making your life — and your fingers' life — easier, feel free to buy me a coffee or a beer: every little bit helps me keep Bassmate running and improving it for everyone who's eager to learn!</p>
+    </div>
+
+    <a href="https://www.paypal.com/donate/?business=roberto.pisconti@gmail.com&no_recurring=0&item_name=Supporta+lo+sviluppo+di+Bass+Scales&currency_code=EUR" target="_blank" rel="noopener noreferrer" class="paypal-btn" id="donate-btn-text" data-i18n="coffee">
+       ☕ Offrimi un caffè
+    </a>
+    <br>
+    <a href="index.html" class="back-link" id="back-btn-text" data-i18n="back_btn">⬅️ Torna al Manico</a>
+
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

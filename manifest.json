@@ -1,23 +1,16 @@
 {
-  "name": "Bassmate",
+  "name": "Bassmate — Manuale del basso",
   "short_name": "Bassmate",
-  "description": "Esploratore interattivo di scale e arpeggi sul manico del basso.",
-  "start_url": "index.html",
+  "description": "Manuale interattivo del basso: scale, arpeggi e accordi sul manico, metronomo, quiz e griglie stampabili. Funziona offline.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#080810",
-  "theme_color": "#080810",
+  "orientation": "any",
+  "background_color": "#08080f",
+  "theme_color": "#08080f",
+  "lang": "it",
+  "categories": ["music", "education"],
   "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    }
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }

@@ -1,0 +1,96 @@
+/* =========================================================================
+   DESIGN TOKENS — "Studio scuro premium"
+   Fondo scuro profondo, superfici vetro/blur, accento ciano neon.
+   Tema: default automatico (prefers-color-scheme) + override [data-theme].
+   ========================================================================= */
+
+:root {
+  /* palette base (dark di default) */
+  --bg:        #08080f;
+  --bg-2:      #0d0e18;
+  --surface:   rgba(22, 24, 38, 0.66);
+  --surface-2: rgba(30, 33, 52, 0.72);
+  --glass-blur: 14px;
+  --border:    rgba(255, 255, 255, 0.08);
+  --border-2:  rgba(255, 255, 255, 0.14);
+
+  --text:      #eef1f8;
+  --muted:     #9aa3b8;
+  --faint:     #5d6479;
+
+  /* accento ciano neon + secondari */
+  --accent:     #22e0d6;
+  --accent-2:   #12b8c9;
+  --accent-ink: #04201f;
+  --accent-glow: rgba(34, 224, 214, 0.55);
+
+  --root-c:    #22e0d6;          /* nota radice sul manico */
+  --root-g:    rgba(34, 224, 214, 0.7);
+  --note-c:    #6d7bff;          /* nota di scala */
+  --note-g:    rgba(109, 123, 255, 0.55);
+
+  --danger:    #ef4444;
+  --warn:      #f59e0b;
+  --ok:        #10b981;
+
+  /* forma & profondità */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-pill: 999px;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+  --shadow-1: 0 2px 8px rgba(0,0,0,0.35);
+  --shadow-2: 0 12px 40px rgba(0,0,0,0.45);
+  --shadow-glow: 0 0 24px var(--accent-glow);
+
+  /* tipografia */
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --header-h: 64px;
+  --tabbar-h: 60px;
+}
+
+/* tema chiaro: applicato sia in auto (se il SO è chiaro) sia con [data-theme="light"] */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:        #f4f5fa;
+    --bg-2:      #ffffff;
+    --surface:   rgba(255, 255, 255, 0.78);
+    --surface-2: rgba(248, 249, 253, 0.9);
+    --border:    rgba(10, 14, 30, 0.10);
+    --border-2:  rgba(10, 14, 30, 0.18);
+    --text:      #14171f;
+    --muted:     #5a6172;
+    --faint:     #9aa1b2;
+    --accent:     #0bb3a6;
+    --accent-2:   #0a9aa9;
+    --accent-glow: rgba(11, 179, 166, 0.35);
+    --root-c:    #0bb3a6;
+    --root-g:    rgba(11, 179, 166, 0.5);
+    --note-c:    #5a67e8;
+    --note-g:    rgba(90, 103, 232, 0.4);
+    --shadow-2: 0 12px 40px rgba(20, 23, 31, 0.12);
+  }
+}
+
+/* override manuale del toggle (vince su prefers-color-scheme) */
+:root[data-theme="light"] {
+  --bg:        #f4f5fa;
+  --bg-2:      #ffffff;
+  --surface:   rgba(255, 255, 255, 0.78);
+  --surface-2: rgba(248, 249, 253, 0.9);
+  --border:    rgba(10, 14, 30, 0.10);
+  --border-2:  rgba(10, 14, 30, 0.18);
+  --text:      #14171f;
+  --muted:     #5a6172;
+  --faint:     #9aa1b2;
+  --accent:     #0bb3a6;
+  --accent-2:   #0a9aa9;
+  --accent-glow: rgba(11, 179, 166, 0.35);
+  --root-c:    #0bb3a6;
+  --root-g:    rgba(11, 179, 166, 0.5);
+  --note-c:    #5a67e8;
+  --note-g:    rgba(90, 103, 232, 0.4);
+  --shadow-2: 0 12px 40px rgba(20, 23, 31, 0.12);
+}
+
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }

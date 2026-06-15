@@ -1,0 +1,50 @@
+/* =========================================================================
+   PRINT — esportazione PDF via stampa nativa (offline, vettoriale).
+   Due modalità impostate da body[data-print]:
+     "scale"  → stampa il manico + info della scala corrente (Studio)
+     "grids"  → stampa i manici vuoti (sezione Griglie)
+   ========================================================================= */
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  :root { color-scheme: light; }
+  html, body { background: #fff !important; }
+  body * { color: #000 !important; }
+
+  .hd, .tabbar { display: none !important; }
+
+  /* nascondi tutto, poi mostra solo la sezione da stampare */
+  body[data-print] .view-section { display: none !important; }
+
+  /* ---- recolor manico per la carta (vale per .fb ovunque) ---- */
+  .fb { background: #fff !important; border: 1px solid #999 !important; box-shadow: none !important; overflow: visible !important; }
+  .fb-grid { border-color: #999 !important; }
+  .fb-row { background: #fff !important; }
+  .fb-row + .fb-row { border-top-color: #bbb !important; }
+  .fb-row::after { background: #333 !important; }
+  .fb-cell { border-right-color: #ccc !important; }
+  .fb-cell.fb-open-col { border-right: 3px solid #000 !important; background: #fff !important; }
+  .fb-cell.is-marker, .fb-cell.in-box { background: #f3f3f3 !important; }
+  .fb-fnum.is-marker { color: #000 !important; font-weight: 700; }
+  .dot { background: #555 !important; color: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; }
+  .dot.is-root { background: #000 !important; color: #fff !important; }
+  .dot.q-dim { background: #ddd !important; border-color: #999 !important; }
+
+  /* =================== STAMPA SCALA =================== */
+  body[data-print="scale"] #studio { display: block !important; }
+  body[data-print="scale"] .studio-grid { display: block !important; }
+  body[data-print="scale"] .sidebar,
+  body[data-print="scale"] .head-right,
+  body[data-print="scale"] .transport,
+  body[data-print="scale"] .panels,
+  body[data-print="scale"] .legend,
+  body[data-print="scale"] .posbar { display: none !important; }
+  body[data-print="scale"] .info .root-badge { background: #000 !important; color: #fff !important; box-shadow: none !important; }
+  body[data-print="scale"] .info .desc { color: #333 !important; }
+  body[data-print="scale"] .head-eyebrow { color: #666 !important; }
+
+  /* =================== STAMPA GRIGLIE =================== */
+  body[data-print="grids"] #grids { display: block !important; }
+  body[data-print="grids"] .grids-toolbar { display: none !important; }
+  body[data-print="grids"] .gneck { break-inside: avoid; margin-bottom: 16mm; }
+  body[data-print="grids"] .gneck-title { border-bottom: 1px solid #000 !important; }
+}

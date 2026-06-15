@@ -1,35 +1,42 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-mode="simple">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  
-  <title>Bassmate — Interactive Bass Fretboard & Scales Explorer</title>
-  <meta name="description" content="Bassmate is a free, interactive bass guitar fretboard explorer. Generate scales, arpeggios, alternate tunings, play audio, and practice with the built-in metronome and quiz mode.">
-  <meta name="keywords" content="bass, fretboard, scale generator, bass scale, bass arpeggio, interactive bass, learn bass, bass quiz, metronome, alternate tuning, drop d, bass chords">
+  <title>Bassmate — Manuale interattivo del basso</title>
+  <meta name="description" content="Bassmate: il manuale interattivo del basso. Scale, arpeggi e accordi per blues, funk, jazz, rock e metal sul manico, con audio, metronomo, quiz e griglie stampabili. Funziona offline.">
+  <meta name="keywords" content="basso, manico, scale basso, arpeggi basso, accordi basso, blues, funk, jazz, metronomo, quiz basso, accordature, drop d, manuale basso, fretboard bass">
   <meta name="author" content="PiscoFactory">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://bassmate.it/">
 
-  <!-- Open Graph / Facebook -->
+  <meta name="theme-color" content="#08080f">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bassmate">
+
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://bassmate.it/">
-  <meta property="og:title" content="Bassmate — The Ultimate Bass Explorer">
-  <meta property="og:description" content="Interactive fretboard, audio playback, metronome, and quiz. Level up your bass playing for free.">
-  <meta property="og:image" content="https://bassmate.it/icon.svg">
+  <meta property="og:title" content="Bassmate — Manuale interattivo del basso">
+  <meta property="og:description" content="Scale, arpeggi e accordi sul manico per blues, funk, jazz, rock e metal. Audio, metronomo, quiz e griglie stampabili. Gratis e offline.">
+  <meta property="og:image" content="https://bassmate.it/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bassmate — manuale interattivo del basso">
+  <meta property="og:site_name" content="Bassmate">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:locale:alternate" content="en_US">
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://bassmate.it/">
-  <meta property="twitter:title" content="Bassmate — Interactive Bass Assistant">
-  <meta property="twitter:description" content="Discover scales, arpeggios, and train your ear with the free interactive bass fretboard app.">
-  <meta property="twitter:image" content="https://bassmate.it/icon.svg">
-  
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#080810">
-  <link rel="apple-touch-icon" href="icon.svg">
-  
-  <link rel="canonical" href="https://bassmate.it/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bassmate — Manuale interattivo del basso">
+  <meta name="twitter:description" content="Scale, arpeggi e accordi sul manico, metronomo, quiz e griglie stampabili. Gratis e offline.">
+  <meta name="twitter:image" content="https://bassmate.it/assets/og-image.png">
 
   <script type="application/ld+json">
   {
@@ -41,342 +48,159 @@
     "applicationSubCategory": "Bass Guitar",
     "browserRequirements": "Requires a modern browser with JavaScript enabled",
     "inLanguage": ["it", "en"],
-    "availableLanguage": ["Italian", "English"],
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR"
-    },
     "url": "https://bassmate.it/",
     "sameAs": "https://github.com/RobyPisco/bassmate",
-    "description": "Free interactive bass guitar fretboard explorer. Practice scales, arpeggios and alternate tunings with audio playback, built-in metronome, chromatic tuner, drum backing tracks and quiz mode. Works offline as a PWA.",
-    "author": {
-      "@type": "Person",
-      "name": "Roberto Pisconti",
-      "url": "https://github.com/RobyPisco"
-    },
+    "description": "Manuale interattivo del basso: scale, arpeggi e accordi sul manico per blues, funk, jazz, rock e metal, con audio, metronomo, quiz e griglie stampabili. Funziona offline come PWA.",
+    "image": "https://bassmate.it/assets/og-image.png",
+    "screenshot": "https://bassmate.it/assets/og-image.png",
+    "softwareVersion": "2.0",
+    "datePublished": "2026-06-15",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "author": { "@type": "Person", "name": "Roberto Pisconti", "url": "https://github.com/RobyPisco" },
+    "publisher": { "@type": "Organization", "name": "PiscoFactory" },
     "featureList": [
-      "Interactive bass guitar fretboard",
-      "Scale and arpeggio generator with 20+ scale types",
-      "Alternate tunings — Standard, Drop D, Drop A, Open tunings",
-      "4, 5 and 6 string bass support",
-      "Audio playback of scales and arpeggios",
-      "Chromatic tuner",
-      "Metronome with groove presets — Rock, Funk, Jazz, Bossa, Shuffle",
-      "Drum backing tracks",
-      "Fretboard quiz mode",
-      "Chord library with PDF export",
-      "Blank fretboard grids for teachers",
-      "Offline-first PWA — installable on mobile",
-      "Italian and English interface"
+      "Manico interattivo del basso (4, 5, 6 corde)",
+      "30 tra scale e arpeggi con descrizione e generi d'uso",
+      "Libreria accordi con diagrammi",
+      "Metronomo con groove e batteria",
+      "Quiz sul manico",
+      "Griglie vuote stampabili",
+      "PWA offline, italiano e inglese"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Bassmate è gratuito?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì, Bassmate è completamente gratuito, senza account né pubblicità, e funziona anche offline." } },
+      { "@type": "Question", "name": "Quali scale posso studiare sul basso con Bassmate?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Oltre 30 tra scale e arpeggi: pentatoniche, blues, modi, scale jazz (bebop, alterata), minore armonica e melodica, e altre, organizzate anche per genere (blues, funk, jazz, rock, metal, latin)." } },
+      { "@type": "Question", "name": "Funziona su 4, 5 e 6 corde e con accordature alternate?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì. Bassmate supporta bassi a 4, 5 e 6 corde e diverse accordature come Standard, Drop D, Drop C e altre." } },
+      { "@type": "Question", "name": "Posso usare Bassmate offline o installarlo sul telefono?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì. Bassmate è una PWA: si installa su iOS e Android e funziona senza connessione." } }
     ]
   }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/print.css">
 </head>
 <body>
+<h1 class="sr-only">Bassmate — Manuale interattivo del basso: scale, arpeggi e accordi sul manico</h1>
+<noscript>
+  <p style="padding:16px;text-align:center">Bassmate richiede JavaScript per il manico interattivo. Attivalo nel browser. — Bassmate needs JavaScript enabled for the interactive fretboard.</p>
+</noscript>
 <div class="app">
 
-  <!-- ================= TOP DASHBOARD (INJECTED) ================= -->
-  <div id="header-placeholder"></div>
+  <!-- HEADER -->
+  <header class="hd">
+    <a href="index.html" class="hd-logo" aria-label="Bassmate home">
+      <span class="glyph">𝄢</span>
+      <span class="name">Bassmate<small>PiscoFactory</small></span>
+    </a>
 
-  <!-- ================= MAIN & FRETBOARD ================= -->
+    <nav class="hd-nav" id="navTabs" aria-label="Sezioni"></nav>
+
+    <span class="hd-spacer"></span>
+
+    <div class="hd-tools">
+      <div class="seg" id="modeSeg" role="group" aria-label="Modalità">
+        <button data-v="simple" data-i18n="mode_simple">Semplice</button>
+        <button data-v="advanced" data-i18n="mode_advanced">Avanzata</button>
+      </div>
+      <div class="seg" id="langSeg" role="group" aria-label="Lingua">
+        <button data-v="it">IT</button>
+        <button data-v="en">EN</button>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Tema">🌙</button>
+      <button class="icon-btn" id="audioBtn" title="Audio" aria-label="Audio">🔊</button>
+      <a class="icon-btn" href="help.html" title="Guida" aria-label="Guida">❓</a>
+      <a class="icon-btn" href="donate.html" title="Offrimi un caffè" aria-label="Offrimi un caffè">☕</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
   <main class="main">
-    <div class="scale-info" id="scaleInfo"></div>
+    <!-- STUDIO -->
+    <section id="studio" class="view-section active">
+      <div class="studio-grid">
 
-    <div class="pos-bar hide" id="posBar">
-      <button class="pos-nav" id="posL" aria-label="Posizione precedente">◀</button>
-      <span class="pos-txt" id="posTxt"></span>
-      <button class="pos-nav" id="posR" aria-label="Posizione successiva">▶</button>
-    </div>
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar"><!-- iniettata --></aside>
 
-    <!-- ================= METRONOME PANEL ================= -->
-    <div id="metroPanel" class="metro-panel">
-      <div class="metro-desk-grid">
+        <!-- MAIN -->
+        <div class="studio-main">
+          <div class="studio-head" id="studioHead"><!-- titolo + opzioni iniettati --></div>
 
-        <!-- ── LEFT COL: Timing controls ── -->
-        <div class="metro-dc metro-dc-left">
-          <div class="metro-ctrl-grp">
-            <span class="row-label-sm" data-i18n="metro_sig">Battuta</span>
-            <select id="metroTimeSig" class="metro-select">
-              <option value="2">2/4</option>
-              <option value="3">3/4</option>
-              <option value="4" selected>4/4</option>
-              <option value="5">5/4</option>
-              <option value="6">6/8</option>
-              <option value="7">7/8</option>
-            </select>
+          <div class="posbar adv-only hide" id="posbar">
+            <button class="pill" id="posPrev" data-i18n-title="pos_prev">◀</button>
+            <span class="pos-txt" id="posTxt"></span>
+            <button class="pill" id="posNext" data-i18n-title="pos_next">▶</button>
           </div>
-          <div class="metro-ctrl-grp">
-            <span class="row-label-sm" data-i18n="metro_sub">Suddividi</span>
-            <div class="metro-subs" id="metroSubdivs">
-              <button class="p on" data-v="1">1</button>
-              <button class="p" data-v="2">2</button>
-              <button class="p" data-v="3">3</button>
-              <button class="p" data-v="4">4</button>
-            </div>
+
+          <div id="fretboard"></div>
+
+          <div class="legend">
+            <div class="li"><span class="ld" style="background:var(--root-c); box-shadow:0 0 8px var(--root-g)"></span><span data-i18n="leg_root">Nota radice</span></div>
+            <div class="li"><span class="ld" style="background:var(--note-c); box-shadow:0 0 8px var(--note-g)"></span><span data-i18n="leg_note">Nota della scala</span></div>
           </div>
-          <div class="metro-ctrl-grp">
-            <div class="metro-toggle-row">
-              <span class="row-label-sm" data-i18n="metro_trainer">Speed Up</span>
-              <label class="metro-s-btn trainer-s" style="width:34px;height:34px;font-size:14px;">
-                <input type="checkbox" id="metroTrainerTog" style="display:none">
-                <span id="metroTrainerIcon">📈</span>
-              </label>
-            </div>
-            <div class="metro-incr-row">
-              <span class="unit">+</span>
-              <input type="number" id="metroIncrBpm" value="1" min="1" max="10" class="sm-input-num" style="width:44px!important;">
-              <span class="unit">BPM /</span>
-              <input type="number" id="metroIncrBars" value="2" min="1" max="32" class="sm-input-num" style="width:44px!important;">
-              <span class="unit">bars</span>
-            </div>
+
+          <!-- TRANSPORT (metronomo integrato) -->
+          <div class="transport card" id="transport"><!-- iniettato --></div>
+
+          <!-- PANNELLI TEORIA -->
+          <div class="panels">
+            <div class="card card-pad panel" id="harmPanel"></div>
+            <div class="card card-pad panel" id="formulaPanel"></div>
+            <div class="card card-pad panel" id="sharePanel"></div>
           </div>
         </div>
 
-        <!-- ── CENTER COL: BPM disk + actions ── -->
-        <div class="metro-ui-tack">
-
-          <!-- Beat dots -->
-          <div class="metro-t-header">
-            <div class="metro-beats" id="metroBeatDots"></div>
-          </div>
-
-          <!-- BPM Disk -->
-          <div class="metro-t-body">
-            <button class="metro-h-btn" id="metroBpmDn" aria-label="BPM Down">−</button>
-            <div class="metro-bpm-hero" id="metroTapArea">
-              <div class="hero-inner">
-                <span class="hero-term" id="metroBpmTerm">Moderato</span>
-                <span class="hero-val" id="metroBpmNum">80</span>
-                <span class="hero-unit">BPM</span>
-              </div>
-            </div>
-            <button class="metro-h-btn" id="metroBpmUp" aria-label="BPM Up">+</button>
-          </div>
-
-          <!-- Play + Half/Double -->
-          <div class="metro-action-row">
-            <button id="metroBpmHalf" class="metro-halfdbl-btn" title="BPM ÷ 2" aria-label="Dimezza BPM">÷2</button>
-            <button id="metroStartBtn" class="metro-t-play" aria-label="Avvia metronomo">▶</button>
-            <button id="metroBpmDouble" class="metro-halfdbl-btn" title="BPM × 2" aria-label="Raddoppia BPM">×2</button>
-          </div>
-
-          <!-- Timer & Progress -->
-          <div class="metro-t-timer">
-            <div class="t-times">
-              <span id="metroTimerElapsed">00:00</span>
-              <span id="metroTimerTotal">05:00</span>
-            </div>
-            <div class="t-progress-track">
-              <div id="metroProgressFill" class="t-progress-fill"></div>
-            </div>
-          </div>
-
-          <!-- Step Grid (pattern visualizer) -->
-          <div class="metro-step-wrap">
-            <span class="row-label-sm" id="metroStepLabel">Pattern</span>
-            <div class="metro-step-grid" id="metroStepGrid"></div>
-          </div>
-
-          <!-- Small action buttons -->
-          <div class="metro-t-footer">
-            <button id="metroFlashBtnUI" class="metro-s-btn on" aria-label="Flash visivo" aria-pressed="true">✨</button>
-            <button id="metroSoundCycleBtn" class="metro-s-btn" aria-label="Cambia suono metronomo">🔊</button>
-            <select id="metroGrooveCtrlInline" class="metro-groove-inline">
-              <option value="none">🎵 Click</option>
-              <option value="rock">🤘 Rock</option>
-              <option value="funk">🎸 Funk</option>
-              <option value="jazz">🎷 Jazz</option>
-              <option value="bossa">🌴 Bossa</option>
-              <option value="shuffle">🔀 Shuffle</option>
-            </select>
-            <button id="metroDrumsBtn" class="metro-s-btn" title="Drum backing track" aria-label="Drum backing track" aria-pressed="false">🥁</button>
-            <!-- Mobile only: toggle side columns -->
-            <button id="metroAdvBtn" class="metro-s-btn metro-mobile-only" data-i18n-title="metro_adv" title="Opzioni avanzati metronomo" aria-label="Opzioni avanzati metronomo">⚙️</button>
-          </div>
-
-        </div><!-- /metro-ui-tack -->
-
-        <!-- ── RIGHT COL: Groove / Volume / Timer ── -->
-        <div class="metro-dc metro-dc-right">
-          <div class="metro-ctrl-grp">
-            <span class="row-label-sm" data-i18n="metro_groove">Groove</span>
-            <select id="metroGrooveCtrl" class="metro-select">
-              <option value="none">Click</option>
-              <option value="rock">Rock 4/4</option>
-              <option value="funk">Funk 16th</option>
-              <option value="jazz">Jazz swing</option>
-              <option value="bossa">Bossa Nova</option>
-              <option value="shuffle">Shuffle</option>
-            </select>
-          </div>
-          <div class="metro-ctrl-grp">
-            <span class="row-label-sm" data-i18n="metro_volume">Volume</span>
-            <input type="range" id="metroVolumeCtrl" class="metro-vol-slider" min="0" max="100" value="80">
-          </div>
-          <div class="metro-ctrl-grp">
-            <div class="metro-toggle-row">
-              <span class="row-label-sm" data-i18n="metro_timer">Timer</span>
-              <input type="checkbox" id="metroTimerTog" class="adv-check">
-            </div>
-            <div class="metro-incr-row" style="margin-top:6px;">
-              <input type="number" id="metroTimerMin" value="5" min="1" max="99" class="sm-input-num" style="width:44px!important;">
-              <span class="unit">min</span>
-            </div>
-          </div>
-          <div class="metro-ctrl-grp">
-            <div class="metro-toggle-row">
-              <span class="row-label-sm" data-i18n="metro_flash">Flash</span>
-              <button id="metroFlashTogRight" class="metro-s-btn on" style="width:34px;height:34px;font-size:14px;" aria-label="Flash visivo" aria-pressed="true">✨</button>
-            </div>
-          </div>
-          <div class="metro-ctrl-grp">
-            <div class="metro-toggle-row">
-              <span class="row-label-sm">Drums</span>
-              <button id="metroDrumsBtnRight" class="metro-s-btn" style="width:34px;height:34px;font-size:14px;" aria-label="Drum backing track" aria-pressed="false">🥁</button>
-            </div>
-            <div id="metroDrumVolWrap" style="display:none; margin-top:6px;">
-              <input type="range" id="metroDrumVolCtrl" class="metro-vol-slider" min="0" max="100" value="70">
-            </div>
-          </div>
-        </div><!-- /metro-dc-right -->
-
-        <!-- Hidden compat -->
-        <div class="hide">
-          <select id="metroSoundSet"><option value="digital">Digital</option><option value="wood">Wood</option><option value="drum">Drum</option></select>
-          <input type="checkbox" id="metroFlashTog" checked>
-          <div id="metroAdvanced"></div>
-        </div>
-
-      </div><!-- /metro-desk-grid -->
-    </div><!-- /metroPanel -->
-
-    <div class="fb-area">
-      <div class="fb-layout" id="fretboard"></div>
-    </div>
-
-    <div id="quizPanel" class="quiz-panel">
-      <div class="quiz-hud">
-        <div class="quiz-timer-bar"><div class="quiz-timer-fill" id="quizTimerFill"></div></div>
-        <div class="quiz-single-row">
-          <div class="quiz-score" id="quizScore" data-i18n="quiz_initial">🏆 0</div>
-          <div id="quizRankLabel" class="quiz-combo" style="color:var(--accent); display:none;">Bronze 🥉</div>
-          <div class="quiz-combo" id="quizCombo">Combo x1</div>
-          <div class="quiz-time" id="quizTime">⏱️ 60s</div>
-          <div class="quiz-sep"></div>
-          <select id="quizModeCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
-            <option value="note">🎵 Note</option>
-            <option value="degree">🔢 Gradi</option>
-          </select>
-          <select id="quizDiffCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
-            <option value="easy">⭐ Easy</option>
-            <option value="normal" selected>⭐⭐ Normal</option>
-            <option value="hard">⭐⭐⭐ Hard</option>
-          </select>
-          <select id="quizTimeCtrl" class="quiz-ctrl-btn" style="cursor:pointer; font-family:'Space Mono',monospace;">
-            <option value="30">⏱ 30s</option>
-            <option value="60" selected>⏱ 60s</option>
-            <option value="120">⏱ 120s</option>
-            <option value="infinite">⏱ ∞</option>
-          </select>
-          <button id="quizStartBtn" class="quiz-ctrl-btn">▶️ Start</button>
-          <button id="quizStopBtn" class="quiz-ctrl-btn">⏹️ Stop</button>
-          <button id="quizResetBtn" class="quiz-ctrl-btn">🔄 Reset</button>
-        </div>
       </div>
-      <div class="quiz-btns" id="quizBtns"></div>
-      <div class="quiz-stats-bar" id="quizStatsBar"></div>
-    </div>
+    </section>
 
-    <!-- ================= TUNER PANEL ================= -->
-    <div id="tunerPanel" class="tuner-panel">
-      <div class="tuner-ui">
-        <div class="tuner-top">
-          <div class="tuner-note-display" id="tunerNote">—</div>
-          <div class="tuner-freq-display" id="tunerFreq">— Hz</div>
-        </div>
-        <!-- Needle meter -->
-        <div class="tuner-meter">
-          <div class="tuner-meter-track">
-            <div class="tuner-meter-zone-red-l"></div>
-            <div class="tuner-meter-zone-yellow-l"></div>
-            <div class="tuner-meter-zone-green"></div>
-            <div class="tuner-meter-zone-yellow-r"></div>
-            <div class="tuner-meter-zone-red-r"></div>
-            <div class="tuner-needle" id="tunerNeedle"></div>
-            <div class="tuner-center-mark"></div>
-          </div>
-          <div class="tuner-meter-labels">
-            <span>-50¢</span><span>-25¢</span><span>0</span><span>+25¢</span><span>+50¢</span>
-          </div>
-        </div>
-        <div class="tuner-cents-display" id="tunerCents">0 cents</div>
-        <div class="tuner-status" id="tunerStatus" data-i18n="tuner_prompt">Premi il pulsante per iniziare</div>
-        <button id="tunerStartBtn" class="tuner-start-btn">🎙️ <span id="tunerStartBtnLabel" data-i18n="tuner_start">Avvia Tuner</span></button>
-      </div>
-    </div>
+    <!-- ACCORDI -->
+    <section id="chords" class="view-section"></section>
 
-    <!-- ================= TAB PANEL ================= -->
-    <div id="tabPanel" class="tab-transcription-panel">
-      <div class="tab-ui">
-        <div class="tab-header">
-           <h3 data-i18n="tab_title">Trascrizione Tab</h3>
-           <p style="font-size: 13px; color: var(--muted);" data-i18n="tab_subtitle">Clicca sul manico per registrare le note</p>
-        </div>
-        <div class="tab-display-wrapper">
-          <pre id="tabDisplay" class="tab-ascii-box">G|---
-D|---
-A|---
-E|---</pre>
-        </div>
-        <div class="tab-controls">
-           <button id="tabUndoBtn" class="p">🔙 <span data-i18n="undo">Undo</span></button>
-           <button id="tabClearBtn" class="p">🗑️ <span data-i18n="clear">Clear</span></button>
-           <button id="tabCopyBtn" class="p">📋 <span data-i18n="copy">Copy</span></button>
-        </div>
-      </div>
-    </div>
+    <!-- METRONOMO -->
+    <section id="metro" class="view-section"></section>
 
+    <!-- QUIZ -->
+    <section id="quiz" class="view-section"></section>
 
-    <div class="legend" id="fbLegend">
-      <div class="li"><div class="ld" style="background:var(--root-c); box-shadow: 0 0 8px var(--root-g)"></div><span data-i18n="pos_root">Nota radice</span></div>
-      <div class="li"><div class="ld" style="background:var(--note-c); box-shadow: 0 0 8px var(--note-g)"></div><span data-i18n="pos_note">Nota della scala</span></div>
-    </div>
+    <!-- GRIGLIE (manici vuoti stampabili) -->
+    <section id="grids" class="view-section"></section>
   </main>
 
-  <div id="footer-placeholder"></div>
-
-  <!-- ================= BOTTOM TAB BAR (mobile) ================= -->
-  <nav class="bottom-tab-bar" aria-label="Navigazione rapida">
-    <button class="tab-btn active" data-tab="studio">
-      <span class="tab-icon">🎸</span>
-      <span class="tab-label" data-i18n="studio">Studio</span>
-    </button>
-    <button class="tab-btn" data-tab="quiz">
-      <span class="tab-icon">🎯</span>
-      <span class="tab-label" data-i18n="nav_quiz">Quiz</span>
-    </button>
-    <button class="tab-btn" data-tab="tuner">
-      <span class="tab-icon">🎙️</span>
-      <span class="tab-label" data-i18n="nav_tuner">Tuner</span>
-    </button>
-    <button class="tab-btn" data-tab="metro">
-      <span class="tab-icon">🥁</span>
-      <span class="tab-label" data-i18n="nav_metro">Metro</span>
-    </button>
-    <button class="tab-btn" data-tab="tab">
-      <span class="tab-icon">📝</span>
-      <span class="tab-label" data-i18n="tab_title">Tab</span>
-    </button>
-  </nav>
+  <!-- BOTTOM TAB BAR (mobile) -->
+  <nav class="tabbar" id="tabbar" aria-label="Navigazione rapida"></nav>
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="app.js"></script>
+<!-- Contenuto statico per indicizzazione / SEO -->
+<footer class="site-foot">
+  <div class="foot-in">
+    <p><strong>Bassmate</strong> è il manuale interattivo del basso: esplora <strong>scale</strong>, <strong>arpeggi</strong> e <strong>accordi</strong> direttamente sul manico, ascolta il suono, allena il tempo col metronomo e mettiti alla prova col quiz. Gratis, senza account, funziona offline.</p>
+    <p class="foot-kw"><strong>Scale e arpeggi:</strong> Maggiore, Minore naturale, Pentatonica maggiore e minore, Blues, Dorico, Frigio, Lidio, Misolidio, Locrio, Minore armonica e melodica, Bebop, Lidio dominante, Alterata, Frigio dominante (spagnola), Diminuita, Esatonale, Cromatica, più arpeggi Maj7, min7, dom7, m7♭5 e dim7.</p>
+    <p class="foot-kw"><strong>Generi:</strong> Blues · Funk · Rock · Metal · Jazz · Latin · Pop. <strong>Bassi:</strong> 4, 5 e 6 corde, accordature Standard, Drop D, Drop C e altre.</p>
+    <nav class="foot-links" aria-label="Pagine">
+      <a href="help.html">Guida</a> · <a href="donate.html">Sostieni</a> · <a href="contact.html">Contatti</a> · <a href="https://github.com/RobyPisco/bassmate" rel="noopener">GitHub</a>
+    </nav>
+    <p class="foot-copy">© Bassmate · PiscoFactory — Built in Italy 🤘</p>
+  </div>
+</footer>
+
+<script type="module" src="js/app.js"></script>
 </body>
 </html>

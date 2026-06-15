@@ -1,0 +1,30 @@
+/* =========================================================================
+   PAGE — stile pagine secondarie (Aiuto, Donate, Contatti).
+   ========================================================================= */
+.page { max-width: 680px; margin: 40px auto; padding: 0 16px; }
+.page-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; text-decoration: none; color: inherit; }
+.page-logo .glyph { font-size: 26px; color: var(--accent); text-shadow: 0 0 14px var(--accent-glow); }
+.page-logo .name { font-weight: 900; font-size: 18px; }
+
+.page-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: 36px; text-align: center; backdrop-filter: blur(var(--glass-blur)); box-shadow: var(--shadow-2);
+}
+.page-card .hero { font-size: 56px; margin-bottom: 16px; }
+.page-card h1 { font-size: 26px; margin-bottom: 16px; }
+.page-card p { color: var(--muted); text-align: left; line-height: 1.6; margin-bottom: 16px; }
+
+.page-cta {
+  display: inline-flex; gap: 10px; align-items: center; justify-content: center;
+  padding: 14px 24px; border-radius: var(--r-md); font-weight: 700; font-family: var(--font-mono);
+  text-decoration: none; margin: 10px 0 18px; transition: transform .15s;
+}
+.page-cta:hover { transform: translateY(-2px); }
+.page-cta.coffee { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-glow); border: none; cursor: pointer; }
+
+.page-back { color: var(--accent); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 8px; }
+.page-back:hover { text-decoration: underline; }
+
+.help-section { text-align: left; margin-bottom: 18px; }
+.help-section h3 { color: var(--accent); font-size: 16px; margin-bottom: 4px; }
+.help-section p { margin-bottom: 4px; }
