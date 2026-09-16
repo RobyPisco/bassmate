@@ -5,7 +5,7 @@
      "grids"  → stampa i manici vuoti (sezione Griglie)
    ========================================================================= */
 @media print {
-  @page { size: A4 landscape; margin: 12mm; }
+  @page { size: auto; margin: 8mm 10mm; }
   :root { color-scheme: light; }
   html, body { background: #fff !important; }
   body * { color: #000 !important; }
@@ -14,6 +14,31 @@
 
   /* nascondi tutto, poi mostra solo la sezione da stampare */
   body[data-print] .view-section { display: none !important; }
+
+  /* Footer in stampa: elimina l'intero blocco testuale SEO, mostra solo una riga pulita */
+  .site-foot {
+    margin-top: 6mm !important;
+    padding: 3mm 0 0 0 !important;
+    border-top: 1px solid #ddd !important;
+    text-align: center !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .site-foot .foot-in {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .site-foot .foot-in > p:not(.foot-copy),
+  .site-foot .foot-kw,
+  .site-foot .foot-links {
+    display: none !important;
+  }
+  .site-foot .foot-copy {
+    display: block !important;
+    font-size: 8pt !important;
+    color: #666 !important;
+    margin: 0 !important;
+  }
 
   /* ---- recolor manico per la carta (vale per .fb ovunque) ---- */
   .fb { background: #fff !important; border: 1px solid #999 !important; box-shadow: none !important; overflow: visible !important; }
@@ -24,6 +49,7 @@
   .fb-cell { border-right-color: #ccc !important; }
   .fb-cell.fb-open-col { border-right: 3px solid #000 !important; background: #fff !important; }
   .fb-cell.is-marker, .fb-cell.in-box { background: #f3f3f3 !important; }
+  .fb-cell.is-marker::before { background: #bbb !important; opacity: 0.8 !important; }
   .fb-fnum.is-marker { color: #000 !important; font-weight: 700; }
   .dot { background: #555 !important; color: #fff !important; border: 1px solid #000 !important; box-shadow: none !important; }
   .dot.is-root { background: #000 !important; color: #fff !important; }
@@ -43,8 +69,50 @@
   body[data-print="scale"] .head-eyebrow { color: #666 !important; }
 
   /* =================== STAMPA GRIGLIE =================== */
-  body[data-print="grids"] #grids { display: block !important; }
+  body[data-print="grids"] #grids { display: block !important; max-width: 100% !important; margin: 0 !important; }
   body[data-print="grids"] .grids-toolbar { display: none !important; }
-  body[data-print="grids"] .gneck { break-inside: avoid; margin-bottom: 16mm; }
-  body[data-print="grids"] .gneck-title { border-bottom: 1px solid #000 !important; }
+  body[data-print="grids"] #grids .head-eyebrow { display: none !important; }
+  body[data-print="grids"] #grids h2 { font-size: 13pt !important; margin: 0 0 1mm 0 !important; line-height: 1.2 !important; }
+  body[data-print="grids"] #grids p.muted { font-size: 8pt !important; margin: 0 0 3mm 0 !important; color: #666 !important; }
+
+  body[data-print="grids"] .gneck {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 5mm !important;
+  }
+  body[data-print="grids"] .gneck-title {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid #777 !important;
+    font-size: 10pt !important;
+    font-weight: 600 !important;
+    padding: 1px 0 !important;
+    margin-bottom: 2mm !important;
+    height: auto !important;
+  }
+  body[data-print="grids"] .gneck-fb {
+    --open-col: 32px !important;
+    box-shadow: none !important;
+  }
+  body[data-print="grids"] .gneck-fb .fb-fnums,
+  body[data-print="grids"] .gneck-fb .fb-row {
+    min-width: 0 !important;
+    grid-template-columns: var(--open-col) repeat(var(--nfrets, 12), minmax(0, 1fr)) !important;
+  }
+  body[data-print="grids"] .gneck-fb .fb-row {
+    height: 25px !important;
+  }
+  body[data-print="grids"] .gneck-fb .fb-fnums {
+    margin-bottom: 1mm !important;
+  }
+  body[data-print="grids"] .gneck-fb .fb-fnum {
+    font-size: 7.5pt !important;
+    padding-bottom: 1px !important;
+  }
+  body[data-print="grids"] .gneck-str {
+    font-size: 8.5pt !important;
+    font-weight: 700 !important;
+    color: #222 !important;
+  }
 }

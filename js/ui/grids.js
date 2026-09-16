@@ -14,7 +14,7 @@ const STR_LABELS = {
 };
 
 let host;
-const cfg = { count: 2, strings: 4, frets: 12 };
+const cfg = { count: 3, strings: 4, frets: 12 };
 
 export function buildGrids(sectionEl) {
   host = sectionEl;
