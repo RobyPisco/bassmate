@@ -280,9 +280,12 @@ function updateBassAdvice() {
         <div class="muted" style="font-size:13px;margin-bottom:8px">
           <strong>${isIt ? 'Accordi tipici' : 'Chords'}:</strong> ${g.chords}
         </div>
-        <p style="font-size:14px;line-height:1.5;color:var(--text);margin-bottom:12px">
+        <p style="font-size:14px;line-height:1.5;color:var(--text);margin-bottom:8px">
           💡 ${isIt ? g.tip_it : g.tip_en}
         </p>
+        <div class="muted" style="font-size:11px;opacity:0.8">
+          🥁 ${isIt ? 'Batteria acustica campionata da Lars Muldjord (FreePats, CC-BY 4.0)' : 'Real acoustic drums sampled by Lars Muldjord (FreePats, CC-BY 4.0)'}
+        </div>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">

@@ -9,14 +9,15 @@
    - Sincronizzazione precisa a 60fps con la UI.
    ========================================================================= */
 import { getAudioCtx } from './synth.js';
-import { GROOVE_LIBRARY, scheduleDrumStep } from './drums.js';
+import { GROOVE_LIBRARY, scheduleDrumStep, preloadDrumSamples } from './drums.js';
 
 class GrooveEngine {
   constructor() {
-    this.groove = GROOVE_LIBRARY[0]; // default Sloppy Joe
+    this.groove = GROOVE_LIBRARY[0]; // default Velluto Laid-Back
     this.bpm = this.groove.bpm;
     this.volume = 0.85;
     this.running = false;
+    preloadDrumSamples().catch(() => {});
 
     // Canali mixer
     this.mutes = {
