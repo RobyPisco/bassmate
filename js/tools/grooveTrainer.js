@@ -21,6 +21,7 @@ let unsubscribeEngine = null;
 // Tap tempo state
 let lastTap = 0;
 let tapDiffs = [];
+let currentCategory = 'all';
 
 // LocalStorage per i pattern personalizzati dell'utente
 const CUSTOM_STORAGE_KEY = 'bassmate_custom_grooves';
@@ -200,7 +201,7 @@ function render() {
         </div>
 
         <div class="gt-ch-strip" data-ch="ride">
-          <div class="gt-ch-name">🔔 ${isIt ? 'Piatti / Perc' : 'Ride / Perc'}</div>
+          <div class="gt-ch-name">🔔 Ride</div>
           <div class="row" style="gap:4px">
             <button class="chip" data-action="mute" data-ch="ride">MUTE</button>
             <button class="chip" data-action="solo" data-ch="ride">SOLO</button>
@@ -259,9 +260,32 @@ function render() {
     <!-- LIBRERIA GROOVE (CARDS) -->
     <div style="margin-top:24px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="panel-title" style="margin:0">📚 ${isIt ? 'Libreria Groove & Pattern Personali' : 'Groove & Custom Library'}</div>
-        <span class="muted" style="font-size:12px">Studio Pocket Trainer</span>
+        <div class="panel-title" style="margin:0">📚 ${isIt ? 'Libreria Groove per Categoria' : 'Groove Library by Genre'}</div>
+        <span class="muted" style="font-size:12px">${GROOVE_LIBRARY.length} ${isIt ? 'loop ritmici' : 'drum loops'}</span>
       </div>
+
+      <!-- BARRA FILTRI CATEGORIE -->
+      <div class="gt-cat-bar" id="gtCatBar">
+        <button class="pill${currentCategory === 'all' ? ' on' : ''}" data-cat="all">
+          ${isIt ? 'Tutti' : 'All'} <span class="gt-cat-badge">(${GROOVE_LIBRARY.length + getCustomGrooves().length})</span>
+        </button>
+        <button class="pill${currentCategory === 'rock' ? ' on' : ''}" data-cat="rock">
+          🎸 Rock <span class="gt-cat-badge">(${GROOVE_LIBRARY.filter(x => x.category === 'rock').length})</span>
+        </button>
+        <button class="pill${currentCategory === 'blues' ? ' on' : ''}" data-cat="blues">
+          🎷 Blues <span class="gt-cat-badge">(${GROOVE_LIBRARY.filter(x => x.category === 'blues').length})</span>
+        </button>
+        <button class="pill${currentCategory === 'funk' ? ' on' : ''}" data-cat="funk">
+          🪩 Funk & Soul <span class="gt-cat-badge">(${GROOVE_LIBRARY.filter(x => x.category === 'funk').length})</span>
+        </button>
+        <button class="pill${currentCategory === 'jazz' ? ' on' : ''}" data-cat="jazz">
+          🎺 Jazz & Latin <span class="gt-cat-badge">(${GROOVE_LIBRARY.filter(x => x.category === 'jazz').length})</span>
+        </button>
+        <button class="pill${currentCategory === 'custom' ? ' on' : ''}" data-cat="custom">
+          ⭐ ${isIt ? 'I Miei Pattern' : 'My Patterns'} <span class="gt-cat-badge">(${getCustomGrooves().length})</span>
+        </button>
+      </div>
+
       <div class="gt-grid" id="gtGrid">
         <!-- Cards dei groove (custom + factory) -->
       </div>
@@ -509,33 +533,42 @@ function renderGrooveCards() {
   const isIt = state.lang === 'it';
   const customs = getCustomGrooves();
 
+  // Filtra per categoria selezionata
+  const showCustoms = (currentCategory === 'all' || currentCategory === 'custom') && customs.length > 0;
+  let factoryList = GROOVE_LIBRARY;
+  if (currentCategory === 'custom') {
+    factoryList = [];
+  } else if (currentCategory !== 'all') {
+    factoryList = GROOVE_LIBRARY.filter(g => g.category === currentCategory);
+  }
+
   let html = '';
 
-  // 1. Sezione Custom Grooves se presenti
-  if (customs.length > 0) {
-    html += `
-      <div style="grid-column: 1 / -1; margin-bottom: 4px">
-        <div class="row" style="gap:8px;align-items:center">
-          <span style="font-weight:700;font-size:14px;color:var(--text)">⭐ ${isIt ? 'I Tuoi Pattern Personalizzati' : 'Your Custom Patterns'} (${customs.length})</span>
-          <span class="gt-custom-badge">User</span>
+  // 1. Sezione Custom Grooves se presenti o se categoria custom selezionata
+  if (showCustoms) {
+    if (currentCategory === 'all') {
+      html += `
+        <div style="grid-column: 1 / -1; margin-bottom: 2px">
+          <div class="row" style="gap:8px;align-items:center">
+            <span style="font-weight:700;font-size:13px;color:var(--text)">⭐ ${isIt ? 'I Tuoi Pattern Personalizzati' : 'Your Custom Patterns'} (${customs.length})</span>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
 
     html += customs.map(g => {
       const isSelected = g.id === currentId;
       return `
         <div class="gt-card${isSelected ? ' on' : ''}" data-gid="${g.id}" style="border-color:${isSelected ? 'var(--accent)' : 'rgba(255, 152, 0, 0.4)'}">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <div class="row" style="gap:6px;align-items:center">
               <span class="gt-custom-badge">${g.genre || 'Custom'}</span>
               <span class="gt-card-bpm">${g.bpm} BPM</span>
             </div>
             <button class="gt-delete-btn" data-delete-gid="${g.id}" title="${isIt ? 'Elimina questo pattern' : 'Delete this pattern'}">🗑️</button>
           </div>
-          <h4 class="gt-card-title">${g.name}</h4>
-          <p class="muted gt-card-desc">${isIt ? g.desc_it : g.desc_en}</p>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px">
+          <h4 class="gt-card-title" style="margin-bottom:10px">${g.name}</h4>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:12px">
             <span style="color:var(--accent);font-weight:600">🎸 ${g.rec_root || 'E'} ${g.rec_scale || 'dorian'}</span>
             <button class="pill${isSelected ? ' on' : ''}" style="font-size:11px;padding:4px 10px">
               ${isSelected ? (isIt ? 'Attivo' : 'Active') : (isIt ? 'Seleziona' : 'Select')}
@@ -545,25 +578,37 @@ function renderGrooveCards() {
       `;
     }).join('');
 
+    if (currentCategory === 'all' && factoryList.length > 0) {
+      html += `
+        <div style="grid-column: 1 / -1; margin-top: 14px; margin-bottom: 2px">
+          <span style="font-weight:700;font-size:13px;color:var(--text)">📚 ${isIt ? 'Preset di Fabbrica' : 'Factory Presets'} (${factoryList.length})</span>
+        </div>
+      `;
+    }
+  } else if (currentCategory === 'custom' && customs.length === 0) {
     html += `
-      <div style="grid-column: 1 / -1; margin-top: 16px; margin-bottom: 4px">
-        <span style="font-weight:700;font-size:14px;color:var(--text)">📚 ${isIt ? 'Libreria Preset di Fabbrica' : 'Factory Preset Library'} (12)</span>
+      <div style="grid-column: 1 / -1; padding: 24px; text-align: center; background: var(--surface-2); border-radius: var(--r-md); border: 1px dashed var(--border)">
+        <p class="muted" style="margin-bottom:10px">
+          ${isIt ? 'Nessun pattern personalizzato ancora salvato.' : 'No custom patterns saved yet.'}
+        </p>
+        <span style="font-size:12px;color:var(--accent)">
+          💡 ${isIt ? 'Clicca sui pad della matrice qui sopra e premi "Salva Pattern"!' : 'Click pads on the matrix above and hit "Save Pattern"!'}
+        </span>
       </div>
     `;
   }
 
-  // 2. Preset di fabbrica
-  html += GROOVE_LIBRARY.map(g => {
+  // 2. Preset di fabbrica (compatti, senza descrizioni)
+  html += factoryList.map(g => {
     const isSelected = g.id === currentId;
     return `
       <div class="gt-card${isSelected ? ' on' : ''}" data-gid="${g.id}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span class="chip on" style="font-size:11px;padding:2px 8px">${g.genre}</span>
           <span class="gt-card-bpm">${g.bpm} BPM</span>
         </div>
-        <h4 class="gt-card-title">${g.name}</h4>
-        <p class="muted gt-card-desc">${isIt ? g.desc_it : g.desc_en}</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px">
+        <h4 class="gt-card-title" style="margin-bottom:10px">${g.name}</h4>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:12px">
           <span style="color:var(--accent);font-weight:600">🎸 ${g.rec_root} ${g.rec_scale}</span>
           <button class="pill${isSelected ? ' on' : ''}" style="font-size:11px;padding:4px 10px">
             ${isSelected ? (isIt ? 'Attivo' : 'Active') : (isIt ? 'Seleziona' : 'Select')}
@@ -857,4 +902,16 @@ function bind() {
     if (!card) return;
     grooveEngine.setGroove(card.dataset.gid, getCustomGrooves());
   });
+
+  // Filtri categoria groove
+  const catBar = host.querySelector('#gtCatBar');
+  if (catBar) {
+    catBar.addEventListener('click', e => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      currentCategory = btn.dataset.cat;
+      catBar.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('on', b === btn));
+      renderGrooveCards();
+    });
+  }
 }
