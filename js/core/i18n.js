@@ -8,7 +8,7 @@ import { state } from './state.js';
 export const DICT = {
   it: {
     // header / nav
-    studio: 'Studio', manual: 'Manuale', chords: 'Accordi', metro: 'Metro', tuner: 'Tuner', quiz: 'Quiz', tab: 'Tab',
+    studio: 'Studio', manual: 'Manuale', chords: 'Accordi', metro: 'Metro', groove_trainer: 'Groove', tuner: 'Tuner', quiz: 'Quiz', tab: 'Tab',
     mode_simple: 'Semplice', mode_advanced: 'Avanzata', mode: 'Modalità',
     // controlli strumento
     root_note: 'Nota radice', scale_chord: 'Scala / Accordo', tuning: 'Accordatura',
@@ -60,7 +60,7 @@ export const DICT = {
     sw_update: 'Nuova versione disponibile', sw_update_btn: 'Aggiorna',
   },
   en: {
-    studio: 'Studio', manual: 'Manual', chords: 'Chords', metro: 'Metro', tuner: 'Tuner', quiz: 'Quiz', tab: 'Tab',
+    studio: 'Studio', manual: 'Manual', chords: 'Chords', metro: 'Metro', groove_trainer: 'Groove', tuner: 'Tuner', quiz: 'Quiz', tab: 'Tab',
     mode_simple: 'Simple', mode_advanced: 'Advanced', mode: 'Mode',
     root_note: 'Root note', scale_chord: 'Scale / Chord', tuning: 'Tuning',
     labels: 'Labels', view: 'View', hand: 'Hand', genre: 'Genre',

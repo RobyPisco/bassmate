@@ -405,6 +405,155 @@
 .tuner-badge { font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: var(--r-pill); background: var(--surface-2); border: 1px solid var(--border); margin-top: 6px; }
 .tuner-ref-grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 
+/* =========================================================================
+   GROOVE TRAINER (SBL-Style Loop Trainer)
+   ========================================================================= */
+#groove { max-width: 920px; margin: 0 auto; }
+.gt-console { display: flex; flex-direction: column; gap: var(--sp-4); }
+
+.gt-top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.gt-play-btn {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-ink);
+  font-size: 24px; font-weight: 900; border: none; cursor: pointer;
+  display: grid; place-items: center; box-shadow: 0 0 16px var(--accent-glow);
+  transition: transform 0.12s, box-shadow 0.15s, background 0.15s; flex: none;
+}
+.gt-play-btn:hover { transform: scale(1.06); }
+.gt-play-btn.playing {
+  background: var(--danger); color: #fff;
+  box-shadow: 0 0 18px rgba(255, 77, 77, 0.45);
+}
+
+.gt-bpm-zone { flex: 1; min-width: 220px; max-width: 380px; text-align: center; }
+.gt-bpm-readout {
+  min-width: 100px; display: inline-flex; flex-direction: column; align-items: center;
+  font-family: var(--font-mono); font-size: 32px; font-weight: 800; line-height: 1;
+}
+.gt-bpm-readout small { font-size: 11px; font-weight: 700; color: var(--faint); letter-spacing: 0.05em; }
+
+.gt-actions { display: flex; gap: 8px; align-items: center; }
+
+.gt-status-strip {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 14px; border-radius: var(--r-md);
+  background: var(--surface-2); border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+}
+.gt-bar-badge { color: var(--accent); }
+.gt-callout { color: var(--muted); transition: color 0.15s; }
+
+/* 16-Step Matrix */
+.gt-matrix-wrap {
+  background: var(--surface-2); border: 1px solid var(--border-2);
+  border-radius: var(--r-lg); padding: 14px; overflow-x: auto;
+}
+.gt-step-header {
+  display: grid; grid-template-columns: 86px repeat(16, minmax(24px, 1fr));
+  gap: 4px; margin-bottom: 8px; text-align: center; font-family: var(--font-mono);
+}
+.gt-step-col {
+  font-size: 11px; font-weight: 700; color: var(--faint); padding: 3px 0;
+  border-radius: var(--r-sm); transition: background 0.08s, color 0.08s;
+}
+.gt-step-col.gt-beat-start { color: var(--text); font-weight: 800; }
+.gt-step-col.active { background: var(--accent); color: var(--accent-ink); font-weight: 900; }
+
+.gt-matrix-rows { display: flex; flex-direction: column; gap: 6px; }
+.gt-inst-row {
+  display: grid; grid-template-columns: 86px repeat(16, minmax(24px, 1fr));
+  gap: 4px; align-items: center;
+}
+.gt-inst-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--muted); display: flex; align-items: center; gap: 4px;
+}
+.gt-pads-row { display: contents; }
+.gt-pad {
+  height: 28px; border-radius: 4px; background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border); transition: transform 0.08s, background 0.08s, box-shadow 0.08s;
+  position: relative;
+}
+.gt-pad.beat-pad { border-color: var(--border-2); }
+.gt-pad.has-hit {
+  background: var(--surface); border-color: var(--border-2);
+}
+/* Colori specifici per fusto */
+.gt-pad[data-ch="kick"].has-hit { background: #00bcd4; box-shadow: 0 0 8px rgba(0, 188, 212, 0.4); border-color: transparent; }
+.gt-pad[data-ch="snare"].has-hit { background: #ab47bc; box-shadow: 0 0 8px rgba(171, 71, 188, 0.4); border-color: transparent; }
+.gt-pad[data-ch="hihat"].has-hit { background: #ffa726; box-shadow: 0 0 6px rgba(255, 167, 38, 0.35); border-color: transparent; }
+.gt-pad[data-ch="ride"].has-hit { background: #26a69a; box-shadow: 0 0 6px rgba(38, 166, 154, 0.35); border-color: transparent; }
+
+.gt-pad.ghost { opacity: 0.4; transform: scale(0.8); }
+.gt-pad.accent { filter: brightness(1.25); transform: scale(1.05); }
+.gt-pad.open::after {
+  content: ''; position: absolute; inset: 4px; border-radius: 50%;
+  border: 2px solid #fff; pointer-events: none;
+}
+.gt-pad.step-active {
+  outline: 2px solid #fff; z-index: 2; transform: scale(1.1);
+}
+
+/* Mixer */
+.gt-mixer {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.gt-ch-strip {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px; background: var(--surface-2); border-radius: var(--r-md);
+  border: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+}
+.gt-ch-name { display: flex; align-items: center; gap: 6px; }
+
+/* Trainers grid */
+.gt-trainers-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+/* Bass Box */
+.gt-bass-box {
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(34, 224, 214, 0.05) 100%);
+  border: 1px solid var(--accent); box-shadow: 0 0 16px var(--accent-glow);
+}
+.gt-badge-glow {
+  display: inline-block; font-family: var(--font-mono); font-size: 11px;
+  font-weight: 800; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase;
+}
+
+/* Groove Cards Grid */
+.gt-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.gt-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 16px; cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.gt-card:hover {
+  border-color: var(--accent); transform: translateY(-2px);
+  box-shadow: var(--shadow-1);
+}
+.gt-card.on {
+  border-color: var(--accent); background: var(--surface-2);
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+.gt-card-title {
+  font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px;
+}
+.gt-card-bpm {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent);
+}
+.gt-card-desc {
+  font-size: 12px; line-height: 1.45; flex: 1; margin: 4px 0 8px;
+}
+
 /* ---------- banner aggiornamento PWA ---------- */
 .sw-banner {
   position: fixed; left: 50%; bottom: calc(var(--tabbar-h) + 14px); transform: translateX(-50%);
@@ -417,3 +566,4 @@
 
 /* ---------- utilità modalità ---------- */
 [data-mode="simple"] .adv-only { display: none !important; }
+

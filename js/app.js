@@ -15,11 +15,13 @@ import { buildMetro } from './ui/metro.js';
 import { buildQuiz } from './tools/quiz.js';
 import { buildGrids } from './ui/grids.js';
 import { buildTuner, stopTuner } from './tools/tuner.js';
+import { buildGrooveTrainer, stopGrooveTrainer } from './tools/grooveTrainer.js';
 
 const NAV = [
   { id: 'studio', i18n: 'studio', icon: '🎸', ready: true },
   { id: 'chords', i18n: 'chords', icon: '🎼', ready: true },
-  { id: 'metro',  i18n: 'metro',  icon: '🥁', ready: true },
+  { id: 'metro',  i18n: 'metro',  icon: '⏱️', ready: true },
+  { id: 'groove', i18n: 'groove_trainer', icon: '🥁', ready: true },
   { id: 'tuner',  i18n: 'tuner',  icon: '🎛️', ready: true },
   { id: 'quiz',   i18n: 'quiz',   icon: '🎯', ready: true },
   { id: 'grids',  i18n: 'grids',  icon: '📋', ready: true },
@@ -28,6 +30,7 @@ const NAV = [
 const $ = sel => document.querySelector(sel);
 let chordsBuilt = false;
 let metroBuilt = false;
+let grooveBuilt = false;
 let tunerBuilt = false;
 let quizBuilt = false;
 let gridsBuilt = false;
@@ -57,11 +60,13 @@ function switchView(id) {
   const item = NAV.find(n => n.id === id);
   if (!item || !item.ready) return;
   if (state.activeView === 'tuner' && id !== 'tuner') stopTuner();
+  if (state.activeView === 'groove' && id !== 'groove') stopGrooveTrainer();
   state.activeView = id;
   document.querySelectorAll('.view-section').forEach(s => s.classList.toggle('active', s.id === id));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view === id));
   if (id === 'chords' && !chordsBuilt) { buildChords($('#chords')); chordsBuilt = true; }
   if (id === 'metro' && !metroBuilt) { buildMetro($('#metro')); metroBuilt = true; }
+  if (id === 'groove' && !grooveBuilt) { buildGrooveTrainer($('#groove')); grooveBuilt = true; }
   if (id === 'tuner' && !tunerBuilt) { buildTuner($('#tuner')); tunerBuilt = true; }
   if (id === 'quiz' && !quizBuilt) { buildQuiz($('#quiz')); quizBuilt = true; }
   if (id === 'grids' && !gridsBuilt) { buildGrids($('#grids')); gridsBuilt = true; }
@@ -136,6 +141,7 @@ function init() {
     buildNav(); buildStudio(); buildTransport(); applyI18n(); renderAll();
     if (chordsBuilt) buildChords($('#chords'));
     if (metroBuilt) buildMetro($('#metro'));
+    if (grooveBuilt) buildGrooveTrainer($('#groove'));
     if (tunerBuilt) buildTuner($('#tuner'));
     if (quizBuilt) buildQuiz($('#quiz'));
     if (gridsBuilt) buildGrids($('#grids'));

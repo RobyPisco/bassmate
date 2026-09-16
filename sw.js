@@ -4,7 +4,7 @@
    così l'utente non resta su una versione vecchia senza saperlo.
    Bump CACHE_NAME a ogni release per invalidare la cache.
    ========================================================================= */
-const CACHE_NAME = 'bassmate-v2-4';
+const CACHE_NAME = 'bassmate-v2-5';
 
 const APP_SHELL = [
   './',
@@ -31,6 +31,7 @@ const APP_SHELL = [
   './js/audio/synth.js',
   './js/audio/metronome.js',
   './js/audio/drums.js',
+  './js/audio/grooveEngine.js',
   './js/ui/controls.js',
   './js/ui/fretboard.js',
   './js/ui/transport.js',
@@ -39,6 +40,7 @@ const APP_SHELL = [
   './js/tools/chords.js',
   './js/tools/quiz.js',
   './js/tools/tuner.js',
+  './js/tools/grooveTrainer.js',
 ];
 
 self.addEventListener('install', event => {

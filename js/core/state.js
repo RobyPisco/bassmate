@@ -82,7 +82,7 @@ function parseUrlParams() {
   if (m && ['simple', 'advanced'].includes(m)) patch.mode = m;
 
   const tab = params.get('tab') ?? params.get('view_section');
-  if (tab && ['studio', 'chords', 'metro', 'quiz', 'grids'].includes(tab)) patch.activeView = tab;
+  if (tab && ['studio', 'chords', 'metro', 'groove', 'tuner', 'quiz', 'grids'].includes(tab)) patch.activeView = tab;
 
   return patch;
 }
