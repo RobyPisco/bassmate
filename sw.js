@@ -4,7 +4,7 @@
    così l'utente non resta su una versione vecchia senza saperlo.
    Bump CACHE_NAME a ogni release per invalidare la cache.
    ========================================================================= */
-const CACHE_NAME = 'bassmate-v2-7';
+const CACHE_NAME = 'bassmate-v2-8';
 
 const APP_SHELL = [
   './',

@@ -105,16 +105,17 @@ function getDrumBus(ctx) {
   return drumBus;
 }
 
-/** Configurazione spaziale stereo (panning) e guadagni relativi ottimali */
+/** Configurazione spaziale stereo (panning) e guadagni calibrati da studio.
+ * Cassa e rullante guidano il mix ritmico, piatti e charleston si collocano come accompagnamento dinamico naturale. */
 const INSTRUMENT_SPECS = {
   kick:         { pan:  0.00, gain: 1.15, jitter: 0.004 },
   snare:        { pan: -0.06, gain: 1.05, jitter: 0.012 },
-  'snare-ghost':{ pan: -0.06, gain: 0.75, jitter: 0.020 },
-  rimshot:      { pan: -0.08, gain: 0.95, jitter: 0.008 },
-  hihat:        { pan: -0.22, gain: 0.90, jitter: 0.015 },
-  'hihat-open': { pan: -0.20, gain: 0.95, jitter: 0.010 },
-  ride:         { pan:  0.28, gain: 0.90, jitter: 0.008 },
-  crash:        { pan: -0.32, gain: 0.95, jitter: 0.005 },
+  'snare-ghost':{ pan: -0.06, gain: 0.70, jitter: 0.020 },
+  rimshot:      { pan: -0.08, gain: 0.90, jitter: 0.008 },
+  hihat:        { pan: -0.22, gain: 0.58, jitter: 0.015 },
+  'hihat-open': { pan: -0.20, gain: 0.38, jitter: 0.010 }, // attenuato per non sovrastare cassa e rullante
+  ride:         { pan:  0.28, gain: 0.42, jitter: 0.008 }, // calibrato per un morbido accompagnamento jazz/blues
+  crash:        { pan: -0.32, gain: 0.55, jitter: 0.005 },
 };
 
 /** Choking realistico: quando il charleston si chiude, strozza l'open hat ancora attivo */
@@ -259,9 +260,9 @@ export function hihat(time, hhVol = 0.6, vol = 1.0, isOpen = false) {
 }
 
 export function ride(time, accent = false, vol = 1.0) {
-  if (playSample('ride', time, vol * (accent ? 0.95 : 0.75))) return;
+  if (playSample('ride', time, vol * (accent ? 0.70 : 0.48))) return;
   const ctx = getAudioCtx();
-  const v = vol * (accent ? 0.55 : 0.38);
+  const v = vol * (accent ? 0.40 : 0.28);
   [1046, 1567, 2637, 3120].forEach((freq, i) => {
     const osc = ctx.createOscillator(), g = ctx.createGain();
     osc.type = 'sine'; osc.frequency.value = freq;
@@ -558,7 +559,7 @@ export function scheduleDrumStep(si, time, dp, vol = 1.0, opts = {}) {
     snare(time, dp.snare[si], rimshot, vol);
   }
   if (!muteH && dp.open_hihat && dp.open_hihat[si]) {
-    hihat(time, 0.9, vol, true);
+    hihat(time, 0.55, vol, true);
   } else if (!muteH && dp.hihat && dp.hihat[si]) {
     const hhLvl = dp.hh_vol ? dp.hh_vol[si] : (dp.hihat[si] === 2 ? 1.0 : 0.6);
     hihat(time, hhLvl, vol, false);

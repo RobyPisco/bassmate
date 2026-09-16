@@ -13,7 +13,7 @@ import { GROOVE_LIBRARY, scheduleDrumStep, preloadDrumSamples } from './drums.js
 
 class GrooveEngine {
   constructor() {
-    this.groove = GROOVE_LIBRARY[0]; // default Velluto Laid-Back
+    this.groove = JSON.parse(JSON.stringify(GROOVE_LIBRARY[0])); // deep copy per permettere modifiche live
     this.bpm = this.groove.bpm;
     this.volume = 0.85;
     this.running = false;
@@ -59,11 +59,56 @@ class GrooveEngine {
     this.listeners = new Set();
   }
 
-  setGroove(id) {
-    const found = GROOVE_LIBRARY.find(g => g.id === id);
+  setGroove(id, customGrooves = []) {
+    let found = GROOVE_LIBRARY.find(g => g.id === id);
+    if (!found && customGrooves && customGrooves.length) {
+      found = customGrooves.find(g => g.id === id);
+    }
     if (!found) return;
-    this.groove = found;
-    this.bpm = found.bpm;
+    this.groove = JSON.parse(JSON.stringify(found));
+    this.bpm = found.bpm || this.bpm;
+    this.notify({ type: 'groove-changed', groove: this.groove, bpm: this.bpm });
+  }
+
+  loadGrooveObject(grooveObj) {
+    if (!grooveObj || !grooveObj.pattern) return;
+    this.groove = JSON.parse(JSON.stringify(grooveObj));
+    if (grooveObj.bpm) this.bpm = grooveObj.bpm;
+    this.notify({ type: 'groove-changed', groove: this.groove, bpm: this.bpm });
+  }
+
+  updateStep(channel, stepIndex, val) {
+    if (!this.groove.pattern) {
+      this.groove.pattern = { kick:[], snare:[], hihat:[], open_hihat:[], ride:[] };
+    }
+    const p = this.groove.pattern;
+    if (!p[channel]) p[channel] = Array(16).fill(0);
+    p[channel][stepIndex] = val;
+    this.groove.isModified = true;
+    this.notify({ type: 'pattern-updated', channel, stepIndex, val, groove: this.groove });
+  }
+
+  clearPattern() {
+    this.groove.pattern = {
+      kick: Array(16).fill(0),
+      snare: Array(16).fill(0),
+      hihat: Array(16).fill(0),
+      open_hihat: Array(16).fill(0),
+      ride: Array(16).fill(0),
+    };
+    this.groove.isModified = true;
+    this.notify({ type: 'groove-changed', groove: this.groove, bpm: this.bpm });
+  }
+
+  randomizePattern() {
+    const kick = [2, 0, 0, Math.random() > 0.5 ? 1 : 0, 0, 0, 1, 0, Math.random() > 0.4 ? 2 : 1, 0, 0, 0, 0, 1, 0, 0];
+    const snare = [0, 0, 0, 0, 2, 0, 0, Math.random() > 0.5 ? 3 : 0, 0, Math.random() > 0.6 ? 3 : 0, 0, 0, 2, 0, Math.random() > 0.5 ? 3 : 0, 0];
+    const hihat = [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 0];
+    const open_hihat = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2];
+    const ride = Array(16).fill(0);
+
+    this.groove.pattern = { kick, snare, hihat, open_hihat, ride };
+    this.groove.isModified = true;
     this.notify({ type: 'groove-changed', groove: this.groove, bpm: this.bpm });
   }
 
