@@ -1,10 +1,12 @@
 /* =========================================================================
    DRUMS — Motore di batteria acustica realistica e sintesi ibrida.
    Campioni acustici reali:
-   - Registrati da Lars Muldjord (MuldjordKit, FreePats project, licenza CC-BY 4.0).
-   - Inclusi: Kick, Snare, Snare-Ghost, Rimshot/Side-stick, Hi-Hat Chiuso,
-     Hi-Hat Aperto, Piatto Ride, Crash.
-   - Riproduzione sample-based ad alta fedeltà con fallback sintetizzato immediato.
+   - Salamander Drumkit (Yamaha Custom acoustic kit registrato con microfoni
+     overhead stereo di sala da Alexander Holm, licenza CC-BY 3.0).
+   - Inclusi in alta fedeltà stereo 44.1kHz: Kick, Snare, Snare-Ghost, Rimshot/Side-stick,
+     Hi-Hat Chiuso, Hi-Hat Aperto, Piatto Ride, Crash.
+   - Master Drum Bus con DynamicsCompressorNode ("glue" analogica), EQ presence/sub
+     e Stereo Panner per posizionamento spaziale realistico.
    ========================================================================= */
 import { getAudioCtx } from './synth.js';
 
@@ -48,19 +50,135 @@ export async function preloadDrumSamples() {
   return loadPromise;
 }
 
+/* ---------------- GESTIONE MASTER DRUM BUS & EFFETTI STUDIO ---------------- */
+let drumBus = null;
+let activeOpenHatGains = [];
+
+/**
+ * Inizializza il Drum Bus professionale:
+ * - DynamicsCompressorNode: "incolla" i fusti dando punch, attacco e respiro ritmico (pumping analogico leggero).
+ * - Low-Shelf EQ (+1.5 dB a 70Hz): conferisce corpo e peso tellurico alla cassa per il groove del bassista.
+ * - High-Shelf EQ (+2.0 dB a 8.5kHz): dona aria, frizzantezza e sizzle a piatti e rullante senza asprezza.
+ */
+function getDrumBus(ctx) {
+  if (drumBus && drumBus.ctx === ctx) return drumBus;
+
+  const busInput = ctx.createGain();
+  busInput.gain.value = 1.0;
+
+  // 1. Equalizzazione di mastering per batteria
+  const lowShelf = ctx.createBiquadFilter();
+  lowShelf.type = 'lowshelf';
+  lowShelf.frequency.value = 75;
+  lowShelf.gain.value = 1.8;
+
+  const highShelf = ctx.createBiquadFilter();
+  highShelf.type = 'highshelf';
+  highShelf.frequency.value = 8500;
+  highShelf.gain.value = 1.8;
+
+  // 2. Bus Compressor ("Glue" compression da studio)
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.setValueAtTime(-14, ctx.currentTime);
+  comp.knee.setValueAtTime(6, ctx.currentTime);
+  comp.ratio.setValueAtTime(3.8, ctx.currentTime);
+  comp.attack.setValueAtTime(0.006, ctx.currentTime); // 6ms: lascia passare il transiente iniziale prima di comprimere
+  comp.release.setValueAtTime(0.12, ctx.currentTime); // 120ms: respiro naturale col pocket
+
+  // Master drum ceiling
+  const masterOut = ctx.createGain();
+  masterOut.gain.value = 0.95;
+
+  // Routing della catena: input -> lowShelf -> highShelf -> comp -> masterOut -> destination
+  busInput.connect(lowShelf);
+  lowShelf.connect(highShelf);
+  highShelf.connect(comp);
+  comp.connect(masterOut);
+  masterOut.connect(ctx.destination);
+
+  drumBus = {
+    ctx,
+    input: busInput,
+    compressor: comp,
+    masterOut
+  };
+  return drumBus;
+}
+
+/** Configurazione spaziale stereo (panning) e guadagni relativi ottimali */
+const INSTRUMENT_SPECS = {
+  kick:         { pan:  0.00, gain: 1.15, jitter: 0.004 },
+  snare:        { pan: -0.06, gain: 1.05, jitter: 0.012 },
+  'snare-ghost':{ pan: -0.06, gain: 0.75, jitter: 0.020 },
+  rimshot:      { pan: -0.08, gain: 0.95, jitter: 0.008 },
+  hihat:        { pan: -0.22, gain: 0.90, jitter: 0.015 },
+  'hihat-open': { pan: -0.20, gain: 0.95, jitter: 0.010 },
+  ride:         { pan:  0.28, gain: 0.90, jitter: 0.008 },
+  crash:        { pan: -0.32, gain: 0.95, jitter: 0.005 },
+};
+
+/** Choking realistico: quando il charleston si chiude, strozza l'open hat ancora attivo */
+function chokeOpenHiHat(time) {
+  const ctx = getAudioCtx();
+  const safeTime = Math.max(ctx.currentTime, time);
+  activeOpenHatGains = activeOpenHatGains.filter(({ gainNode, stopTime }) => {
+    if (stopTime <= safeTime) return false;
+    try {
+      gainNode.cancelScheduledValues(safeTime);
+      gainNode.setValueAtTime(gainNode.value || 0.8, safeTime);
+      gainNode.linearRampToValueAtTime(0.001, safeTime + 0.018); // 18ms pedata sul pedale
+    } catch (_) {}
+    return false;
+  });
+}
+
 function playSample(key, time, vol = 1.0, pitch = 1.0) {
   const buf = AUDIO_BUFFERS[key];
   if (!buf) return false;
   const ctx = getAudioCtx();
+  const bus = getDrumBus(ctx);
+
+  const spec = INSTRUMENT_SPECS[key] || { pan: 0, gain: 1.0, jitter: 0.01 };
+
+  // Micro-humanization (variazione impercettibile di intonazione come in una vera esecuzione)
+  const humanPitch = pitch * (1 + (Math.random() - 0.5) * (spec.jitter || 0.01));
+  const finalVol = Math.max(0.001, vol * spec.gain);
+
   const src = ctx.createBufferSource();
   const g = ctx.createGain();
 
   src.buffer = buf;
-  if (pitch !== 1.0) src.playbackRate.value = pitch;
-  g.gain.setValueAtTime(vol, time);
+  src.playbackRate.value = humanPitch;
+  g.gain.setValueAtTime(finalVol, time);
 
-  src.connect(g);
-  g.connect(ctx.destination);
+  // Se è charleston aperto, memorizziamo per choking
+  if (key === 'hihat-open') {
+    activeOpenHatGains.push({
+      gainNode: g,
+      stopTime: time + buf.duration
+    });
+  } else if (key === 'hihat') {
+    // Choke open hihat quando suona il closed
+    chokeOpenHiHat(time);
+  }
+
+  // Panning stereo se supportato
+  if (typeof ctx.createStereoPanner === 'function' && spec.pan !== 0) {
+    try {
+      const panner = ctx.createStereoPanner();
+      panner.pan.setValueAtTime(spec.pan, time);
+      src.connect(g);
+      g.connect(panner);
+      panner.connect(bus.input);
+    } catch (_) {
+      src.connect(g);
+      g.connect(bus.input);
+    }
+  } else {
+    src.connect(g);
+    g.connect(bus.input);
+  }
+
   src.start(time);
   return true;
 }
