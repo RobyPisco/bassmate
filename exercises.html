@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12 Esercizi Pratici per Basso — Bassmate</title>
+  <meta name="description" content="12 esercizi pratici per basso elettrico: scale maggiori, pentatoniche, modi dorici, arpeggi e altro. Apri direttamente sul manico interattivo Bassmate.">
+  <meta name="keywords" content="esercizi basso, bass exercises, scale basso, pentatonica basso, modo dorico, arpeggio basso, imparare basso">
+  <meta name="author" content="PiscoFactory">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bassmate.it/exercises.html">
+  <meta property="og:title" content="12 Esercizi Pratici per Basso — Bassmate">
+  <meta property="og:description" content="Scala maggiore, pentatonica, modi, arpeggi e altro. Esercizi interattivi direttamente sul manico del basso.">
+  <meta property="og:image" content="https://bassmate.it/assets/og-image.png">
+  <link rel="canonical" href="https://bassmate.it/exercises.html">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#08080f">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/page.css">
+  <style>
+    .ex-grid { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+    .ex-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+      padding: 20px; display: flex; gap: 18px; align-items: flex-start; text-align: left;
+      transition: border-color .15s, transform .15s;
+    }
+    .ex-card:hover { border-color: var(--accent); transform: translateX(3px); }
+    .ex-num {
+      width: 42px; height: 42px; flex: none; border-radius: 50%;
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      color: var(--accent); font-family: var(--font-mono); font-size: 18px; font-weight: 800;
+      display: grid; place-items: center; box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .ex-body { flex: 1; min-width: 0; }
+    .ex-body h2 { font-size: 18px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+    .ex-body p { color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 12px; }
+    .ex-body em { color: var(--accent); font-style: normal; font-weight: 600; }
+    .ex-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px; border-radius: var(--r-pill);
+      background: var(--surface-2); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+      text-decoration: none; transition: .14s;
+    }
+    .ex-btn:hover { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  </style>
+</head>
+<body>
+<div class="page" style="max-width:840px">
+  <a href="index.html" class="page-logo"><span class="glyph">𝄢</span><span class="name">Bassmate</span></a>
+  <div class="page-card">
+    <div class="hero">📚 🎸</div>
+
+    <!-- ITALIANO -->
+    <div data-lang="it">
+      <h1>I 12 Esercizi Fondamentali</h1>
+      <p style="text-align:center">Queste 12 routine rappresentano la spina dorsale della tecnica e della teoria del basso. Includile nel tuo riscaldamento quotidiano e clicca il tasto azzurro per caricare il preset visivo sul manico!</p>
+      
+      <div class="ex-grid">
+        <div class="ex-card">
+          <div class="ex-num">1</div>
+          <div class="ex-body">
+            <h2>La Sfida Cromatica</h2>
+            <p>Suona la Scala Cromatica su ogni singola corda, partendo dalla nota a vuoto fino al 12° tasto. Pronuncia ad alta voce il nome della nota mentre la suoni.<br><em>Scopo:</em> Memorizzare i nomi delle note e superare lo "smarrimento da tastiera vuota".</p>
+            <a href="index.html?r=C&s=chromatic&l=note&v=full" class="ex-btn">🎸 Prova sul Manico (Cromatica)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">2</div>
+          <div class="ex-body">
+            <h2>Scala Maggiore Monocorda</h2>
+            <p>Imposta la Vista su "Tutto". Scegli una root (es. La) e percorri tutta la corda usando la formula dei TONI (T) e SEMITONI (S): <strong>T-T-S-T-T-T-S</strong>.<br><em>Scopo:</em> Unire l'orecchio alla distanza geometrica degli intervalli sul manico.</p>
+            <a href="index.html?r=A&s=major&l=deg&v=full" class="ex-btn">🎸 Prova sul Manico (La Maggiore)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">3</div>
+          <div class="ex-body">
+            <h2>Il Pattern del "Box 5 tasti" (Maggiore)</h2>
+            <p>Attiva la Vista "Box 5 tasti" e mantieni la mano parallela. Suona una scala maggiore iniziando dal dito medio o indice, muovendoti verticalmente attraverso le corde.<br><em>Scopo:</em> Imparare a suonare fluidi mantenendo la mano ancorata a una singola posizione.</p>
+            <a href="index.html?r=A&s=major&v=box&pos=4&l=finger" class="ex-btn">🎸 Prova sul Manico (Box Dita)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">4</div>
+          <div class="ex-body">
+            <h2>La Pentatonica Universale (Minore)</h2>
+            <p>Il re di tutti i groove. Suona la Pentatonica Minore (1, ♭3, 4, 5, ♭7): cinque note infallibili che funzionano sempre su rock, blues e funk.<br><em>Scopo:</em> Avere un set sicuro di note a prova di errore per accompagnare e improvvisare.</p>
+            <a href="index.html?r=A&s=minPenta&v=box&pos=5&l=finger" class="ex-btn">🎸 Prova sul Manico (Box Pentatonica)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">5</div>
+          <div class="ex-body">
+            <h2>Catturare la Blue Note</h2>
+            <p>Aggiungi alla pentatonica minore la ♭5 (quinta diminuita). Esercitati a suonarla non come nota fissa ma come passaggio scivolato o martellato verso la 5ª naturale.<br><em>Scopo:</em> Generare la tensione "sporca" ed espressiva essenziale per funk, blues e rock.</p>
+            <a href="index.html?r=A&s=blues&v=box&pos=5&l=deg" class="ex-btn">🎸 Prova sul Manico (Box Blues Gradi)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">6</div>
+          <div class="ex-body">
+            <h2>Salti in Ottava Fissa</h2>
+            <p>Per qualsiasi nota suonata, trova la sua ottava saltando due tasti a destra e due corde in alto. Suona l'alternanza Basso-Alto con ritmo disco/funk.<br><em>Scopo:</em> Interiorizzare l'intervallo dell'ottava senza cercarlo con gli occhi.</p>
+            <a href="index.html?r=E&s=major&v=full&l=note" class="ex-btn">🎸 Prova sul Manico (Ottave di Mi)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">7</div>
+          <div class="ex-body">
+            <h2>Quinte e Quarte sul Manico</h2>
+            <p>La 5ª giusta si trova a destra di due tasti sulla corda superiore. La 4ª giusta? È esattamente sullo stesso tasto, sulla corda immediatamente sopra.<br><em>Scopo:</em> Questi due salti risolvono il 90% degli accompagnamenti nella musica moderna.</p>
+            <a href="index.html?r=D&s=major&v=box&pos=4&l=deg" class="ex-btn">🎸 Prova sul Manico (Re Maggiore Box)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">8</div>
+          <div class="ex-body">
+            <h2>Arpeggio della Triade</h2>
+            <p>Suona sequenzialmente Fondamentale (1), Terza (3/♭3) e Quinta (5). Esercitati a passare da triadi maggiori a minori.<br><em>Scopo:</em> Inculcare nella mano le forme geometriche Maggiore (triangolo) vs Minore.</p>
+            <a href="index.html?r=C&s=majTriad&v=box&pos=2&l=deg" class="ex-btn">🎸 Prova sul Manico (Triade di Do)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">9</div>
+          <div class="ex-body">
+            <h2>Progressione I–IV–V–vi</h2>
+            <p>Prendi una tonalità come Do Maggiore. Suona come linea di basso i gradi I (Do), IV (Fa), V (Sol) e vi (La minore), la formula regina delle canzoni moderne.<br><em>Scopo:</em> Pensare per gradi e numeri romani per poter trasportare qualsiasi brano al volo.</p>
+            <a href="index.html?r=C&s=major&l=deg&v=full" class="ex-btn">🎸 Prova sul Manico (Gradi di Do)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">10</div>
+          <div class="ex-body">
+            <h2>Allineamento col Metronomo in 4/4</h2>
+            <p>Imposta il metronomo a 80 BPM. Suona con precisione sui tempi forti (1 e 3) e inserisci ghost notes o respiri sui tempi deboli.<br><em>Scopo:</em> La teoria non serve se il tempo vacilla. L'orologio è la guida del bassista.</p>
+            <a href="index.html?r=G&s=minPenta&l=note&v=full&tab=metro" class="ex-btn">🎸 Prova sul Manico col Metronomo</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">11</div>
+          <div class="ex-body">
+            <h2>Il Modo Dorico — Il Suono Funk & Jazz</h2>
+            <p>Minore ma con la Sesta Maggiore (6 naturale): il modo di <em>Billie Jean</em>, <em>Chameleon</em> e <em>So What</em>. Aperto, moderno e irresistibile.<br><em>Scopo:</em> Padroneggiare il modo più usato nel Funk, nel Soul e nel Jazz moderno.</p>
+            <a href="index.html?r=A&s=dorian&l=deg&v=full" class="ex-btn">🎸 Prova sul Manico (La Dorico)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">12</div>
+          <div class="ex-body">
+            <h2>Arpeggio Dominante 7 (Turnaround)</h2>
+            <p>Triade maggiore + settima minore (1, 3, 5, ♭7): l'accordo di tensione che vuole risolvere, cuore pulsante del blues e del jazz.<br><em>Scopo:</em> Costruire walking bass e turnaround fluidi su qualsiasi giro blues.</p>
+            <a href="index.html?r=G&s=dom7&l=deg&v=full" class="ex-btn">🎸 Prova sul Manico (Sol Dom7)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENGLISH -->
+    <div data-lang="en" style="display:none;">
+      <h1>Top 12 Essential Exercises</h1>
+      <p style="text-align:center">These 12 routines represent the backbone of bass technique and theory. Include them in your daily warmup and click the button to load the visual preset on your fretboard!</p>
+
+      <div class="ex-grid">
+        <div class="ex-card">
+          <div class="ex-num">1</div>
+          <div class="ex-body">
+            <h2>The Chromatic Challenge</h2>
+            <p>Play the Chromatic Scale on each string from open to 12th fret, speaking note names aloud.<br><em>Purpose:</em> Memorize fretboard note names effortlessly.</p>
+            <a href="index.html?r=C&s=chromatic&l=note&v=full" class="ex-btn">🎸 Open on Fretboard (Chromatic)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">2</div>
+          <div class="ex-body">
+            <h2>Single-String Major Scale</h2>
+            <p>Travel along a single string using Whole (W) and Half (H) steps: <strong>W-W-H-W-W-W-H</strong>.<br><em>Purpose:</em> Connect your ear to physical interval distances.</p>
+            <a href="index.html?r=A&s=major&l=deg&v=full" class="ex-btn">🎸 Open on Fretboard (A Major)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">3</div>
+          <div class="ex-body">
+            <h2>The "5-Fret Box" Pattern</h2>
+            <p>Lock your hand in a 5-fret box and play a major scale moving vertically across strings.<br><em>Purpose:</em> Play fluently without unnecessary lateral hand shifts.</p>
+            <a href="index.html?r=A&s=major&v=box&pos=4&l=finger" class="ex-btn">🎸 Open on Fretboard (Fingers Box)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">4</div>
+          <div class="ex-body">
+            <h2>The Universal Minor Pentatonic</h2>
+            <p>The king of bass grooves: 1, ♭3, 4, 5, ♭7. Five safe, expressive notes for rock, blues and funk.<br><em>Purpose:</em> A bullet-proof note palette for jamming and walking lines.</p>
+            <a href="index.html?r=A&s=minPenta&v=box&pos=5&l=finger" class="ex-btn">🎸 Open on Fretboard (Penta Box)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">5</div>
+          <div class="ex-body">
+            <h2>Catching the Blue Note</h2>
+            <p>Add the ♭5 passing tone to the minor pentatonic. Slide or hammer-on into the natural fifth.<br><em>Purpose:</em> Create gritty, vocal tension for funk, blues and rock.</p>
+            <a href="index.html?r=A&s=blues&v=box&pos=5&l=deg" class="ex-btn">🎸 Open on Fretboard (Blues Degrees)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">6</div>
+          <div class="ex-body">
+            <h2>Fixed Octave Jumps</h2>
+            <p>Find octaves instantly: two frets up and two strings higher. Practice disco/funk octave lines.<br><em>Purpose:</em> Internalize octaves by muscle memory.</p>
+            <a href="index.html?r=E&s=major&v=full&l=note" class="ex-btn">🎸 Open on Fretboard (E Octaves)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">7</div>
+          <div class="ex-body">
+            <h2>Fourths and Fifths</h2>
+            <p>The 5th is two frets up on the next string; the 4th is directly across on the same fret.<br><em>Purpose:</em> Master the two intervals behind 90% of popular music.</p>
+            <a href="index.html?r=D&s=major&v=box&pos=4&l=deg" class="ex-btn">🎸 Open on Fretboard (D Major Box)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">8</div>
+          <div class="ex-body">
+            <h2>Triad Arpeggios</h2>
+            <p>Arpeggiate Root (1), Third (3/♭3) and Fifth (5). Compare major triangles with minor shapes.<br><em>Purpose:</em> Anchor chord tones in hand geometry.</p>
+            <a href="index.html?r=C&s=majTriad&v=box&pos=2&l=deg" class="ex-btn">🎸 Open on Fretboard (C Triad)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">9</div>
+          <div class="ex-body">
+            <h2>The I–IV–V–vi Progression</h2>
+            <p>Play Roman numerals I, IV, V, vi in C Major (C, F, G, Am).<br><em>Purpose:</em> Transpose modern pop/rock progressions to any key instantly.</p>
+            <a href="index.html?r=C&s=major&l=deg&v=full" class="ex-btn">🎸 Open on Fretboard (C Degrees)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">10</div>
+          <div class="ex-body">
+            <h2>Metronome Groove Alignment</h2>
+            <p>Lock with an 80 BPM beat on beats 1 and 3, using ghost notes on off-beats.<br><em>Purpose:</em> Solid timing is the primary duty of any bassist.</p>
+            <a href="index.html?r=G&s=minPenta&l=note&v=full&tab=metro" class="ex-btn">🎸 Open on Fretboard with Metronome</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">11</div>
+          <div class="ex-body">
+            <h2>Dorian Mode — Funk & Jazz</h2>
+            <p>Minor with a raised 6th: the sound of <em>Billie Jean</em> and <em>Chameleon</em>.<br><em>Purpose:</em> Master the most expressive mode for groove music.</p>
+            <a href="index.html?r=A&s=dorian&l=deg&v=full" class="ex-btn">🎸 Open on Fretboard (A Dorian)</a>
+          </div>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-num">12</div>
+          <div class="ex-body">
+            <h2>Dominant 7 Arpeggio</h2>
+            <p>1, 3, 5, ♭7: the cornerstone chord of blues turnarounds and jazz walking lines.<br><em>Purpose:</em> Build smooth, resolving bass lines over dominant chords.</p>
+            <a href="index.html?r=G&s=dom7&l=deg&v=full" class="ex-btn">🎸 Open on Fretboard (G Dom7)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="page-back"><span data-lang="it">⬅️ Torna al Manico</span><span data-lang="en" style="display:none">⬅️ Back to the Fretboard</span></a>
+  </div>
+</div>
+<script src="js/page.js"></script>
+</body>
+</html>

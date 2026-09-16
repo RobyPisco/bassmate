@@ -14,11 +14,13 @@ import { buildChords, refreshChords } from './tools/chords.js';
 import { buildMetro } from './ui/metro.js';
 import { buildQuiz } from './tools/quiz.js';
 import { buildGrids } from './ui/grids.js';
+import { buildTuner, stopTuner } from './tools/tuner.js';
 
 const NAV = [
   { id: 'studio', i18n: 'studio', icon: '🎸', ready: true },
   { id: 'chords', i18n: 'chords', icon: '🎼', ready: true },
   { id: 'metro',  i18n: 'metro',  icon: '🥁', ready: true },
+  { id: 'tuner',  i18n: 'tuner',  icon: '🎛️', ready: true },
   { id: 'quiz',   i18n: 'quiz',   icon: '🎯', ready: true },
   { id: 'grids',  i18n: 'grids',  icon: '📋', ready: true },
 ];
@@ -26,6 +28,7 @@ const NAV = [
 const $ = sel => document.querySelector(sel);
 let chordsBuilt = false;
 let metroBuilt = false;
+let tunerBuilt = false;
 let quizBuilt = false;
 let gridsBuilt = false;
 
@@ -53,11 +56,13 @@ function buildNav() {
 function switchView(id) {
   const item = NAV.find(n => n.id === id);
   if (!item || !item.ready) return;
+  if (state.activeView === 'tuner' && id !== 'tuner') stopTuner();
   state.activeView = id;
   document.querySelectorAll('.view-section').forEach(s => s.classList.toggle('active', s.id === id));
   document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('on', b.dataset.view === id));
   if (id === 'chords' && !chordsBuilt) { buildChords($('#chords')); chordsBuilt = true; }
   if (id === 'metro' && !metroBuilt) { buildMetro($('#metro')); metroBuilt = true; }
+  if (id === 'tuner' && !tunerBuilt) { buildTuner($('#tuner')); tunerBuilt = true; }
   if (id === 'quiz' && !quizBuilt) { buildQuiz($('#quiz')); quizBuilt = true; }
   if (id === 'grids' && !gridsBuilt) { buildGrids($('#grids')); gridsBuilt = true; }
 }
@@ -79,7 +84,7 @@ function syncAudioBtn() { $('#audioBtn').textContent = state.audio ? '🔊' : '�
 function syncSeg(id, val) { document.querySelectorAll(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === val)); }
 
 function syncPosBar() {
-  const show = state.mode === 'advanced' && state.view === 'box';
+  const show = state.view === 'box';
   $('#posbar').classList.toggle('hide', !show);
   if (show) $('#posTxt').textContent = `${t('position')}: ${state.boxStart}–${state.boxStart + BOX - 1}`;
 }
@@ -109,6 +114,9 @@ function init() {
   syncSeg('langSeg', state.lang);
   document.documentElement.setAttribute('data-mode', state.mode);
   renderAll();
+  if (state.activeView && state.activeView !== 'studio') {
+    switchView(state.activeView);
+  }
 
   $('#navTabs').addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) switchView(b.dataset.view); });
   $('#tabbar').addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) switchView(b.dataset.view); });
@@ -128,6 +136,7 @@ function init() {
     buildNav(); buildStudio(); buildTransport(); applyI18n(); renderAll();
     if (chordsBuilt) buildChords($('#chords'));
     if (metroBuilt) buildMetro($('#metro'));
+    if (tunerBuilt) buildTuner($('#tuner'));
     if (quizBuilt) buildQuiz($('#quiz'));
     if (gridsBuilt) buildGrids($('#grids'));
   });

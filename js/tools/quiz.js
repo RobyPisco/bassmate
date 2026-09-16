@@ -109,6 +109,11 @@ function bind() {
   host.querySelector('#qTime').addEventListener('click', e => seg(e, v => QZ.timeLimit = +v));
   host.querySelector('#qStart').addEventListener('click', start);
   host.querySelector('#qStop').addEventListener('click', () => end(true));
+  host.querySelector('#qPrompt').addEventListener('click', e => {
+    if (e.target.closest('#qReplay')) {
+      if (QZ.q?.audio) QZ.q.audio();
+    }
+  });
 }
 function seg(e, setFn) {
   const b = e.target.closest('[data-v]'); if (!b) return;

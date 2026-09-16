@@ -26,7 +26,7 @@ export const DICT = {
     // legenda
     leg_root: 'Nota radice', leg_note: 'Nota della scala',
     // studio head / pannelli
-    selected_scale: 'Scala selezionata', show: 'Mostra', notes_short: 'Note', solfege_short: 'Solf.',
+    selected_scale: 'Scala selezionata', show: 'Mostra', notes_short: 'Note', solfege_short: 'Solf.', fingers_short: 'Dita',
     listen: 'Ascolta', share: 'Condividi', notes_count: 'note',
     harmonization: 'Armonizzazione', harm_na: 'Disponibile per scale a 7 note.',
     // transport / metronomo
@@ -43,6 +43,17 @@ export const DICT = {
     quiz_q_degree: 'Che grado è la nota nella scala',
     quiz_q_ear: 'Quale scala hai sentito?',
     quiz_q_shape: 'Che scala è questa, con radice',
+    // tuner
+    tuner_title: 'Accordatore Cromatico',
+    tuner_sub: 'Usa il microfono per accordare il tuo basso o ascolta le note di riferimento.',
+    tuner_start: 'Attiva microfono',
+    tuner_stop: 'Disattiva',
+    tuner_listening: 'In ascolto...',
+    tuner_in_tune: 'In tono',
+    tuner_flat: 'Calante (troppo basso)',
+    tuner_sharp: 'Crescente (troppo alto)',
+    tuner_error: 'Accesso al microfono non consentito o non supportato.',
+    tuner_ref_notes: 'Note di riferimento (tocca per ascoltare):',
     // export / griglie
     export_pdf: 'PDF', grids: 'Griglie', grids_sub: 'Per scrivere scale, esercizi e compiti a mano.',
     grids_count: 'Numero manici', grids_strings: 'Corde', grids_frets: 'Tasti',
@@ -62,7 +73,7 @@ export const DICT = {
     theme: 'Theme', theme_auto: 'Auto', theme_dark: 'Dark', theme_light: 'Light',
     audio_on: 'Audio ON', audio_off: 'Audio OFF',
     leg_root: 'Root note', leg_note: 'Scale note',
-    selected_scale: 'Selected scale', show: 'Show', notes_short: 'Notes', solfege_short: 'Solf.',
+    selected_scale: 'Selected scale', show: 'Show', notes_short: 'Notes', solfege_short: 'Solf.', fingers_short: 'Fingers',
     listen: 'Listen', share: 'Share', notes_count: 'notes',
     harmonization: 'Harmonization', harm_na: 'Available for 7-note scales.',
     tempo: 'Time', subdivision: 'Subdivision', bpm: 'BPM',
@@ -77,6 +88,17 @@ export const DICT = {
     quiz_q_degree: 'Which degree is the note in the scale',
     quiz_q_ear: 'Which scale did you hear?',
     quiz_q_shape: 'Which scale is this, with root',
+    // tuner
+    tuner_title: 'Chromatic Tuner',
+    tuner_sub: 'Use your microphone to tune your bass or play reference tones.',
+    tuner_start: 'Enable microphone',
+    tuner_stop: 'Stop',
+    tuner_listening: 'Listening...',
+    tuner_in_tune: 'In tune',
+    tuner_flat: 'Flat (too low)',
+    tuner_sharp: 'Sharp (too high)',
+    tuner_error: 'Microphone permission denied or not supported.',
+    tuner_ref_notes: 'Reference notes (tap to hear):',
     export_pdf: 'PDF', grids: 'Grids', grids_sub: 'For writing scales, exercises and homework by hand.',
     grids_count: 'Necks', grids_strings: 'Strings', grids_frets: 'Frets',
     sw_update: 'New version available', sw_update_btn: 'Update',

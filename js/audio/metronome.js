@@ -139,6 +139,23 @@ export function setBpm(v) {
   window.dispatchEvent(new CustomEvent('bm:bpm', { detail: metro.bpm }));
 }
 
+export function setBeats(v) {
+  metro.beats = Math.max(1, Math.min(16, +v));
+  window.dispatchEvent(new CustomEvent('bm:sig', { detail: metro.beats }));
+}
+
+export function setSubdivision(v) {
+  metro.subdivision = Math.max(1, Math.min(8, +v));
+  window.dispatchEvent(new CustomEvent('bm:sub', { detail: metro.subdivision }));
+}
+
+export function setGroove(v) {
+  if (GROOVES[v]) {
+    metro.groove = v;
+    window.dispatchEvent(new CustomEvent('bm:groove', { detail: metro.groove }));
+  }
+}
+
 /** Tap tempo: chiama a ogni tap, calcola il BPM dalla media degli intervalli. */
 export function tap() {
   const now = performance.now();

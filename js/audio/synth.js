@@ -30,13 +30,20 @@ export function playBeep(freq, duration = 0.15) {
   } catch (e) { console.warn('Audio error:', e); }
 }
 
+let _seqTimers = [];
+
+export function stopSequence() {
+  _seqTimers.forEach(id => clearTimeout(id));
+  _seqTimers = [];
+}
+
 /** Suona una nota MIDI con timbro di basso (saw biting + sub sine + lowpass). */
-export function playNote(midi) {
+export function playNote(midi, when = null) {
   if (!state.audio) return;
   try {
     const ctx = getAudioCtx();
     const freq = 440 * Math.pow(2, (midi - 69) / 12);
-    const now = ctx.currentTime;
+    const now = (when !== null && when >= ctx.currentTime) ? when : ctx.currentTime;
 
     const osc1 = ctx.createOscillator();
     osc1.type = 'sawtooth';
@@ -72,5 +79,10 @@ export function playNote(midi) {
 /** Suona una sequenza di note MIDI a intervallo fisso (per "ascolta scala"). */
 export function playSequence(midiList, gap = 0.32) {
   if (!state.audio || !midiList.length) return;
-  midiList.forEach((m, i) => setTimeout(() => playNote(m), i * gap * 1000));
+  stopSequence();
+  const ctx = getAudioCtx();
+  const startAt = ctx.currentTime + 0.04;
+  midiList.forEach((m, i) => {
+    playNote(m, startAt + i * gap);
+  });
 }

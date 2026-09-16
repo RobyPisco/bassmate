@@ -4,16 +4,19 @@
    così l'utente non resta su una versione vecchia senza saperlo.
    Bump CACHE_NAME a ogni release per invalidare la cache.
    ========================================================================= */
-const CACHE_NAME = 'bassmate-v2-1';
+const CACHE_NAME = 'bassmate-v2-4';
 
 const APP_SHELL = [
   './',
   './index.html',
+  './exercises.html',
   './help.html',
   './donate.html',
   './contact.html',
   './manifest.json',
   './assets/icon.svg',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
   './css/tokens.css',
   './css/base.css',
   './css/components.css',
@@ -35,11 +38,12 @@ const APP_SHELL = [
   './js/ui/grids.js',
   './js/tools/chords.js',
   './js/tools/quiz.js',
+  './js/tools/tuner.js',
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(APP_SHELL)));
-  // niente skipWaiting() qui: lo decide la pagina
+  self.skipWaiting();
 });
 
 self.addEventListener('message', event => {

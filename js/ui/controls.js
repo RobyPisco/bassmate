@@ -33,7 +33,13 @@ function buildSidebar() {
       <div class="sb-genres" id="sbGenre"></div>
     </div>
     <div class="sb-block">
-      <div class="sb-title" data-i18n="root_note">Nota radice</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="sb-title" data-i18n="root_note">Nota radice</div>
+        <div class="row" style="gap:4px">
+          <button class="pill" id="btnTransDn" title="Semitono giù" data-i18n-title="transpose_dn" style="padding:2px 8px;font-size:11px">♭ −1</button>
+          <button class="pill" id="btnTransUp" title="Semitono su" data-i18n-title="transpose_up" style="padding:2px 8px;font-size:11px">♯ +1</button>
+        </div>
+      </div>
       <div class="root-pad" id="sbRoot"></div>
     </div>
     <div class="sb-block">
@@ -123,11 +129,19 @@ function buildHead() {
     </div>
     <div class="head-right">
       <div class="head-opt">
+        <span class="row-label" data-i18n="view">Vista</span>
+        <div class="seg" id="viewSeg">
+          <button data-v="full" data-i18n="all">Tutto</button>
+          <button data-v="box" data-i18n="box">Box 5 tasti</button>
+        </div>
+      </div>
+      <div class="head-opt">
         <span class="row-label" data-i18n="show">Mostra</span>
         <div class="seg" id="labelSeg">
           <button data-v="deg" data-i18n="degrees">Gradi</button>
           <button data-v="note" data-i18n="notes_short">Note</button>
           <button data-v="solfege" data-i18n="solfege_short">Solf.</button>
+          <button data-v="finger" data-i18n="fingers_short">Dita</button>
         </div>
       </div>
       <div class="head-opt">
@@ -150,6 +164,12 @@ function bindSidebar() {
     const b = e.target.closest('[data-genre]'); if (!b) return;
     set({ genre: b.dataset.genre || null }); fillScales(); fillGenres();
   });
+  sidebar.querySelector('#btnTransDn')?.addEventListener('click', () => {
+    set({ root: (+state.root + 11) % 12 });
+  });
+  sidebar.querySelector('#btnTransUp')?.addEventListener('click', () => {
+    set({ root: (+state.root + 1) % 12 });
+  });
   sidebar.querySelector('#sbRoot').addEventListener('click', e => {
     const b = e.target.closest('[data-root]'); if (!b) return;
     set({ root: +b.dataset.root });
@@ -170,6 +190,10 @@ function bindSidebar() {
 }
 
 function bindHead() {
+  head.querySelector('#viewSeg').addEventListener('click', e => {
+    const b = e.target.closest('[data-v]'); if (!b) return;
+    set({ view: b.dataset.v });
+  });
   head.querySelector('#labelSeg').addEventListener('click', e => {
     const b = e.target.closest('[data-v]'); if (!b) return;
     set({ label: b.dataset.v }); fillRoot();
@@ -206,6 +230,7 @@ export function syncActive() {
   sidebar.querySelectorAll('[data-scale]').forEach(b => b.classList.toggle('on', b.dataset.scale === state.scale));
   sidebar.querySelectorAll('[data-genre]').forEach(b => b.classList.toggle('on', (b.dataset.genre || null) === state.genre));
   sidebar.querySelectorAll('[data-tuning]').forEach(b => b.classList.toggle('on', b.dataset.tuning === state.tuning));
+  head.querySelectorAll('#viewSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === state.view));
   head.querySelectorAll('#labelSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === state.label));
   head.querySelectorAll('#handSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === state.hand));
 }
@@ -259,15 +284,38 @@ function renderHarmonization() {
 
 function shareUrl() {
   const rootName = NOTES_EN[+state.root].replace('#', 's');
-  return `bassmate.it/?r=${rootName}&s=${state.scale}`;
+  let q = `?r=${rootName}&s=${state.scale}`;
+  if (state.view === 'box') q += `&v=box&pos=${state.boxStart}`;
+  if (state.label !== 'deg') q += `&l=${state.label}`;
+  if (state.tuning !== 'std-4') q += `&t=${state.tuning}`;
+  if (typeof window !== 'undefined' && window.location.origin && window.location.origin !== 'null') {
+    return `${window.location.origin}${window.location.pathname}${q}`;
+  }
+  return `https://bassmate.it/${q}`;
 }
 function renderShare() {
+  const url = shareUrl();
   sharePanel.innerHTML = `
     <div class="panel-title" data-i18n="share">Condividi</div>
-    <div class="share-box"><code id="shareUrl">${shareUrl()}</code><button class="pill" id="shareCopy">⧉</button></div>`;
+    <div class="share-box"><code id="shareUrl">${url}</code><button class="pill" id="shareCopy" title="Copia link">⧉</button></div>`;
   sharePanel.querySelector('#shareCopy').addEventListener('click', copyShare);
 }
 function copyShare() {
-  const url = 'https://' + shareUrl();
-  navigator.clipboard?.writeText(url).catch(() => {});
+  const url = shareUrl();
+  const copyFn = () => {
+    const btn = head.querySelector('#shareBtn span') || head.querySelector('#shareBtn');
+    const copyBtn = sharePanel.querySelector('#shareCopy');
+    if (btn) {
+      const old = btn.textContent;
+      btn.textContent = state.lang === 'it' ? 'Copiato!' : 'Copied!';
+      setTimeout(() => { btn.textContent = old; }, 1800);
+    }
+    if (copyBtn) {
+      copyBtn.textContent = '✓';
+      setTimeout(() => { copyBtn.textContent = '⧉'; }, 1800);
+    }
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(url).then(copyFn).catch(() => {});
+  }
 }

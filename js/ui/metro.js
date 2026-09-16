@@ -6,7 +6,7 @@
    ========================================================================= */
 import { t } from '../core/i18n.js';
 import { state } from '../core/state.js';
-import { metro, GROOVES, toggleMetro, setBpm, tap, bpmTerm } from '../audio/metronome.js';
+import { metro, GROOVES, toggleMetro, setBpm, tap, bpmTerm, setBeats, setSubdivision, setGroove } from '../audio/metronome.js';
 
 const SIGS = [3, 4, 6, 7];
 const SUBS = [{ v: 1, s: '1' }, { v: 2, s: '2' }, { v: 3, s: '3' }, { v: 4, s: '4' }];
@@ -117,19 +117,15 @@ function bind() {
   host.querySelector('#mPlay').addEventListener('click', () => toggleMetro());
   host.querySelector('#mSig').addEventListener('click', e => {
     const b = e.target.closest('[data-v]'); if (!b) return;
-    metro.beats = +b.dataset.v;
-    host.querySelectorAll('#mSig button').forEach(x => x.classList.toggle('on', x === b));
-    buildBeats();
+    setBeats(+b.dataset.v);
   });
   host.querySelector('#mSub').addEventListener('click', e => {
     const b = e.target.closest('[data-v]'); if (!b) return;
-    metro.subdivision = +b.dataset.v;
-    host.querySelectorAll('#mSub button').forEach(x => x.classList.toggle('on', x === b));
+    setSubdivision(+b.dataset.v);
   });
   host.querySelector('#mGroove').addEventListener('click', e => {
     const b = e.target.closest('[data-groove]'); if (!b) return;
-    metro.groove = b.dataset.groove;
-    host.querySelectorAll('#mGroove .chip').forEach(x => x.classList.toggle('on', x === b));
+    setGroove(b.dataset.groove);
   });
   host.querySelector('#mDrums').addEventListener('change', e => { metro.drumsEnabled = e.target.checked; });
   host.querySelector('#mDrumVol').addEventListener('input', e => { metro.drumVolume = e.target.value / 100; });
@@ -149,6 +145,17 @@ if (!window.__bmMetroBound) {
     const n = document.getElementById('mBpm'), s = document.getElementById('mSlider'), term = document.getElementById('mTerm');
     if (n) n.textContent = metro.bpm; if (s) s.value = metro.bpm;
     if (term) term.textContent = bpmTerm(metro.bpm);
+  });
+  window.addEventListener('bm:sig', e => {
+    document.querySelectorAll('#metro #mSig button').forEach(x => x.classList.toggle('on', +x.dataset.v === e.detail));
+    const beatsEl = document.querySelector('#metro #mBeats');
+    if (beatsEl) beatsEl.innerHTML = Array.from({ length: metro.beats }, (_, i) => `<span class="tp-dot${i === 0 ? ' accent' : ''}"></span>`).join('');
+  });
+  window.addEventListener('bm:sub', e => {
+    document.querySelectorAll('#metro #mSub button').forEach(x => x.classList.toggle('on', +x.dataset.v === e.detail));
+  });
+  window.addEventListener('bm:groove', e => {
+    document.querySelectorAll('#metro #mGroove .chip').forEach(x => x.classList.toggle('on', x.dataset.groove === e.detail));
   });
   window.addEventListener('bm:run', e => {
     const p = document.getElementById('mPlay'); if (!p) return;

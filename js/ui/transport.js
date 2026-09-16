@@ -3,7 +3,7 @@
    Play, BPM ±/slider, pallini battito, tempo (numeratore), suddivisione.
    ========================================================================= */
 import { t } from '../core/i18n.js';
-import { metro, toggleMetro, stopMetro, setBpm } from '../audio/metronome.js';
+import { metro, toggleMetro, stopMetro, setBpm, setBeats, setSubdivision } from '../audio/metronome.js';
 
 const SIGS = [3, 4, 6, 7];                 // numeratori battuta
 const SUBS = [{ v: 1, s: '1' }, { v: 2, s: '2' }, { v: 3, s: '3' }, { v: 4, s: '4' }];
@@ -32,6 +32,11 @@ export function buildTransport() {
   `;
   buildBeats();
   bind();
+  const p = host.querySelector('#tpPlay');
+  if (p) {
+    p.textContent = metro.running ? '❚❚' : '▶';
+    p.classList.toggle('on', metro.running);
+  }
   document.querySelectorAll('#transport [data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
 }
 
@@ -47,16 +52,12 @@ function bind() {
   host.querySelector('#tpSlider').addEventListener('input', e => { setBpm(+e.target.value); syncBpm(); });
   host.querySelector('#tpSig').addEventListener('click', e => {
     const b = e.target.closest('[data-v]'); if (!b) return;
-    metro.beats = +b.dataset.v;
-    host.querySelectorAll('#tpSig button').forEach(x => x.classList.toggle('on', x === b));
-    buildBeats();
+    setBeats(+b.dataset.v);
   });
   host.querySelector('#tpSub').addEventListener('click', e => {
     const b = e.target.closest('[data-v]'); if (!b) return;
-    metro.subdivision = +b.dataset.v;
-    host.querySelectorAll('#tpSub button').forEach(x => x.classList.toggle('on', x === b));
+    setSubdivision(+b.dataset.v);
   });
-
 }
 
 /* Listener globali una sola volta: interrogano il DOM per id (resistono ai rebuild).
@@ -69,6 +70,17 @@ if (!window.__bmTransportBound) {
   window.addEventListener('bm:bpm', () => {
     const n = document.getElementById('tpBpm'), s = document.getElementById('tpSlider');
     if (n) n.textContent = metro.bpm; if (s) s.value = metro.bpm;
+  });
+  window.addEventListener('bm:sig', e => {
+    document.querySelectorAll('#transport #tpSig button').forEach(x => x.classList.toggle('on', +x.dataset.v === e.detail));
+    const h = document.getElementById('transport');
+    if (h) {
+      const el = h.querySelector('#tpBeats');
+      if (el) el.innerHTML = Array.from({ length: metro.beats }, (_, i) => `<span class="tp-dot" data-b="${i}"></span>`).join('');
+    }
+  });
+  window.addEventListener('bm:sub', e => {
+    document.querySelectorAll('#transport #tpSub button').forEach(x => x.classList.toggle('on', +x.dataset.v === e.detail));
   });
   window.addEventListener('bm:run', e => {
     const p = document.getElementById('tpPlay'); if (!p) return;
