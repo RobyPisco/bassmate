@@ -76,13 +76,15 @@ button { cursor: pointer; border: none; background: none; }
 /* segmented control (modalità, lingua) */
 .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-pill); padding: 3px; }
 .seg button { padding: 5px 12px; border-radius: var(--r-pill); font-size: 12px; font-weight: 700; color: var(--muted); transition: .15s; }
-.seg button.on { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-glow); }
+.seg button.on { background: var(--accent); color: var(--accent-ink); }
 
 .icon-btn {
   width: 38px; height: 38px; display: inline-grid; place-items: center;
   border-radius: var(--r-md); border: 1px solid var(--border);
-  background: var(--surface); font-size: 16px; transition: .15s;
+  background: var(--surface); font-size: 16px; transition: .15s; color: var(--text);
 }
+.icon-btn .ico { display: block; }
+.ico { flex: none; }
 .icon-btn:hover { border-color: var(--border-2); transform: translateY(-1px); }
 
 /* ---------- main ---------- */
@@ -109,4 +111,13 @@ button { cursor: pointer; border: none; background: none; }
   .hd-nav { display: none; }
   .tabbar { display: flex; }
   .main { padding: var(--sp-3); }
+  /* header su due righe (logo + icone / modalità + lingua); scorre via con la pagina
+     così il manico resta il primo elemento utile */
+  .hd { position: static; flex-wrap: wrap; gap: var(--sp-2) 6px; padding: var(--sp-2) var(--sp-3); min-height: 0; }
+  .hd-logo .name small { display: none; }
+  .hd-tools { display: contents; }
+  .hd-tools .icon-btn { order: 1; width: 40px; height: 40px; }
+  .hd-tools .seg { order: 2; }
+  .hd-tools .seg button { padding: 8px 12px; min-height: 36px; }
+  #modeSeg { margin-right: auto; }
 }

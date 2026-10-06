@@ -5,12 +5,14 @@
    ========================================================================= */
 import { state, set } from '../core/state.js';
 import { t } from '../core/i18n.js';
+import { icon } from './icons.js';
 import {
   SCALES, SCALE_GROUPS, GENRES, TUNINGS, NOTES_EN, NOTES_IT,
   scaleNotes, intervalFormula, getNoteName, scaleField, harmonize,
 } from '../core/theory.js';
 
-let sidebar, head, harmPanel, formulaPanel, sharePanel;
+let sidebar, head, harmPanel, formulaPanel, sharePanel, filterBar, backdrop;
+let sheetBound = false;
 
 export function buildStudio() {
   sidebar = document.getElementById('sidebar');
@@ -18,16 +20,23 @@ export function buildStudio() {
   harmPanel = document.getElementById('harmPanel');
   formulaPanel = document.getElementById('formulaPanel');
   sharePanel = document.getElementById('sharePanel');
+  filterBar = document.getElementById('filterBar');
+  backdrop = document.getElementById('sheetBackdrop');
   buildSidebar();
   buildHead();
   bindSidebar();
   bindHead();
+  bindSheet();
   refreshStudio();
 }
 
 /* ---------------- SIDEBAR ---------------- */
 function buildSidebar() {
   sidebar.innerHTML = `
+    <div class="sb-sheet-head">
+      <span class="sb-sheet-title" data-i18n="filters">Filtri</span>
+      <button class="pill on" id="sheetClose" type="button" data-i18n="done">Fatto</button>
+    </div>
     <div class="sb-block">
       <div class="sb-title" data-i18n="genre">Genere</div>
       <div class="sb-genres" id="sbGenre"></div>
@@ -62,7 +71,7 @@ function fillGenres() {
   const el = sidebar.querySelector('#sbGenre');
   const mk = (k, label, on) => `<button class="chip${on ? ' on' : ''}" data-genre="${k}">${label}</button>`;
   let html = mk('', t('all_scales'), !state.genre);
-  for (const [k, g] of Object.entries(GENRES)) html += mk(k, `${g.emoji} ${g[state.lang] || g.en}`, state.genre === k);
+  for (const [k, g] of Object.entries(GENRES)) html += mk(k, g[state.lang] || g.en, state.genre === k);
   el.innerHTML = html;
 }
 
@@ -152,10 +161,39 @@ function buildHead() {
         </div>
       </div>
       <button class="pill on" id="playBtn">▶ <span data-i18n="listen">Ascolta</span></button>
-      <button class="pill" id="shareBtn">↗ <span data-i18n="share">Condividi</span></button>
-      <button class="pill" id="pdfBtn">🖨 <span data-i18n="export_pdf">PDF</span></button>
+      <button class="pill" id="shareBtn">${icon('share', 15)} <span data-i18n="share">Condividi</span></button>
+      <button class="pill" id="pdfBtn">${icon('print', 15)} <span data-i18n="export_pdf">PDF</span></button>
     </div>
   `;
+}
+
+/* ---------------- PANNELLO FILTRI (mobile) ---------------- */
+function sheetOpen() { return document.body.classList.contains('sheet-open'); }
+function setSheet(open) {
+  document.body.classList.toggle('sheet-open', open);
+  backdrop.hidden = !open;
+  filterBar.setAttribute('aria-expanded', String(open));
+  if (open) sidebar.querySelector('#sheetClose')?.focus();
+  else if (document.activeElement && sidebar.contains(document.activeElement)) filterBar.focus();
+}
+function bindSheet() {
+  sidebar.querySelector('#sheetClose').addEventListener('click', () => setSheet(false));
+  if (sheetBound) return;       // gli elementi statici si collegano una volta sola
+  sheetBound = true;
+  filterBar.addEventListener('click', () => setSheet(!sheetOpen()));
+  backdrop.addEventListener('click', () => setSheet(false));
+  window.addEventListener('keydown', e => { if (e.key === 'Escape' && sheetOpen()) setSheet(false); });
+  window.matchMedia('(min-width: 761px)').addEventListener('change', e => { if (e.matches) setSheet(false); });
+}
+function renderSummary() {
+  if (!filterBar) return;
+  const useSolf = state.label === 'solfege';
+  const root = getNoteName(+state.root, useSolf ? 'solfege' : 'note');
+  const tn = TUNINGS[state.tuning];
+  const parts = [root, scaleField(state.scale, 'name', state.lang), tn ? (tn[state.lang] || tn.en) : ''];
+  filterBar.innerHTML = `
+    <span class="mf-sum">${parts.filter(Boolean).join(' · ')}</span>
+    <span class="mf-act">${icon('filters', 18)}<span>${t('filters')}</span></span>`;
 }
 
 /* ---------------- EVENTI ---------------- */
@@ -219,6 +257,7 @@ export function refreshStudio() {
   renderHarmonization();
   renderFormula();
   renderShare();
+  renderSummary();
   syncActive();
   // applica i18n agli elementi appena creati
   document.querySelectorAll('#studio [data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));

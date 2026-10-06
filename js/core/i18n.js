@@ -27,7 +27,7 @@ export const DICT = {
     leg_root: 'Nota radice', leg_note: 'Nota della scala',
     // studio head / pannelli
     selected_scale: 'Scala selezionata', show: 'Mostra', notes_short: 'Note', solfege_short: 'Solf.', fingers_short: 'Dita',
-    listen: 'Ascolta', share: 'Condividi', notes_count: 'note',
+    listen: 'Ascolta', filters: 'Filtri', done: 'Fatto', share: 'Condividi', notes_count: 'note',
     harmonization: 'Armonizzazione', harm_na: 'Disponibile per scale a 7 note.',
     // transport / metronomo
     tempo: 'Tempo', subdivision: 'Suddivisione', bpm: 'BPM',
@@ -74,7 +74,7 @@ export const DICT = {
     audio_on: 'Audio ON', audio_off: 'Audio OFF',
     leg_root: 'Root note', leg_note: 'Scale note',
     selected_scale: 'Selected scale', show: 'Show', notes_short: 'Notes', solfege_short: 'Solf.', fingers_short: 'Fingers',
-    listen: 'Listen', share: 'Share', notes_count: 'notes',
+    listen: 'Listen', filters: 'Filters', done: 'Done', share: 'Share', notes_count: 'notes',
     harmonization: 'Harmonization', harm_na: 'Available for 7-note scales.',
     tempo: 'Time', subdivision: 'Subdivision', bpm: 'BPM',
     chords_lib: 'Chord library', chords_sub: '4-string bass · standard E·A·D·G tuning',

@@ -16,7 +16,7 @@
 
   --text:      #eef1f8;
   --muted:     #9aa3b8;
-  --faint:     #5d6479;
+  --faint:     #7c859b;
 
   /* accento ciano neon + secondari */
   --accent:     #22e0d6;
@@ -59,7 +59,7 @@
     --border-2:  rgba(10, 14, 30, 0.18);
     --text:      #14171f;
     --muted:     #5a6172;
-    --faint:     #9aa1b2;
+    --faint:     #6b7385;
     --accent:     #0bb3a6;
     --accent-2:   #0a9aa9;
     --accent-glow: rgba(11, 179, 166, 0.35);
@@ -81,7 +81,7 @@
   --border-2:  rgba(10, 14, 30, 0.18);
   --text:      #14171f;
   --muted:     #5a6172;
-  --faint:     #9aa1b2;
+  --faint:     #6b7385;
   --accent:     #0bb3a6;
   --accent-2:   #0a9aa9;
   --accent-glow: rgba(11, 179, 166, 0.35);

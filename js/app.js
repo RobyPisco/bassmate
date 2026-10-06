@@ -9,6 +9,7 @@ import { SCALES, BOX, FRETS } from './core/theory.js';
 import { playSequence } from './audio/synth.js';
 import { buildStudio, refreshStudio, syncActive } from './ui/controls.js';
 import { buildTransport } from './ui/transport.js';
+import { icon } from './ui/icons.js';
 import { renderFretboard } from './ui/fretboard.js';
 import { buildChords, refreshChords } from './tools/chords.js';
 import { buildMetro } from './ui/metro.js';
@@ -18,13 +19,13 @@ import { buildTuner, stopTuner } from './tools/tuner.js';
 import { buildGrooveTrainer, stopGrooveTrainer } from './tools/grooveTrainer.js';
 
 const NAV = [
-  { id: 'studio', i18n: 'studio', icon: '🎸', ready: true },
-  { id: 'chords', i18n: 'chords', icon: '🎼', ready: true },
-  { id: 'metro',  i18n: 'metro',  icon: '⏱️', ready: true },
-  { id: 'groove', i18n: 'groove_trainer', icon: '🥁', ready: true },
-  { id: 'tuner',  i18n: 'tuner',  icon: '🎛️', ready: true },
-  { id: 'quiz',   i18n: 'quiz',   icon: '🎯', ready: true },
-  { id: 'grids',  i18n: 'grids',  icon: '📋', ready: true },
+  { id: 'studio', i18n: 'studio', icon: 'studio', ready: true },
+  { id: 'chords', i18n: 'chords', icon: 'chords', ready: true },
+  { id: 'metro',  i18n: 'metro',  icon: 'metro', ready: true },
+  { id: 'groove', i18n: 'groove_trainer', icon: 'groove', ready: true },
+  { id: 'tuner',  i18n: 'tuner',  icon: 'tuner', ready: true },
+  { id: 'quiz',   i18n: 'quiz',   icon: 'quiz', ready: true },
+  { id: 'grids',  i18n: 'grids',  icon: 'grids', ready: true },
 ];
 
 const $ = sel => document.querySelector(sel);
@@ -50,7 +51,7 @@ function buildNav() {
     const bt = document.createElement('button');
     bt.className = active ? 'on' : '';
     bt.dataset.view = item.id;
-    bt.innerHTML = `<span class="ic">${item.icon}</span><span>${label}</span>`;
+    bt.innerHTML = `<span class="ic">${icon(item.icon, 22)}</span><span>${label}</span>`;
     if (!item.ready) bt.style.opacity = .4;
     bar.appendChild(bt);
   });
@@ -77,7 +78,7 @@ function applyTheme() {
   const root = document.documentElement;
   if (state.theme === 'auto') root.removeAttribute('data-theme');
   else root.setAttribute('data-theme', state.theme);
-  $('#themeBtn').textContent = state.theme === 'auto' ? '🌓' : state.theme === 'dark' ? '🌙' : '☀️';
+  $('#themeBtn').innerHTML = icon(state.theme === 'auto' ? 'theme-auto' : state.theme === 'dark' ? 'theme-dark' : 'theme-light');
 }
 function cycleTheme() {
   const order = ['auto', 'dark', 'light'];
@@ -85,7 +86,16 @@ function cycleTheme() {
   applyTheme();
 }
 
-function syncAudioBtn() { $('#audioBtn').textContent = state.audio ? '🔊' : '🔇'; }
+function syncAudioBtn() {
+  const b = $('#audioBtn');
+  b.innerHTML = icon(state.audio ? 'audio-on' : 'audio-off');
+  b.setAttribute('aria-pressed', String(state.audio));
+}
+function buildHeaderIcons() {
+  $('#exercisesBtn').innerHTML = icon('exercises');
+  $('#helpBtn').innerHTML = icon('help');
+  $('#donateBtn').innerHTML = icon('donate');
+}
 function syncSeg(id, val) { document.querySelectorAll(`#${id} button`).forEach(b => b.classList.toggle('on', b.dataset.v === val)); }
 
 function syncPosBar() {
@@ -110,6 +120,7 @@ function renderAll() {
 
 function init() {
   buildNav();
+  buildHeaderIcons();
   buildStudio();
   buildTransport();
   applyI18n();

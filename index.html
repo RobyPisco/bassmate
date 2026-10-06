@@ -2,7 +2,7 @@
 <html lang="it" data-mode="simple">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Bassmate — Manuale interattivo del basso</title>
   <meta name="description" content="Bassmate: il manuale interattivo del basso. Scale, arpeggi e accordi per blues, funk, jazz, rock e metal sul manico, con audio, metronomo, quiz e griglie stampabili. Funziona offline.">
@@ -15,6 +15,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icon.svg">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Bassmate">
@@ -123,11 +124,11 @@
         <button data-v="it">IT</button>
         <button data-v="en">EN</button>
       </div>
-      <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Tema">🌙</button>
-      <button class="icon-btn" id="audioBtn" title="Audio" aria-label="Audio">🔊</button>
-      <a class="icon-btn" href="exercises.html" title="Esercizi" aria-label="Esercizi">📚</a>
-      <a class="icon-btn" href="help.html" title="Guida" aria-label="Guida">❓</a>
-      <a class="icon-btn" href="donate.html" title="Offrimi un caffè" aria-label="Offrimi un caffè">☕</a>
+      <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Tema"></button>
+      <button class="icon-btn" id="audioBtn" title="Audio" aria-label="Audio"></button>
+      <a class="icon-btn" id="exercisesBtn" href="exercises.html" title="Esercizi" aria-label="Esercizi"></a>
+      <a class="icon-btn" id="helpBtn" href="help.html" title="Guida" aria-label="Guida"></a>
+      <a class="icon-btn" id="donateBtn" href="donate.html" title="Offrimi un caffè" aria-label="Offrimi un caffè"></a>
     </div>
   </header>
 
@@ -137,7 +138,11 @@
     <section id="studio" class="view-section active">
       <div class="studio-grid">
 
-        <!-- SIDEBAR -->
+        <!-- RIEPILOGO FILTRI (solo mobile): apre il pannello filtri -->
+        <button class="mf-bar" id="filterBar" type="button" aria-controls="sidebar" aria-expanded="false"></button>
+        <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+
+        <!-- SIDEBAR (su mobile diventa pannello dal basso) -->
         <aside class="sidebar" id="sidebar"><!-- iniettata --></aside>
 
         <!-- MAIN -->
